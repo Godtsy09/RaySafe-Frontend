@@ -1,0 +1,49 @@
+<main class="register-container">
+
+<h1 class="page-title">Registrar nuevo agente</h1>
+
+<section class="card-form">
+
+<span class="subtitle">DATOS PARA REGISTRAR</span>
+
+<form class="form">
+    <div class="form-group">
+        <label for="name">NOMBRE *</label>
+        <input
+        type="text"
+        id="name"
+        placeholder="nombre"
+        required
+        />
+        </div>
+
+    <div class="form-group">
+        <label for="email">EMAIL *</label>
+        <input
+        type="email"
+        id="email"
+        placeholder="nombre@gmail.com"
+        />
+        </div>
+
+    <div class="form-group">
+        <label for="password">CONTRASEÑA *</label>
+        <input
+        type="password"
+        id="password"
+        placeholder="contraseña"
+        />
+        </div>
+
+        <div class="role-selector">
+            <input type="radio" id="role-agent" name="role" value="agent">
+            <label for="role-agent" class="role-btn">Agente</label>
+            <input type="radio" id="role-admin" name="role" value="admin">
+            <label for="role-admin" class="role-btn">Admin</label>
+        </div>
+
+        <button type="submit" class="submit-btn">Ingrese al sistema</button>
+
+</form>
+</section>
+</main>

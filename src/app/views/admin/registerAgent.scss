@@ -1,0 +1,146 @@
+$navy-dark: #293852;
+$brown-tan: #c48b59;
+$bg-input: #f4f4f4;
+$border-card: #e5e5e5;
+$text-sub: #8c96a3;
+$text-label: #555555;
+
+.register-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  min-height: calc(100vh - 160px); 
+  background-color: #ffffff;
+
+  .page-title {
+    font-family: serif;
+    font-size: 2rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 2rem;
+  }
+
+  .card-form {
+    background: #ffffff;
+    border: 1px solid $border-card;
+    border-radius: 2px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 440px;
+    box-sizing: border-box;
+
+    .subtitle {
+      display: block;
+      font-family: monospace, monospace;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      color: $text-sub;
+      margin-bottom: 1.5rem;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+
+        label {
+          font-family: monospace, monospace;
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: $text-label;
+          letter-spacing: 0.5px;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.75rem 0.9rem;
+          background-color: $bg-input;
+          border: 1px solid #e0e0e0;
+          border-radius: 2px;
+          font-size: 0.875rem;
+          color: #333333;
+          outline: none;
+          box-sizing: border-box;
+          transition: border-color 0.2s;
+
+          &::placeholder {
+            color: #a0a0a0;
+          }
+
+          &:focus {
+            border-color: $navy-dark;
+          }
+        }
+      }
+
+      .role-selector {
+        display: flex;
+        width: 100%;
+        margin-top: 0.5rem;
+
+        input[type="radio"] {
+          display: none;
+
+          &:checked + .role-btn {
+            background-color: $navy-dark;
+            color: #ffffff;
+            border-color: $navy-dark;
+          }
+        }
+
+        .role-btn {
+          flex: 1;
+          padding: 0.75rem;
+          border: 1px solid $border-card;
+          background-color: $bg-input;
+          color: #666666;
+          font-size: 0.875rem;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:first-of-type {
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
+          }
+
+          &:last-of-type {
+            border-top-right-radius: 2px;
+            border-bottom-right-radius: 2px;
+            border-left: none;
+          }
+
+          &:hover {
+            background-color: lighten($navy-dark, 15%);
+            color: #ffffff;
+          }
+        }
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 0.85rem;
+        background-color: $brown-tan;
+        color: #ffffff;
+        border: none;
+        border-radius: 2px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 0.5rem;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: darken($brown-tan, 5%);
+        }
+      }
+    }
+  }
+}
