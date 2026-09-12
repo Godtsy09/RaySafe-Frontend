@@ -1,0 +1,42 @@
+<div class="login-container">
+
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <span class="badge">ACCESO INSTITUCIONAL</span>
+            <h2>Solo para agentes y <span>administradores autorizados.</span></h2>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="form-wrapper">
+            <h1 class="brand-title">RaySafe</h1>
+            <h2 class="form-title">Login</h2>
+            <p class="form-subtitle">Ingresa con tus credenciales institucionales.</p>
+            <form (submit)="$event.preventDefault()">
+                <div class="form-group">
+                    <label for="email">EMAIL</label>
+                    <input
+                    type="email"
+                    id="email"
+                    placeholder="nombre@gmail.com"
+                    required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="password">CONTRASEÑA</label>
+                    <input
+                    type="password"
+                    id="password"
+                    placeholder="contraseña"
+                    required
+                    />
+                </div>
+
+                <button type="submit" class="btn-submit">ingrese al sistema</button>
+            </form>
+        </div>
+    </div>
+</div>

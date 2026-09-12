@@ -1,0 +1,169 @@
+$primary-dark: #233550;
+$accent-bronze: #c58d5e;
+$text-muted: #8c98a4;
+$input-bg: #f8f9fa;
+$border-color: #e2e8f0;
+
+.login-container {
+  display: flex;
+  min-height: calc(100vh - 120px);
+  width: 100%;
+  font-family: system-ui, -apple-system, sans-serif;
+
+  .hero-section {
+    flex: 1.1;
+    position: relative;
+    background-image: url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=1200');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 3.5rem;
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(35, 53, 80, 0.35) 0%, rgba(35, 53, 80, 0.75) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: #ffffff;
+      max-width: 480px;
+
+      .badge {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #d1d5db;
+        display: block;
+        margin-bottom: 0.75rem;
+      }
+
+      h2 {
+        font-family: Georgia, serif;
+        font-size: 2.5rem;
+        font-weight: 400;
+        line-height: 1.25;
+        margin: 0;
+
+        span {
+          font-style: italic;
+          color: $accent-bronze;
+          display: block;
+        }
+      }
+    }
+  }
+
+  .form-section {
+    flex: 0.9;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 360px;
+
+      .brand-title {
+        font-family: 'Bodoni MT', 'Didot', Georgia, serif;
+        font-style: italic;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #1a202c;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: -0.5px;
+      }
+
+      .form-title {
+        font-family: Georgia, serif;
+        font-size: 2.2rem;
+        font-weight: 400;
+        color: $accent-bronze;
+        margin: 0 0 0.25rem 0;
+      }
+
+      .form-subtitle {
+        font-size: 0.85rem;
+        color: $text-muted;
+        margin-bottom: 2rem;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          font-family: 'Courier New', Courier, monospace;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 2px;
+          color: #5a6a85;
+          margin-bottom: 0.5rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          background-color: $input-bg;
+          border: 1px solid $border-color;
+          border-radius: 2px;
+          font-family: 'Courier New', Courier, monospace;
+          font-size: 0.875rem;
+          color: #2d3748;
+          box-sizing: border-box;
+          outline: none;
+          transition: border-color 0.2s;
+
+          &:focus {
+            border-color: $primary-dark;
+            background-color: #ffffff;
+          }
+
+          &::placeholder {
+            color: #a0aec0;
+          }
+        }
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 0.85rem;
+        background-color: $primary-dark;
+        color: #ffffff;
+        border: none;
+        border-radius: 2px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #1a283c;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+
+    .hero-section {
+      min-height: 300px;
+      padding: 2rem;
+    }
+  }
+}
