@@ -1,0 +1,80 @@
+<app-header-user></app-header-user>
+<div class="denuncia-container">
+  <section class="denuncia-content">
+    <span class="denuncia-eyebrow">NUEVA DENUNCIA</span>
+    <h1 class="denuncia-title">Formulario Anónimo</h1>
+
+    <form class="denuncia-form">
+
+      <div class="form-group">
+        <label class="form-label">Categoria la de denuncia (humano-animal)</label>
+        <select class="form-control">
+          <option value="" disabled selected>Seleccionar categoria...</option>
+          <option value="humano">Humano</option>
+          <option value="animal">Animal</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo de abuso *</label>
+          <select class="form-control">
+            <option value="" disabled selected>Seleccionar tipo...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nivel de riesgo *</label>
+          <select class="form-control">
+            <option value="" disabled selected>Seleccionar nivel...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Descripción *</label>
+        <textarea
+          class="form-control textarea"
+          placeholder="Describe los hechos: ¿que paso?, ¿como ocurrio?, ¿quienes estaban involucrados?"
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Ubicación *</label>
+
+        <div class="form-row">
+          <input type="text" class="form-control" value="Guatemala" />
+          <input type="text" class="form-control" value="Ciudad de Guatemala" />
+        </div>
+
+        <input
+          type="text"
+          class="form-control location-address"
+          placeholder="Direccion o referencia (ej: Zona 3, Calle 4-50)"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Evidencias (opcional)</label>
+        <div class="dropzone">
+          <p class="dropzone-text">Arrastra archivos o haz clic para seleccionar</p>
+          <p class="dropzone-hint">JPG · PNG · MP4 · PDF</p>
+          <input type="file" class="dropzone-input" multiple hidden />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email (opcional — para recibir actualizaciones)</label>
+        <input type="email" class="form-control" placeholder="tucorreo@ejemplo.com" />
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-cancel">Cancelar</button>
+        <button type="submit" class="btn btn-submit">Enviar denuncia</button>
+      </div>
+
+    </form>
+  </section>
+</div>
+
+<app-adjuntar-evidencia></app-adjuntar-evidencia>
