@@ -4,10 +4,15 @@ $text-muted: #8c98a4;
 $input-bg: #f8f9fa;
 $border-color: #e2e8f0;
 
+:host {
+  display: block;
+  width: 100%;
+}
+
 .login-container {
   display: flex;
-  min-height: calc(100vh - 120px);
   width: 100%;
+  min-height: 100vh;
   font-family: system-ui, -apple-system, sans-serif;
 
   .hero-section {
