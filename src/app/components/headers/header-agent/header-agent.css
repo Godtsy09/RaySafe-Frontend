@@ -1,5 +1,6 @@
 :host {
   display: block;
+  width: 100%;
 }
 
 .header {
@@ -8,7 +9,7 @@
   align-items: center;
   gap: 2rem;
   padding: 0 2rem;
-  height: 4rem;
+  height: 4.5rem;
   background-color: #0a2a5e;
   color: #ffffff;
   box-sizing: border-box;
