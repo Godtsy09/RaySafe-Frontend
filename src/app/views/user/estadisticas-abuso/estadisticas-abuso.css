@@ -1,0 +1,303 @@
+.estadisticas-container {
+  display: flex;
+  justify-content: center;
+  padding: 60px 40px 100px;
+  background-color: #ffffff;
+  background-image: radial-gradient(#e2e2e2 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.estadisticas-content {
+  width: 100%;
+  max-width: 1425px;
+}
+
+.estadisticas-eyebrow {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #b3452f;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.estadisticas-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 42px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+.estadisticas-subtitle {
+  font-size: 16px;
+  color: #6b6b6b;
+  margin: 0 0 40px;
+}
+
+.estadisticas-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Grid de departamentos */
+
+.departamentos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 20px;
+}
+
+.depto-card {
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #e4e4e4;
+  margin: -1px 0 0 -1px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.depto-nombre {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2c2c2c;
+}
+
+.depto-total {
+  font-size: 13px;
+  color: #999;
+}
+
+/* Niveles de calor, del más bajo al más alto */
+
+.depto-nivel-1 {
+  background-color: #ffffff;
+}
+
+.depto-nivel-2 {
+  background-color: #fbeceb;
+}
+
+.depto-nivel-3 {
+  background-color: #f7d9d5;
+}
+
+.depto-nivel-4 {
+  background-color: #f3c2ba;
+}
+
+.depto-nivel-4 .depto-nombre {
+  color: #b3452f;
+  font-weight: 600;
+}
+
+.depto-nivel-4 .depto-total {
+  color: #b3452f;
+}
+
+/* Seleccionado: pisa cualquier nivel de calor por especificidad */
+
+.depto-card.depto-card--seleccionado {
+  background-color: #1e3a5f;
+  border-color: #1e3a5f;
+}
+
+.depto-card.depto-card--seleccionado .depto-nombre,
+.depto-card.depto-card--seleccionado .depto-total {
+  color: #ffffff;
+}
+
+/* Panel lateral */
+
+.estadisticas-side {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detalle-placeholder {
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 40px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.placeholder-icono {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.placeholder-titulo {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.placeholder-texto {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.detalle-panel {
+  position: relative;
+  background-color: #1e3a5f;
+  border-radius: 6px;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.detalle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detalle-label {
+  font-size: 13px;
+  color: #a9b8cc;
+}
+
+.detalle-cerrar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background-color: transparent;
+  color: #ffffff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detalle-cerrar:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.detalle-nombre {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: -12px 0 0;
+}
+
+.detalle-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.detalle-total-numero {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 34px;
+  color: #c9884f;
+}
+
+.detalle-total-texto {
+  font-size: 14px;
+  color: #a9b8cc;
+}
+
+.detalle-lista-tipos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detalle-tipo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detalle-tipo-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detalle-tipo-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #c9884f;
+  flex-shrink: 0;
+}
+
+.detalle-tipo-nombre {
+  flex: 1;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #d7e0ec;
+}
+
+.detalle-tipo-cantidad {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.detalle-tipo-barra {
+  height: 3px;
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+
+.detalle-tipo-barra-fill {
+  height: 100%;
+  background-color: #c9884f;
+  border-radius: 2px;
+}
+
+/* Tarjetas de totales */
+
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.stat-card {
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-numero {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 30px;
+  color: #1a1a1a;
+}
+
+.stat-texto {
+  font-size: 13px;
+  color: #888;
+}
