@@ -1,0 +1,80 @@
+<app-header-user></app-header-user>
+
+<div class="estadisticas-container">
+  <section class="estadisticas-content">
+    <span class="estadisticas-eyebrow">ESTADÍSTICAS DE ABUSO</span>
+    <h1 class="estadisticas-title">Denuncias por departamento</h1>
+    <p class="estadisticas-subtitle">
+      Haz clic en un departamento para ver los datos de esa zona. Datos agregados — sin información individual.
+    </p>
+
+    <div class="estadisticas-layout">
+
+      <div class="departamentos-grid">
+        <button
+          type="button"
+          class="depto-card"
+          *ngFor="let depto of departamentos"
+          [ngClass]="claseColor(depto.total)"
+          [class.depto-card--seleccionado]="departamentoSeleccionado()?.nombre === depto.nombre"
+          (click)="seleccionar(depto)"
+        >
+          <span class="depto-nombre">{{ depto.nombre }}</span>
+          <span class="depto-total">{{ depto.total }}</span>
+        </button>
+      </div>
+
+      <div class="estadisticas-side">
+
+        <div class="detalle-placeholder" *ngIf="!departamentoSeleccionado()">
+          <span class="placeholder-icono">🗺️</span>
+          <h3 class="placeholder-titulo">Selecciona un departamento</h3>
+          <p class="placeholder-texto">
+            Haz clic en cualquier zona del mapa para ver los datos de denuncias de esa área.
+          </p>
+        </div>
+
+        <div class="detalle-panel" *ngIf="departamentoSeleccionado() as depto">
+          <div class="detalle-header">
+            <span class="detalle-label">Departamento</span>
+            <button type="button" class="detalle-cerrar" (click)="cerrarDetalle()" aria-label="Cerrar">✕</button>
+          </div>
+
+          <h3 class="detalle-nombre">{{ depto.nombre }}</h3>
+
+          <div class="detalle-total">
+            <span class="detalle-total-numero">{{ depto.total }}</span>
+            <span class="detalle-total-texto">reportes</span>
+          </div>
+
+          <ul class="detalle-lista-tipos">
+            <li class="detalle-tipo" *ngFor="let item of desglose(depto)">
+              <div class="detalle-tipo-header">
+                <span class="detalle-tipo-dot"></span>
+                <span class="detalle-tipo-nombre">{{ item.tipo }}</span>
+                <span class="detalle-tipo-cantidad">{{ item.cantidad }}</span>
+              </div>
+              <div class="detalle-tipo-barra">
+                <div class="detalle-tipo-barra-fill" [style.width.%]="item.ancho"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <span class="stat-numero">{{ totalNacional | number }}</span>
+            <span class="stat-texto">Total nacional</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-numero">{{ totalDepartamentos }}</span>
+            <span class="stat-texto">Departamentos</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+</div>

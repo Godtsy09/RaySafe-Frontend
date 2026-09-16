@@ -1,0 +1,371 @@
+.recursos-container {
+  display: flex;
+  justify-content: center;
+  padding: 60px 40px 100px;
+  background-color: #ffffff;
+  background-image: radial-gradient(#e2e2e2 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.recursos-content {
+  width: 100%;
+  max-width: 1425px;
+}
+
+.recursos-eyebrow {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #b3452f;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.recursos-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 42px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+.recursos-subtitle {
+  font-size: 16px;
+  color: #6b6b6b;
+  margin: 0 0 40px;
+}
+
+/* PDF cards */
+
+.pdf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 48px;
+}
+
+.pdf-card {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pdf-icon {
+  width: 64px;
+  height: 72px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.pdf-icon--blue {
+  background-color: #eef2f7;
+  color: #3d5a80;
+}
+
+.pdf-icon--red {
+  background-color: #fbeae7;
+  color: #b3452f;
+}
+
+.pdf-icon--green {
+  background-color: #eaf3ec;
+  color: #4a7a5e;
+}
+
+.pdf-icon--purple {
+  background-color: #efedf5;
+  color: #6b5b95;
+}
+
+.pdf-icon--gray {
+  background-color: #eef0f2;
+  color: #5a6472;
+}
+
+.pdf-icon--blue-alt {
+  background-color: #e9eef4;
+  color: #45607a;
+}
+
+.pdf-icon--lavender {
+  background-color: #f0edf6;
+  color: #7a5f9e;
+}
+
+.pdf-icon--tan {
+  background-color: #f2ece2;
+  color: #a17a45;
+}
+
+.pdf-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.pdf-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pdf-tag {
+  font-size: 12px;
+  color: #5a6472;
+  background-color: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.pdf-pages {
+  font-size: 13px;
+  color: #999;
+}
+
+.pdf-download {
+  font-size: 14px;
+  color: #b3452f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.pdf-download:hover {
+  text-decoration: underline;
+}
+
+/* Section titles */
+
+.section-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0 0 20px;
+}
+
+/* Hotlines */
+
+.hotlines-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid #e4e4e4;
+  margin-bottom: 48px;
+}
+
+.hotline-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid #e4e4e4;
+  margin: -1px 0 0 -1px;
+}
+
+.hotline-number {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 34px;
+  color: #c9884f;
+  line-height: 1;
+}
+
+.hotline-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hotline-name {
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.hotline-schedule {
+  font-size: 12px;
+  color: #999;
+}
+
+/* Instituciones */
+
+.instituciones-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.institucion-card {
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.institucion-card:hover {
+  border-color: #c9884f;
+}
+
+.institucion-tag {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.institucion-tag--support {
+  background-color: #eef2f7;
+  color: #3d5a80;
+}
+
+.institucion-tag--shelter {
+  background-color: #eaf3ec;
+  color: #4a7a5e;
+}
+
+.institucion-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.institucion-location {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+.institucion-ver {
+  font-size: 13px;
+  color: #b3452f;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Modal de detalle de institución */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(120, 140, 170, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 480px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 28px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.modal-close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #d9d9d9;
+  background-color: #ffffff;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background-color: #f2f2f2;
+}
+
+.modal-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.detalle-lista {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detalle-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detalle-item dt {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.detalle-item dd {
+  margin: 0;
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+.btn-llamar {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #3d5a80;
+  border-radius: 4px;
+}
+
+.btn-llamar:hover {
+  background-color: #33496b;
+}
