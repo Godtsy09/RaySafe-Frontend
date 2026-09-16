@@ -1,0 +1,669 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+// Variables Institucionales RaySafe
+$brand-blue: #253754;
+$primary-btn: #CA9264;
+$primary-btn-hover: #b0784c;
+$text-dark: #000000;
+$text-muted: #666666;
+
+// Color ajustado según Figma (#50555C al 70%)
+$text-subtle: rgba(#50555C, 0.7);
+
+// Estados y Badges
+$status-success: #2D7A39;
+$status-warning: #253754;
+$status-danger: #D9383A;
+
+// Niveles de Riesgo (Ajustados)
+$risk-low: #16A34A;
+$risk-medium: #D97706;
+$risk-high: #DC2626;
+$risk-critical: #991B1B;
+
+$border-color: #E5E7EB;
+$border-light: #F3F4F6;
+
+.agent-logs-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* Encabezado Principal */
+  .view-header {
+    margin-bottom: 24px;
+
+    .breadcrumbs {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: $text-muted;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .view-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 46px;
+      font-weight: 300;
+      color: $text-dark;
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+  }
+
+  /* Tarjeta de Filtro/Buscador Superior */
+  .filter-card {
+    background: #ffffff;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+    .filter-input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: $text-dark;
+      background: transparent;
+
+      &::placeholder {
+        color: #9CA3AF;
+      }
+    }
+  }
+
+  /* Tabla Principal de Registros */
+  .table-card {
+    background: #ffffff;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+
+    .table-responsive {
+      max-height: 540px;
+      overflow-y: auto;
+      width: 100%;
+
+      .logs-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+        text-align: left;
+
+        th {
+          font-family: 'JetBrains Mono', monospace;
+          padding: 16px 20px;
+          font-size: 12px;
+          color: $text-muted;
+          font-weight: 500;
+          background-color: #ffffff;
+          border-bottom: 1px solid $border-color;
+          letter-spacing: -0.01em;
+          position: sticky;
+          top: 0;
+          z-index: 10;
+
+          &.text-right {
+            text-align: right;
+          }
+        }
+
+        td {
+          padding: 16px 20px;
+          border-bottom: 1px solid $border-light;
+          vertical-align: middle;
+          font-size: 14px;
+          color: $text-dark;
+
+          &.text-right {
+            text-align: right;
+          }
+        }
+
+        tbody tr:last-child td {
+          border-bottom: none;
+        }
+
+        /* Estilos de Columnas */
+        .log-id {
+          font-family: 'JetBrains Mono', monospace;
+          color: $brand-blue;
+          font-weight: 600;
+        }
+
+        .abuse-type {
+          font-weight: 400;
+          color: $text-subtle;
+        }
+
+        .log-date {
+          font-family: 'JetBrains Mono', monospace;
+          font-weight: 500;
+          color: $text-subtle;
+          font-size: 13px;
+        }
+
+        .log-location {
+          font-family: 'DM Sans', sans-serif;
+          font-weight: 400;
+          color: $text-subtle;
+          font-size: 13px;
+        }
+
+        /* Indicadores de Nivel de Riesgo (Badges) */
+        .badge {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 11px;
+          padding: 2px 8px;
+          border-radius: 4px;
+          font-weight: 600;
+          display: inline-block;
+
+          &.risk-low {
+            background-color: #DCFCE7;
+            color: $risk-low;
+          }
+          &.risk-medium {
+            background-color: #FEF3C7;
+            color: $risk-medium;
+          }
+          &.risk-high {
+            background-color: #FEE2E2;
+            color: $risk-high;
+          }
+          &.risk-critical {
+            background-color: #FEE2E2;
+            color: $risk-critical;
+          }
+        }
+
+        /* Indicadores de Estado sin fondos de color */
+        .status {
+          font-family: 'JetBrains Mono', monospace;
+          font-weight: 500;
+          font-size: 12px;
+          padding: 0;
+          background-color: transparent;
+
+          &.warning {
+            color: $status-warning;
+          }
+
+          &.danger {
+            color: $status-danger;
+          }
+
+          &.success {
+            color: $status-success;
+          }
+        }
+
+        /* Botón de Acción Principal */
+        .btn-info {
+          background-color: $primary-btn;
+          color: #ffffff;
+          border: none;
+          padding: 6px 12px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-weight: 500;
+          font-size: 12px;
+          line-height: 1.2;
+          font-family: 'DM Sans', sans-serif;
+          transition: background-color 0.2s ease;
+          display: inline-block;
+
+          &:hover {
+            background-color: $primary-btn-hover;
+          }
+        }
+      }
+    }
+
+    /* Paginación Fija */
+    .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-top: 1px solid $border-color;
+      background-color: #ffffff;
+
+      .btn-pagination {
+        border: 1px solid $border-color;
+        background: #ffffff;
+        padding: 8px 14px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 500;
+        color: #374151;
+        transition: all 0.15s ease;
+
+        &:hover {
+          background-color: #F9FAFB;
+          border-color: #D1D5DB;
+        }
+      }
+
+      .page-numbers {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: 'JetBrains Mono', monospace;
+
+        .page {
+          padding: 6px 12px;
+          font-size: 13px;
+          cursor: pointer;
+          border-radius: 4px;
+          color: #4B5563;
+
+          &.active {
+            background-color: $brand-blue;
+            color: #ffffff;
+            font-weight: 600;
+          }
+        }
+
+        .dots {
+          color: $text-muted;
+          padding: 0 4px;
+        }
+      }
+    }
+  }
+
+  /* Overlay del Modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(37, 55, 84, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1000;
+
+    &.active {
+      opacity: 1;
+      pointer-events: all;
+
+      .modal-card {
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Modal de Expedientes */
+    .modal-card.modal-large {
+      background: #ffffff;
+      width: 720px;
+      max-width: 92vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      border-radius: 12px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      border: none;
+      transform: translateY(12px) scale(0.98);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+
+      .modal-header {
+        padding: 20px 28px;
+        background-color: $brand-blue;
+        border-bottom: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .header-title-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            font-size: 28px;
+            margin: 0;
+            color: #ffffff;
+          }
+
+          .public-badge {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+          }
+        }
+
+        .btn-close {
+          background: none;
+          border: none;
+          font-size: 24px;
+          cursor: pointer;
+          color: rgba(255, 255, 255, 0.7);
+          transition: color 0.15s ease;
+
+          &:hover {
+            color: #ffffff;
+          }
+        }
+      }
+
+      .modal-body {
+        padding: 24px 28px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .divider {
+          border: none;
+          border-top: 1px solid $border-light;
+          margin: 4px 0;
+        }
+
+        .margin-top {
+          margin-top: 18px;
+        }
+
+        .section-title, 
+        h3.section-title {
+          font-family: 'DM Sans', sans-serif;
+          font-size: 18px;
+          font-weight: 600;
+          color: $brand-blue;
+          margin: 0 0 16px 0;
+          letter-spacing: -0.01em;
+          line-height: 1.3;
+        }
+
+        .label {
+          font-size: 12px;
+          font-weight: 600;
+          color: $text-muted;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          display: block;
+          margin-bottom: 6px;
+        }
+
+        .value {
+          font-size: 14px;
+          color: $text-dark;
+          font-weight: 400;
+          line-height: 1.5;
+        }
+
+        .grid-3 {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+
+        .description-box {
+          background-color: #F8FAFC;
+          border: 1px solid #E2E8F0;
+          border-radius: 6px;
+          padding: 12px 14px;
+          font-size: 13.5px;
+          color: #334155;
+          line-height: 1.5;
+          margin: 0;
+        }
+
+        /* Sección 2: Selector de Estado del Caso */
+        .status-management-card {
+          background: #F9FAFB;
+          border: 1px solid $border-color;
+          padding: 16px;
+          border-radius: 8px;
+
+          .status-selector-group {
+            display: flex;
+            flex-direction: column;
+
+            .status-select {
+              width: 100%;
+              padding: 10px 12px;
+              border: 1px solid $border-color;
+              border-radius: 6px;
+              font-family: 'DM Sans', sans-serif;
+              font-size: 14px;
+              color: $text-dark;
+              background-color: #ffffff;
+              outline: none;
+              cursor: pointer;
+
+              &:focus {
+                border-color: $brand-blue;
+              }
+            }
+          }
+        }
+
+        /* Acordeón de Evidencias */
+        .evidence-accordion {
+          border: 1px solid $border-color;
+          border-radius: 6px;
+          background: #ffffff;
+
+          .accordion-header {
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            user-select: none;
+            outline: none;
+
+            &:hover {
+              background-color: #F9FAFB;
+            }
+          }
+
+          .accordion-content {
+            padding: 12px 16px;
+            border-top: 1px solid $border-light;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .evidence-item {
+              display: flex;
+              align-items: center;
+              gap: 12px;
+              padding: 8px 12px;
+              background-color: #F8FAFC;
+              border-radius: 4px;
+
+              .file-icon {
+                font-size: 16px;
+              }
+
+              .file-info {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+
+                .file-name {
+                  font-size: 13px;
+                  font-weight: 500;
+                  color: $text-dark;
+                }
+
+                .file-type {
+                  font-size: 11px;
+                  color: $text-muted;
+                }
+              }
+
+              .btn-link {
+                font-size: 12px;
+                color: $brand-blue;
+                font-weight: 500;
+                text-decoration: none;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+          }
+        }
+
+        /* Formulario de Notas Internas */
+        .add-note-box {
+          display: flex;
+          flex-direction: column;
+          margin-bottom: 16px;
+
+          .note-textarea {
+            width: 100%;
+            border: 1px solid $border-color;
+            border-radius: 6px;
+            padding: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13.5px;
+            color: $text-dark;
+            outline: none;
+            resize: vertical;
+            box-sizing: border-box;
+
+            &:focus {
+              border-color: $brand-blue;
+            }
+          }
+
+          .add-note-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+
+            .btn-primary-sm {
+              background-color: $brand-blue;
+              color: #ffffff;
+              border: none;
+              padding: 6px 14px;
+              border-radius: 4px;
+              font-size: 12px;
+              font-weight: 500;
+              cursor: pointer;
+              transition: background-color 0.2s ease;
+
+              &:hover {
+                background-color: lighten($brand-blue, 10%);
+              }
+            }
+          }
+        }
+
+        /* Feed de Notas */
+        .notes-feed {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          .note-card {
+            border-left: 3px solid $brand-blue;
+            background-color: #F8FAFC;
+            padding: 10px 14px;
+            border-radius: 0 6px 6px 0;
+
+            .note-header {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 4px;
+
+              .author {
+                font-size: 12px;
+                font-weight: 600;
+                color: $text-dark;
+              }
+
+              .date {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 11px;
+                color: $text-muted;
+              }
+            }
+
+            .note-body {
+              font-size: 13px;
+              color: #334155;
+              margin: 0;
+              line-height: 1.4;
+            }
+          }
+        }
+
+        .status-history-compact {
+          background-color: #FFFBEB;
+          border: 1px solid #FDE68A;
+          padding: 10px 14px;
+          border-radius: 6px;
+
+          .history-text {
+            font-size: 12.5px;
+            color: #92400E;
+            margin: 0;
+
+            .status {
+              font-weight: 600;
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        padding: 16px 28px;
+        background-color: $brand-blue;
+        border-top: none;
+        display: flex;
+        justify-content: flex-end;
+
+        .btn-secondary {
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          padding: 8px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          font-weight: 500;
+          color: #ffffff;
+          transition: all 0.15s ease;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+}

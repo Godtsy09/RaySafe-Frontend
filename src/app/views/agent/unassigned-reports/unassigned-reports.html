@@ -1,0 +1,161 @@
+<section class="agent-unassigned-container">
+    <!-- Encabezado -->
+    <div class="view-header">
+        <div class="breadcrumbs">PNC ・ ZONA 3</div>
+        <h1 class="view-title">Sin atender</h1>
+    </div>
+
+    <!-- Tabla Principal -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="logs-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo de abuso</th>
+                        <th>Nivel de Riesgo</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="log-id">RS-0060</td>
+                        <td class="abuse-type">Abuso infantil</td>
+                        <td><span class="badge risk-low">low</span></td>
+                        <td class="log-location">Zona 5, Ciudad Capital</td>
+                        <td><span class="status info">Recibida</span></td>
+                        <td class="log-date">17 sep 2025</td>
+                        <td class="text-right action-buttons">
+                            <button class="btn-info" (click)="openDetailModal()">Ver detalle</button>
+                            <button class="btn-primary" (click)="openClaimModal()">Tomar denuncia</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="log-id">RS-0056</td>
+                        <td class="abuse-type">Abandono animal</td>
+                        <td><span class="badge risk-critical">critical</span></td>
+                        <td class="log-location">Zona 2, Este</td>
+                        <td><span class="status info">Recibida</span></td>
+                        <td class="log-date">11 ago 2025</td>
+                        <td class="text-right action-buttons">
+                            <button class="btn-info" (click)="openDetailModal()">Ver detalle</button>
+                            <button class="btn-primary" (click)="openClaimModal()">Tomar denuncia</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination">
+            <button class="btn-pagination">← Previous</button>
+            <div class="page-numbers">
+                <span class="page active">1</span>
+                <span class="page">2</span>
+                <span class="page">3</span>
+                <span class="dots">...</span>
+                <span class="page">10</span>
+            </div>
+            <button class="btn-pagination">Next →</button>
+        </div>
+    </div>
+
+    <!-- Modal 1: Ver Detalles (Sin datos de agente/notas) -->
+    <div class="modal-overlay" [class.active]="isDetailModalOpen" (click)="closeDetailModal()">
+        <div class="modal-card modal-large" (click)="$event.stopPropagation()">
+
+            <div class="modal-header">
+                <div class="header-title-group">
+                    <h2>Detalles de Denuncia Sin Asignar</h2>
+                    <span class="public-badge">RS-0060</span>
+                </div>
+                <button class="btn-close" (click)="closeDetailModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <!-- DATOS GENERALES -->
+                <div class="section-block">
+                    <h3 class="section-title">Información del Hecho</h3>
+
+                    <div class="grid-3">
+                        <div class="info-group">
+                            <span class="label">Nivel de Riesgo</span>
+                            <span class="badge risk-low">Bajo</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="label">Tipo de Abuso</span>
+                            <span class="value">Abuso infantil (Humano)</span>
+                        </div>
+                        <div class="info-group">
+                            <span class="label">Fecha de Ingreso</span>
+                            <span class="value">17/09/2025 - 10:15 hs</span>
+                        </div>
+                    </div>
+
+                    <div class="info-group margin-top">
+                        <span class="label">Ubicación y Dirección Específica</span>
+                        <span class="value">Zona 5, Ciudad Capital ・ 12 Calle 8-30</span>
+                    </div>
+
+                    <div class="info-group margin-top">
+                        <span class="label">Relato de la Denuncia</span>
+                        <p class="description-box">
+                            Descripción detallada de los hechos reportados por el ciudadano.
+                        </p>
+                    </div>
+                </div>
+
+                <hr class="divider" />
+
+                <!-- EVIDENCIAS -->
+                <div class="section-block">
+                    <h3 class="section-title">Evidencia Adjunta</h3>
+
+                    <details class="evidence-accordion">
+                        <summary class="accordion-header">
+                            <span>📎 Ver Archivos de Evidencia (1 adjunto)</span>
+                        </summary>
+                        <div class="accordion-content">
+                            <div class="evidence-item">
+                                <span class="file-icon">📷</span>
+                                <div class="file-info">
+                                    <span class="file-name">evidencia_1.jpg</span>
+                                    <span class="file-type">Imagen JPEG</span>
+                                </div>
+                                <a href="#" target="_blank" class="btn-link">Ver archivo</a>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <div class="modal-footer-detail">
+                <button class="btn-secondary" (click)="closeDetailModal()">Cerrar</button>
+                <button class="btn-primary" (click)="confirmClaimFromDetail()">Tomar Denuncia</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal 2: Confirmación para Tomar Denuncia -->
+    <div class="modal-overlay" [class.active]="isClaimModalOpen" (click)="closeClaimModal()">
+        <div class="modal-card modal-small" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Asignar caso a mi cuenta</h2>
+                <button class="btn-close" (click)="closeClaimModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Deseas asumir el seguimiento de la denuncia <strong>RS-0060</strong>?</p>
+                <p class="text-subtle">El estado pasará a "En revisión" y quedarás registrado como el agente
+                    responsable.</p>
+            </div>
+            <div class="modal-footer-confirm">
+                <button class="btn-secondary" (click)="closeClaimModal()">Cancelar</button>
+                <button class="btn-primary" (click)="assignReport()">Confirmar y Tomar</button>
+            </div>
+        </div>
+    </div>
+</section>
