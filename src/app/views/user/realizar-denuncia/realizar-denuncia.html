@@ -56,11 +56,33 @@
 
       <div class="form-group">
         <label class="form-label">Evidencias (opcional)</label>
-        <div class="dropzone">
-          <p class="dropzone-text">Arrastra archivos o haz clic para seleccionar</p>
+
+        <button type="button" class="dropzone" (click)="abrirEvidencia()">
+          <p class="dropzone-text">Arrastra archivos o haz clic para adjuntar</p>
           <p class="dropzone-hint">JPG · PNG · MP4 · PDF</p>
-          <input type="file" class="dropzone-input" multiple hidden />
-        </div>
+        </button>
+
+        @if (archivos.length > 0) {
+          <div class="archivos-lista">
+            @for (archivo of archivos; track $index) {
+              <div class="archivo-item">
+                <span class="archivo-icono">📎</span>
+                <span class="archivo-info">
+                  <span class="archivo-nombre">{{ archivo.nombre }}</span>
+                  <span class="archivo-detalle">{{ formatearTamano(archivo.tamano) }} · {{ archivo.tipo }}</span>
+                </span>
+                <button
+                  type="button"
+                  class="archivo-eliminar"
+                  aria-label="Quitar archivo"
+                  (click)="eliminarArchivo($index)"
+                >
+                  ✕
+                </button>
+              </div>
+            }
+          </div>
+        }
       </div>
 
       <div class="form-group">
@@ -76,3 +98,59 @@
     </form>
   </section>
 </div>
+
+@if (evidenciaAbierta) {
+  <div class="modal-overlay" (click)="cerrarEvidencia()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2 class="modal-title">Subir evidencias</h2>
+        <button type="button" class="modal-close" aria-label="Cerrar" (click)="cerrarEvidencia()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="modal-text">
+          Los archivos son cifrados en tránsito y en reposo.
+          Solo las autoridades con acceso al caso pueden verlos.
+        </p>
+
+        <label class="dropzone dropzone--modal">
+          <p class="dropzone-text">Seleccione o arrastre archivos</p>
+          <p class="dropzone-hint">JPG · PNG · MP4 · PDF</p>
+          <input
+            type="file"
+            class="dropzone-input"
+            multiple
+            hidden
+            (change)="onArchivosSeleccionados($event)"
+          />
+        </label>
+
+        @if (archivos.length > 0) {
+          <div class="archivos-lista modal-lista">
+            @for (archivo of archivos; track $index) {
+              <div class="archivo-item">
+                <span class="archivo-icono">📎</span>
+                <span class="archivo-info">
+                  <span class="archivo-nombre">{{ archivo.nombre }}</span>
+                  <span class="archivo-detalle">{{ formatearTamano(archivo.tamano) }} · {{ archivo.tipo }}</span>
+                </span>
+                <button
+                  type="button"
+                  class="archivo-eliminar"
+                  aria-label="Quitar archivo"
+                  (click)="eliminarArchivo($index)"
+                >
+                  ✕
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+        <button type="button" class="btn-confirm" (click)="cerrarEvidencia()">Confirmar archivos</button>
+      </div>
+
+    </div>
+  </div>
+}
