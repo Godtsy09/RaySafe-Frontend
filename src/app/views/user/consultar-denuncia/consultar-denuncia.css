@@ -1,9 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300;400&family=JetBrains+Mono:wght@200;400;500;600&display=swap');
+
 .consultar-container {
   display: flex;
   justify-content: center;
   padding: 60px 40px 100px;
-  background-color: #ffffff;
-  background-image: radial-gradient(#e2e2e2 1px, transparent 1px);
+  background-color: #fafafa;
+  background-image: radial-gradient(#d1d5db4b 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
@@ -14,32 +20,36 @@
 
 .consultar-eyebrow {
   display: block;
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: #b3452f;
-  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 400;
+  color: #C1121F;
+  text-transform: uppercase;
   margin-bottom: 12px;
 }
 
 .consultar-title {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 42px;
-  font-weight: 400;
+  font-family: 'Fraunces', serif;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1.1;
   color: #1a1a1a;
   margin: 0 0 16px;
 }
 
 .consultar-subtitle {
-  font-size: 15px;
-  line-height: 1.6;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
   color: #6b6b6b;
   margin: 0 0 32px;
 }
 
 .consultar-card {
-  border: 1px solid #e4e4e4;
-  border-radius: 6px;
-  padding: 28px;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 2px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -48,14 +58,14 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .form-label {
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  color: #2c3e60;
-  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6c757d;
   text-transform: uppercase;
 }
 
@@ -63,45 +73,50 @@
   width: 100%;
   box-sizing: border-box;
   padding: 14px 16px;
-  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
   color: #1a1a1a;
-  background-color: #f5f5f5;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  font-family: inherit;
+  background-color: #f3f3f3;
+  border: 1px solid #d3d3d3;
+  border-radius: 2px;
 }
 
 .form-control::placeholder {
-  color: #9a9a9a;
+  color: #a0a0a0;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .btn-consultar {
   width: 100%;
   padding: 16px;
-  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
   font-weight: 500;
   color: #ffffff;
   background-color: #c9884f;
   border: none;
-  border-radius: 4px;
+  border-radius: 2px;
   cursor: pointer;
-  font-family: inherit;
+  text-align: center;
+  text-transform: lowercase; /* Mantiene la estética de figma */
 }
 
 .btn-consultar:hover {
   background-color: #b87a44;
 }
 
-/* Resultado */
+/* Tarjeta de Resultado */
 
 .resultado-card {
   margin-top: 24px;
-  border: 1px solid #e4e4e4;
-  border-radius: 6px;
-  padding: 24px;
+  background-color: #f7f7f5;
+  border: 1px solid #dcdcdc;
+  border-radius: 2px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 28px;
 }
 
 .resultado-header {
@@ -110,35 +125,39 @@
   justify-content: space-between;
 }
 
-.resultado-id {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: 18px;
-  color: #1a1a1a;
+/* Etiqueta superior opcional antes del ID simulada en CSS */
+.resultado-header::before {
+  content: 'EXPEDIENTE:';
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #909090;
+  position: absolute;
+  transform: translateY(-18px);
 }
 
-.resultado-badge {
-  font-size: 11px;
+.resultado-id {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
   font-weight: 600;
+  color: #000000;
+  margin-top: 14px;
+}
+
+/* Badge transformado a texto sin fondo plano según Figma */
+.resultado-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 400;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  padding: 5px 12px;
-  border-radius: 4px;
+  padding: 0;
+  background-color: transparent !important;
+  color: #8c96a0 !important;
+  margin-top: 14px;
 }
 
-.resultado-badge--recibida {
-  background-color: #eef2f7;
-  color: #3d5a80;
-}
-
-.resultado-badge--proceso {
-  background-color: #fbeee1;
-  color: #b3712f;
-}
-
-.resultado-badge--resuelta {
-  background-color: #eaf3ec;
-  color: #4a7a5e;
-}
+/* Timeline / Lista de pasos */
 
 .pasos-lista {
   list-style: none;
@@ -146,50 +165,60 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 20px;
+  position: relative;
 }
 
 .paso-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 14px;
+  gap: 16px;
+  position: relative;
+  font-family: 'DM Sans', sans-serif;
 }
 
 .paso-icono {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   flex-shrink: 0;
-  border-radius: 4px;
+  border-radius: 0; /* Íconos cuadrados */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  z-index: 1;
+}
+
+/* Conector vertical entre íconos */
+.paso-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 24px;
+  width: 1px;
+  height: calc(100% + 4px);
+  background-color: #d8d8d8;
+  z-index: 0;
+}
+
+.paso-item--completado .paso-icono,
+.paso-item--actual .paso-icono {
+  background-color: #000000;
   color: #ffffff;
 }
 
-.paso-item--completado .paso-icono {
-  background-color: #2c3e60;
-}
-
-.paso-item--completado .paso-nombre {
-  color: #1a1a1a;
-}
-
-.paso-item--actual .paso-icono {
-  background-color: #c9884f;
-}
-
-.paso-item--actual .paso-nombre {
-  color: #1a1a1a;
-  font-weight: 600;
-}
-
 .paso-item--pendiente .paso-icono {
-  background-color: #e4e4e4;
+  background-color: #d8d8d8;
+  color: transparent;
+}
+
+.paso-nombre {
+  font-size: 15px;
+  font-weight: 500;
+  color: #222222;
 }
 
 .paso-item--pendiente .paso-nombre {
-  color: #999;
+  color: #888888;
+  font-weight: 400;
 }
