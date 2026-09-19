@@ -3,47 +3,60 @@ $brown-tan: #c48b59;
 $bg-input: #f4f4f4;
 $border-card: #e5e5e5;
 $text-sub: #8c96a3;
-$text-label: #555555;
+$text-label: #5a6a7a;
 
 .register-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem 1rem;
+  padding: 2.5rem 1rem;
   min-height: calc(100vh - 160px); 
   background-color: #ffffff;
 
   .page-title {
-    font-family: serif;
-    font-size: 2rem;
-    font-weight: 400;
-    color: #1a1a1a;
-    margin-bottom: 2rem;
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: 0%;
+    color: #000000;
+    text-align: left;
+    width: 100%;
+    max-width: 580px;
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    box-sizing: border-box;
   }
 
   .card-form {
     background: #ffffff;
     border: 1px solid $border-card;
     border-radius: 2px;
-    padding: 2.5rem;
+    padding: 2.5rem 3rem;
     width: 100%;
-    max-width: 440px;
+    max-width: 580px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 
     .subtitle {
       display: block;
-      font-family: monospace, monospace;
-      font-size: 0.8rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 150%;
       letter-spacing: 1px;
-      color: $text-sub;
+      color: rgba(90, 106, 122, 0.75);
       margin-bottom: 1.5rem;
+      text-transform: uppercase;
     }
 
     .form {
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
+      width: 100%;
 
       .form-group {
         display: flex;
@@ -51,11 +64,12 @@ $text-label: #555555;
         gap: 0.4rem;
 
         label {
-          font-family: monospace, monospace;
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: $text-label;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 1.4;
           letter-spacing: 0.5px;
+          color: $text-label;
         }
 
         input {
@@ -100,8 +114,11 @@ $text-label: #555555;
           padding: 0.75rem;
           border: 1px solid $border-card;
           background-color: $bg-input;
-          color: #666666;
-          font-size: 0.875rem;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 150%;
+          color: rgba(0, 0, 0, 0.5);
           text-align: center;
           cursor: pointer;
           transition: all 0.2s ease;
@@ -131,8 +148,11 @@ $text-label: #555555;
         color: #ffffff;
         border: none;
         border-radius: 2px;
-        font-size: 0.875rem;
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
         font-weight: 500;
+        line-height: 20px;
+        letter-spacing: 0%;
         cursor: pointer;
         margin-top: 0.5rem;
         transition: background-color 0.2s;
