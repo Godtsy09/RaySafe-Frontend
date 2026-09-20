@@ -1,0 +1,357 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&display=swap');
+/* ==========================================================================
+   1. CONTENEDOR PRINCIPAL Y FONDO
+   ========================================================================== */
+
+/* Fondo general de la sección con textura de puntos */
+.estadisticas-container {
+  display: flex;
+  justify-content: center;
+  padding: 64px 48px 100px;
+  background-color: #fafafa67;
+  /* Patrón de puntos estilo grid de Figma */
+  background-image: radial-gradient(#d1d5db4b 1px, transparent 1px);
+  background-size: 20px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Ancho máximo para mantener el diseño centrado */
+.estadisticas-content {
+  width: 100%;
+  max-width: 1280px;
+}
+
+
+/* ==========================================================================
+   2. ENCABEZADO Y TÍTULOS
+   ========================================================================== */
+
+/* Subtítulo superior pequeño en rojo/rojo suave (Kicker / Eyebrow) */
+.estadisticas-eyebrow {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 1.8px;
+  color: #cf1320;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Título principal con la tipografía exactas de Figma */
+.estadisticas-title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 45px;          /* Tamaño exacto Figma */
+  font-weight: 300;         /* 'Light' en Figma corresponde a 300 */
+  line-height: 1;         /* Altura de la línea 150% */
+  letter-spacing: 0;        /* Espacio entre letras 0% */
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+/* Descripción / Instrucciones debajo del título */
+.estadisticas-subtitle {
+  font-size: 18px;
+  color: #666666;
+  margin: 0 0 40px;
+}
+
+
+/* ==========================================================================
+   3. ESTRUCTURA / LAYOUT DE DOS COLUMNAS
+   ========================================================================== */
+
+/* Divide la pantalla en 2: Grid de deptos (izquierda) y Panel de datos (derecha) */
+.estadisticas-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px; /* Columna derecha fija a 380px */
+  gap: 28px;                        /* Separación entre columna izq y der */
+  align-items: start;
+}
+
+
+/* ==========================================================================
+   4. MARCO Y RETÍCULA DE DEPARTAMENTOS (COLUMNA IZQUIERDA)
+   ========================================================================== */
+
+/* Marco blanco contenedor de las tarjetas de departamentos */
+.departamentos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas de igual tamaño */
+  gap: 10px;                             /* <- MODIFICADO: Espacio entre tarjetas (antes 16px) */
+  background-color: #ffffff;
+  border: 1px solid #9ca3acad;
+  border-radius: 0;
+  padding: 26px 28px;                     /* Espaciado interno del marco */
+}
+
+/* Estilo individual de cada tarjeta de departamento */
+.depto-card {
+  text-align: left;
+  background-color: #f8f8f8;
+  border: 1px solid #9ca3acdc;
+  border-radius: 0;
+  padding: 13.5px 12px;                     /* Padding interior de la tarjeta */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 58px;                          /* Altura compacta */
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* Nombre del departamento dentro de la tarjeta */
+.depto-nombre {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: #222222;
+  margin-bottom: 2px;
+  line-height: 1.1;
+}
+
+/* Cifra / Total dentro de la tarjeta */
+.depto-total {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13px;
+  color: #474747;
+  line-height: 1;
+}
+
+
+/* ==========================================================================
+   5. ESCALA DE COLORES / INTENSIDAD (NIVELES DE CALOR)
+   ========================================================================== */
+
+.depto-nivel-1 { background-color: #f8f8f8; } /* Mínimo / Neutro */
+.depto-nivel-2 { background-color: #faeded; } /* Bajo */
+.depto-nivel-3 { background-color: #f5dede; } /* Medio */
+.depto-nivel-4 { background-color: #f1d3d3; } /* Alto */
+
+
+/* ==========================================================================
+   6. ESTADO SELECCIONADO / ACTIVO
+   ========================================================================== */
+
+/* Tarjeta seleccionada (Azul oscuro) */
+.depto-card.depto-card--seleccionado {
+  background-color: #24354c !important;
+  border-color: #24354c !important;
+}
+
+.depto-card.depto-card--seleccionado .depto-nombre {
+  color: #ffffff;
+}
+
+.depto-card.depto-card--seleccionado .depto-total {
+  color: #64748b;
+}
+
+
+/* ==========================================================================
+   7. PANEL LATERAL (COLUMNA DERECHA)
+   ========================================================================== */
+
+/* Contenedor vertical para el panel activo/placeholder y tarjetas inferiores */
+.estadisticas-side {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Estado Vacío (Cuando no hay ningún departamento seleccionado) */
+.detalle-placeholder {
+  background-color: #ffffff;
+  border: 1px solid #9ca3ac;
+  border-radius: 0;
+  padding: 48px 28px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.placeholder-icono {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.placeholder-titulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.placeholder-texto {
+  font-size: 13px;
+  color: #777777;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Panel Oscuro de Detalle (Cuando se selecciona un departamento) */
+.detalle-panel {
+  background-color: #24354c;
+  border-radius: 0;
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: #ffffff;
+}
+
+.detalle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detalle-label {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13px;
+  color: #6b7c96;
+}
+
+/* Botón 'X' para cerrar la vista del panel lateral */
+.detalle-cerrar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background-color: transparent;
+  color: #8fa0b5;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detalle-nombre {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 34px;
+  font-weight: 400;
+  color: #ffffff;
+  margin: -6px 0 4px;
+}
+
+.detalle-total {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.detalle-total-numero {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 38px;
+  color: #c88752;
+}
+
+.detalle-total-texto {
+  font-size: 14px;
+  color: #6b7c96;
+}
+
+
+/* ==========================================================================
+   8. BARS & BARRAS DE PROGRESO DEL PANEL LATERAL
+   ========================================================================== */
+
+.detalle-lista-tipos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detalle-tipo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.detalle-tipo-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Punto indicador de color en la lista */
+.detalle-tipo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #c88752;
+  flex-shrink: 0;
+}
+
+.detalle-tipo-nombre {
+  flex: 1;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #d1d5db;
+}
+
+.detalle-tipo-cantidad {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Estructura de la barra de porcentaje/progreso */
+.detalle-tipo-barra {
+  height: 4px;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.detalle-tipo-barra-fill {
+  height: 100%;
+  background-color: #c88752;
+}
+
+
+/* ==========================================================================
+   9. TARJETAS INFERIORES DE TOTALES GENERALES
+   ========================================================================== */
+
+/* Fila para las 2 tarjetas blancas inferiores */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Tarjeta individual de estadística total */
+.stat-card {
+  
+  background-color: #ffffff;
+  border: 1px solid #9ca3ac;
+  border-radius: 0;
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 6px;
+}
+
+.stat-numero {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 38px;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.stat-texto {
+  font-size: 14px;
+  color: #666666;
+}

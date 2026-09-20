@@ -1,0 +1,72 @@
+<app-header-user></app-header-user>
+
+<div class="consultar-container">
+  <section class="consultar-content">
+    <span class="consultar-eyebrow">DENUNCIAS EXISTENTES</span>
+    <h1 class="consultar-title">Seguir mi denuncia</h1>
+    <p class="consultar-subtitle">
+      Ingresa tu ID público para ver el estado general, o añade el token secreto para ver detalles completos.
+    </p>
+
+    <div class="consultar-card">
+
+      <div class="form-group">
+        <label class="form-label">ID público *</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="RS-2025-0049"
+          [(ngModel)]="idPublico"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Token secreto (opcional)</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Ej: 7B2E-A1CD-F498"
+          [(ngModel)]="tokenSecreto"
+        />
+      </div>
+
+      <button type="button" class="btn-consultar" (click)="consultarDenuncia()">
+        Consultar denuncia
+      </button>
+
+    </div>
+
+    <!-- Resultado: aparece debajo del botón naranja al consultar -->
+    <div class="resultado-card" *ngIf="resultado() as denuncia">
+
+      <div class="resultado-header">
+        <span class="resultado-id">{{ denuncia.idPublico }}</span>
+        <span
+          class="resultado-badge"
+          [class.resultado-badge--recibida]="denuncia.estadoActual === 'recibida'"
+          [class.resultado-badge--proceso]="denuncia.estadoActual === 'en_investigacion'"
+          [class.resultado-badge--resuelta]="denuncia.estadoActual === 'resuelta'"
+        >
+          {{ etiquetaEstado(denuncia.estadoActual) }}
+        </span>
+      </div>
+
+      <ul class="pasos-lista">
+        <li
+          class="paso-item"
+          *ngFor="let paso of denuncia.pasos"
+          [class.paso-item--completado]="paso.completado && !paso.actual"
+          [class.paso-item--actual]="paso.actual"
+          [class.paso-item--pendiente]="!paso.completado && !paso.actual"
+        >
+          <span class="paso-icono">
+            <span *ngIf="paso.completado || paso.actual">✓</span>
+          </span>
+          <span class="paso-nombre">{{ paso.nombre }}</span>
+        </li>
+      </ul>
+
+    </div>
+
+  </section>
+</div>

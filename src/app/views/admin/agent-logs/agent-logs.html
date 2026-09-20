@@ -1,0 +1,239 @@
+<section class="agent-logs-container">
+  <!-- Encabezado -->
+  <div class="view-header">
+    <div class="breadcrumbs">PNC ・ ZONA 3</div>
+    <h1 class="view-title">Registros de denuncias</h1>
+  </div>
+
+  <!-- Buscador y Filtros -->
+  <div class="filter-card">
+    <input 
+      type="text" 
+      class="filter-input" 
+      placeholder="Filtrar por ID, agente, tipo o zona..." 
+    />
+  </div>
+
+  <!-- Tabla Principal -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="logs-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo de abuso</th>
+            <th>Agente</th>
+            <th>Fecha</th>
+            <th>Ubicacion</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="log-id">RS-0049</td>
+            <td class="abuse-type">Abuso infantil</td>
+            <td class="agent-name">Carlos García</td>
+            <td class="log-date">22 ago 2025</td>
+            <td class="log-location">Zona 3, Ciudad Capital</td>
+            <td><span class="status warning">En Investigación</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver detalles</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="log-id">RS-0048</td>
+            <td class="abuse-type">Maltrato animal</td>
+            <td class="agent-name">Sofia Mendez</td>
+            <td class="log-date">21 ago 2025</td>
+            <td class="log-location">Zona 7, Sur</td>
+            <td><span class="status danger">Desestimada</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver detalles</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="log-id">RS-0047</td>
+            <td class="abuse-type">Violencia género</td>
+            <td class="agent-name">Ana Morales</td>
+            <td class="log-date">20 ago 2025</td>
+            <td class="log-location">Zona 1, Norte</td>
+            <td><span class="status warning">En Investigación</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver detalles</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="log-id">RS-0043</td>
+            <td class="abuse-type">Abandono animal</td>
+            <td class="agent-name">Roberto Cordon</td>
+            <td class="log-date">15 ago 2025</td>
+            <td class="log-location">Zona 2, Este</td>
+            <td><span class="status success">Resuelta</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver detalles</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button class="btn-pagination">← Previous</button>
+      <div class="page-numbers">
+        <span class="page active">1</span>
+        <span class="page">2</span>
+        <span class="page">3</span>
+        <span class="dots">...</span>
+        <span class="page">10</span>
+      </div>
+      <button class="btn-pagination">Next →</button>
+    </div>
+  </div>
+
+  <!-- Modal "Ver Detalles" (Solo Lectura) -->
+  <div class="modal-overlay" [class.active]="isModalOpen" (click)="closeModal()">
+    <div class="modal-card modal-large" (click)="$event.stopPropagation()">
+      
+      <!-- Encabezado del Modal -->
+      <div class="modal-header">
+        <div class="header-title-group">
+          <h2>Expediente de Denuncia</h2>
+          <span class="public-badge">RS-0049</span>
+        </div>
+        <button class="btn-close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- SECCIÓN 1: DATOS GENERALES DEL CASO -->
+        <div class="section-block">
+          <h3 class="section-title">Información del Hecho</h3>
+          
+          <div class="grid-3">
+            <div class="info-group">
+              <span class="label">Nivel de Riesgo</span>
+              <span class="badge risk-high">Crítico</span>
+            </div>
+            <div class="info-group">
+              <span class="label">Tipo de Abuso</span>
+              <span class="value">Abuso infantil (Humano)</span>
+            </div>
+            <div class="info-group">
+              <span class="label">Fecha de Ingreso</span>
+              <span class="value">22/08/2025 - 14:30 hs</span>
+            </div>
+          </div>
+
+          <div class="info-group margin-top">
+            <span class="label">Ubicación y Dirección Específica</span>
+            <span class="value">Zona 3, Ciudad Capital ・ 4ta Avenida 12-45, Barrio El Carmen</span>
+          </div>
+
+          <div class="info-group margin-top">
+            <span class="label">Relato de la Denuncia</span>
+            <p class="description-box">
+              Vecinos reportan llantos continuos e indicios de falta de atención a un menor durante las noches en el inmueble indicado. No se observa presencia de adultos responsables durante largos períodos.
+            </p>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- SECCIÓN 2: AGENTE Y EVIDENCIAS -->
+        <div class="section-block">
+          <h3 class="section-title">Asignación y Evidencia</h3>
+          
+          <div class="agent-card">
+            <div class="agent-avatar">CG</div>
+            <div class="agent-details">
+              <span class="agent-title">Agente a cargo:</span>
+              <span class="agent-name">Carlos García</span>
+              <span class="agent-email">c.garcia@pnc.gob.gt ・ <span class="badge-status-active">Activo</span></span>
+            </div>
+            
+            <!-- Corrección: Se elimina el punto en class y se agrega la clase status warning -->
+            <div class="info-group">
+              <span class="label">Estado del Caso</span>
+              <span class="status warning">En Investigación</span>
+            </div>
+          </div>
+
+          <!-- Acordeón Desplegable para Evidencias -->
+          <details class="evidence-accordion margin-top">
+            <summary class="accordion-header">
+              <span>📎 Ver Archivos de Evidencia (2 adjuntos)</span>
+            </summary>
+            <div class="accordion-content">
+              <div class="evidence-item">
+                <span class="file-icon">📷</span>
+                <div class="file-info">
+                  <span class="file-name">foto_fachada_inmueble.jpg</span>
+                  <span class="file-type">Imagen JPEG</span>
+                </div>
+                <a href="#" target="_blank" class="btn-link">Ver archivo</a>
+              </div>
+              <div class="evidence-item">
+                <span class="file-icon">🎵</span>
+                <div class="file-info">
+                  <span class="file-name">audio_grabacion_ambiente.mp3</span>
+                  <span class="file-type">Audio MP3</span>
+                </div>
+                <a href="#" target="_blank" class="btn-link">Ver archivo</a>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- SECCIÓN 3: BITÁCORA Y NOTAS DEL AGENTE -->
+        <div class="section-block">
+          <h3 class="section-title">Bitácora de Avances y Notas de Investigación</h3>
+          <!-- Corrección: Etiqueta fuera de notes-feed con margen inferior -->
+          <span class="label" style="margin-bottom: 12px; display: block;">Notas realizadas por el agente:</span>
+
+          <!-- Feed de Notas Registradas -->
+          <div class="notes-feed">
+            <div class="note-card">
+              <div class="note-header">
+                <span class="author">Carlos García (Agente)</span>
+                <span class="date">23 ago 2025 - 09:15 hs</span>
+              </div>
+              <p class="note-body">
+                Se realizó la primera inspección en la dirección especificada. Se entabló diálogo con los vecinos colindantes para recopilar testimonios preliminares.
+              </p>
+            </div>
+
+            <div class="note-card">
+              <div class="note-header">
+                <span class="author">Carlos García (Agente)</span>
+                <span class="date">22 ago 2025 - 16:00 hs</span>
+              </div>
+              <p class="note-body">
+                Se recibió el expediente asignado. Se inicia el protocolo de verificación en coordinación con la unidad local.
+              </p>
+            </div>
+          </div>
+
+          <!-- Historial de Transición de Estado -->
+          <div class="status-history-compact margin-top">
+            <span class="label">Última actualización de estado:</span>
+            <p class="history-text">
+              Pasó a <span class="status warning">En Investigación</span> por <strong>Carlos García</strong> el 22 ago 2025 - 15:10 hs.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Pie del Modal -->
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Cerrar Expediente</button>
+      </div>
+
+    </div>
+  </div>
+</section>

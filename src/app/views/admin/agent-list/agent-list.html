@@ -1,0 +1,188 @@
+<section class="agents-container">
+  <!-- Encabezado con tipografía fina -->
+  <div class="view-header">
+    <div class="breadcrumbs">PNC ・ ZONA 3</div>
+    <h1 class="view-title">Agentes en la institución</h1>
+  </div>
+
+  <!-- Card de la Tabla -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="agents-table">
+        <thead>
+          <tr>
+            <th>Agente</th>
+            <th>ID</th>
+            <th>Casos</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="agent-info">
+                <div class="avatar">CG</div>
+                <div class="details">
+                  <span class="name">Carlos García</span>
+                  <span class="email">c.garcia@pnc.gob.gt</span>
+                </div>
+              </div>
+            </td>
+            <td class="agent-id">PNC-014</td>
+            <td class="agent-id">12</td>
+            <td><span class="status active">activo</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver info</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="agent-info">
+                <div class="avatar">ML</div>
+                <div class="details">
+                  <span class="name">María López</span>
+                  <span class="email">m.lopez@pnc.gob.gt</span>
+                </div>
+              </div>
+            </td>
+            <td class="agent-id">PNC-021</td>
+            <td class="agent-id">8</td>
+            <td><span class="status active">activo</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver info</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="agent-info">
+                <div class="avatar">RD</div>
+                <div class="details">
+                  <span class="name">Roberto Díaz</span>
+                  <span class="email">r.diaz@pnc.gob.gt</span>
+                </div>
+              </div>
+            </td>
+            <td class="agent-id">PNC-009</td>
+            <td class="agent-id">7</td>
+            <td><span class="status inactive">inactivo</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver info</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="agent-info">
+                <div class="avatar">AN</div>
+                <div class="details">
+                  <span class="name">Ana Morales</span>
+                  <span class="email">a.morales@pnc.gob.gt</span>
+                </div>
+              </div>
+            </td>
+            <td class="agent-id">PNC-033</td>
+            <td class="agent-id">15</td>
+            <td><span class="status active">activo</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver info</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="agent-info">
+                <div class="avatar">SM</div>
+                <div class="details">
+                  <span class="name">Sofia Mendez</span>
+                  <span class="email">s.mendez@pnc.gob.gt</span>
+                </div>
+              </div>
+            </td>
+            <td class="agent-id">PNC-044</td>
+            <td class="agent-id">20</td>
+            <td><span class="status active">activo</span></td>
+            <td class="text-right">
+              <button class="btn-info" (click)="openModal()">Ver info</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button class="btn-pagination">← Previous</button>
+      <div class="page-numbers">
+        <span class="page active">1</span>
+        <span class="page">2</span>
+        <span class="page">3</span>
+        <span class="dots">...</span>
+        <span class="page">8</span>
+        <span class="page">9</span>
+        <span class="page">10</span>
+      </div>
+      <button class="btn-pagination">Next →</button>
+    </div>
+  </div>
+
+  <!-- Modal con desenfoque de fondo azul -->
+  <div class="modal-overlay" [class.active]="isModalOpen" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Detalles del Agente</h2>
+        <button class="btn-close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form class="agent-form">
+          <div class="form-group">
+            <label>ID</label>
+            <input type="text" value="PNC-014" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" value="Carlos García" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" value="c.garcia@pnc.gob.gt" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" value="••••••••••••••••" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de Creación</label>
+            <input type="text" value="2026-08-15 10:30:00" readonly class="input-readonly" />
+          </div>
+
+          <hr class="divider" />
+
+          <div class="form-group">
+            <label>Rol (role:)</label>
+            <select>
+              <option value="1">1 - Administrador</option>
+              <option value="2" selected>2 - Agente</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Estado</label>
+            <select>
+              <option value="true" selected>Activo</option>
+              <option value="false">Inactivo</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" (click)="closeModal()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</section>
