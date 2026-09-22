@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { HeaderAdminComponent } from '../../../components/headers/header-admin/header-admin';
 
 @Component({
-  imports: [],
+  imports: [HeaderAdminComponent],
   selector: 'app-agent-list',
   styleUrl: './agent-list.scss',
   templateUrl: './agent-list.html',

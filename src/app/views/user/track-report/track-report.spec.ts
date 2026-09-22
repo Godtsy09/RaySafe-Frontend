@@ -1,16 +1,18 @@
+import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RecursosDeAyuda } from './recursos-de-ayuda';
+import { TrackReport } from './track-report';
 
-describe('RecursosDeAyuda', () => {
-  let component: RecursosDeAyuda;
-  let fixture: ComponentFixture<RecursosDeAyuda>;
+describe('TrackReport', () => {
+  let component: TrackReport;
+  let fixture: ComponentFixture<TrackReport>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RecursosDeAyuda],
+      imports: [TrackReport],
+      providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(RecursosDeAyuda);
+    fixture = TestBed.createComponent(TrackReport);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

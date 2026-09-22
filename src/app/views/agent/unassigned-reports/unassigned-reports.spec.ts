@@ -1,3 +1,4 @@
+import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UnassignedReports } from './unassigned-reports';
 
@@ -8,6 +9,7 @@ describe('UnassignedReports', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [UnassignedReports],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UnassignedReports);

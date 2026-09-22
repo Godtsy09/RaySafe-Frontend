@@ -1,0 +1,54 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+}
+
+.error-code {
+  margin: 0;
+  font-size: 5rem;
+  line-height: 1;
+  color: #c58d5e;
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.message {
+  margin: 1rem 0 0.25rem;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #000000;
+}
+
+.hint {
+  margin: 0 0 2rem;
+  color: rgba(0, 0, 0, 0.55);
+  font-size: 0.95rem;
+}
+
+.btn-home {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  border-radius: 3px;
+  background-color: #c58d5e;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-home:hover {
+  background-color: #b0774a;
+}

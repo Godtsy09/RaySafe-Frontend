@@ -76,7 +76,7 @@
   font-family: 'DM Sans', sans-serif;
   font-size: 18px;
   font-weight: 500;
-  color: #1a1a1a;
+  color: #1a1a1ad7;
   background-color: #f3f3f3;
   border: 1px solid #d3d3d3;
   border-radius: 2px;
@@ -137,9 +137,9 @@
 }
 
 .resultado-id {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   color: #000000;
   margin-top: 14px;
 }

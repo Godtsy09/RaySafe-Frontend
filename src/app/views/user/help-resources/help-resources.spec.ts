@@ -1,18 +1,18 @@
 import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AssignedReports } from './assigned-reports';
+import { HelpResources } from './help-resources';
 
-describe('AssignedReports', () => {
-  let component: AssignedReports;
-  let fixture: ComponentFixture<AssignedReports>;
+describe('HelpResources', () => {
+  let component: HelpResources;
+  let fixture: ComponentFixture<HelpResources>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AssignedReports],
+      imports: [HelpResources],
       providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AssignedReports);
+    fixture = TestBed.createComponent(HelpResources);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

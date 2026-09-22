@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+import { HeaderAgentComponent } from '../../../components/headers/header-agent/header-agent';
 
 @Component({
-  imports: [],
+  imports: [HeaderAgentComponent],
   selector: 'app-assigned-reports',
   styleUrl: './assigned-reports.scss',
   templateUrl: './assigned-reports.html',

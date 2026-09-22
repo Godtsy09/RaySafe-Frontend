@@ -1,20 +1,20 @@
 import { provideRouter } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AssignedReports } from './assigned-reports';
+import { CreateReport } from './create-report';
 
-describe('AssignedReports', () => {
-  let component: AssignedReports;
-  let fixture: ComponentFixture<AssignedReports>;
+describe('CreateReport', () => {
+  let component: CreateReport;
+  let fixture: ComponentFixture<CreateReport>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AssignedReports],
+      imports: [CreateReport],
       providers: [provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(AssignedReports);
+    fixture = TestBed.createComponent(CreateReport);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

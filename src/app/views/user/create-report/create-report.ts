@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { HeaderUserComponent } from '../../../components/headers/header-user/header-user';
 
 interface ArchivoEvidencia {
@@ -18,13 +19,13 @@ function formatearTamano(bytes: number): string {
 }
 
 @Component({
-  imports: [HeaderUserComponent],
-  selector: 'app-realizar-denuncia',
-  templateUrl: './realizar-denuncia.html',
-  styleUrl: './realizar-denuncia.css',
+  imports: [HeaderUserComponent, RouterLink],
+  selector: 'app-create-report',
+  templateUrl: './create-report.html',
+  styleUrl: './create-report.css',
 })
 
-export class RealizarDenunciaComponent {
+export class CreateReport {
   protected evidenciaAbierta = false;
   protected archivos: ArchivoEvidencia[] = [];
 

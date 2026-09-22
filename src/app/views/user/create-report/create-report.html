@@ -4,7 +4,7 @@
     <span class="denuncia-eyebrow">NUEVA DENUNCIA</span>
     <h1 class="denuncia-title">Formulario Anónimo</h1>
 
-    <form class="denuncia-form">
+    <form class="denuncia-form" (submit)="$event.preventDefault()">
 
       <div class="form-group">
         <label class="form-label">Categoria la de denuncia (humano-animal)</label>
@@ -91,7 +91,7 @@
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn btn-cancel">Cancelar</button>
+        <button type="button" class="btn btn-cancel" routerLink="/home">Cancelar</button>
         <button type="submit" class="btn btn-submit">Enviar denuncia</button>
       </div>
 

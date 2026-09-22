@@ -18,12 +18,12 @@ interface ResultadoDenuncia {
 }
 
 @Component({
-  selector: 'app-consultar-denuncia',
+  selector: 'app-track-report',
   imports: [CommonModule, FormsModule, HeaderUserComponent],
-  templateUrl: './consultar-denuncia.html',
-  styleUrl: './consultar-denuncia.css',
+  templateUrl: './track-report.html',
+  styleUrl: './track-report.css',
 })
-export class ConsultarDenuncia {
+export class TrackReport {
   protected idPublico = '';
   protected tokenSecreto = '';
 

@@ -14,12 +14,12 @@ interface DesgloseItem {
 }
 
 @Component({
-  selector: 'app-estadisticas-de-abuso',
+  selector: 'app-abuse-stats',
   imports: [CommonModule, HeaderUserComponent],
-  templateUrl: './estadisticas-abuso.html',
-  styleUrl: './estadisticas-abuso.css',
+  templateUrl: './abuse-stats.html',
+  styleUrl: './abuse-stats.css',
 })
-export class EstadisticasDeAbuso {
+export class AbuseStats {
   //Datos como ejemplo, ya con el ednpoint de las estadisticas,
   //este arreglo se reemplaza por la respuesta
   protected readonly departamentos: Departamento[] = [

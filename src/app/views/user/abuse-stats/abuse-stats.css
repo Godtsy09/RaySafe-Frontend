@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
 /* ==========================================================================
    1. CONTENEDOR PRINCIPAL Y FONDO
    ========================================================================== */
@@ -101,10 +104,10 @@
 
 /* Nombre del departamento dentro de la tarjeta */
 .depto-nombre {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
-  font-weight: 600;
-  color: #222222;
+  font-weight: 500;
+  color: #0e0d0d;
   margin-bottom: 2px;
   line-height: 1.1;
 }

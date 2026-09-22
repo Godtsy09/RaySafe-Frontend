@@ -23,11 +23,11 @@ interface Institucion {
 
 @Component({
   imports: [HeaderUserComponent],
-  selector: 'app-recursos-de-ayuda',
-  styleUrl: './recursos-de-ayuda.css',
-  templateUrl: './recursos-de-ayuda.html',
+  selector: 'app-help-resources',
+  styleUrl: './help-resources.css',
+  templateUrl: './help-resources.html',
 })
-export class RecursosDeAyuda {
+export class HelpResources {
   
   //Datos sobrepuestos de los 6 PDFs mostrados en la vista
   //queda pendiente cambiar ete array por al consulta a la base de datos

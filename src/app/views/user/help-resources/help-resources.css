@@ -1,0 +1,409 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300;400&family=JetBrains+Mono:wght@200;400;500&display=swap');
+
+/* ==========================================================================
+   2. ESTRUCTURA Y CONTENEDOR PRINCIPAL
+   ========================================================================== */
+
+/* Contenedor padre de toda la vista */
+.recursos-container {
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  padding: 60px 40px 100px; /* Relleno: arriba, lados, abajo */
+  background-color: #fafafa;
+  background-image: radial-gradient(#d1d5db4b 1px, transparent 1px); /* Patrón de puntos */
+  background-size: 22px 22px; /* Separación de los puntos del patrón */
+}
+
+/* Envoltorio interno que limita el ancho de la vista */
+.recursos-content {
+  width: 100%;
+  max-width: 1280px; /* Ancho máximo ajustado para evitar tarjetas excesivamente anchas */
+}
+
+/* ==========================================================================
+   3. ENCABEZADO DE LA SECCIÓN (TITULARES)
+   ========================================================================== */
+
+/* Texto pequeño o subtítulo superior en rojo */
+.recursos-eyebrow {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #C1121F; /* Rojo característico */
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Título principal con tipografía serif */
+.recursos-title {
+  font-family: 'Fraunces', serif;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1.1;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+}
+
+/* Breve descripción debajo del título principal */
+.recursos-subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b6b6b;
+  margin: 0 0 32px;
+}
+
+/* ==========================================================================
+   4. TARJETAS DE PDF / GUÍAS EDUCATIVAS
+   ========================================================================== */
+
+/* Grilla para las tarjetas de recursos PDF */
+.pdf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual ancho */
+  gap: 24px; /* Espacio entre cada tarjeta */
+  margin-bottom: 48px;
+}
+
+/* Estructura individual de la tarjeta de PDF */
+.pdf-card {
+  background-color: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+/* Ícono / Badge contenedor del texto "PDF" */
+.pdf-icon {
+  width: 56px;
+  height: 64px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Variantes de color para el ícono de PDF */
+.pdf-icon--blue     { background-color: #eef2f7; color: #3d5a80; }
+.pdf-icon--red      { background-color: #fbeae7; color: #b3452f; }
+.pdf-icon--green    { background-color: #eaf3ec; color: #4a7a5e; }
+.pdf-icon--purple   { background-color: #efedf5; color: #6b5b95; }
+.pdf-icon--gray     { background-color: #eef0f2; color: #5a6472; }
+.pdf-icon--blue-alt { background-color: #e9eef4; color: #45607a; }
+.pdf-icon--lavender { background-color: #f0edf6; color: #7a5f9e; }
+.pdf-icon--tan      { background-color: #f2ece2; color: #a17a45; }
+
+/* Nombre o título del documento PDF */
+.pdf-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* Fila inferior de metadata (Tag de categoría y número de páginas) */
+.pdf-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: auto; /* Empuja el contenido al fondo de la tarjeta */
+}
+
+/* Etiqueta de la categoría del PDF */
+.pdf-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #5a6472;
+  background-color: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* Texto indicador de páginas */
+.pdf-pages {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #8c96a0;
+}
+
+/* Enlace / Botón para descargar */
+.pdf-download {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #c1121f;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.pdf-download:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   5. TÍTULOS GENERALES DE SECCIÓN
+   ========================================================================== */
+
+.section-title {
+  font-family: 'Fraunces', serif;
+  font-size: 30px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0 0 20px;
+}
+
+/* ==========================================================================
+   6. LÍNEAS DE EMERGENCIA / HOTLINES
+   ========================================================================== */
+
+/* Grilla de 4 columnas para números de teléfono de ayuda */
+.hotlines-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0; /* Sin espacio para colapsar los bordes */
+  border-top: 1px solid #e4e4e4;
+  margin-bottom: 48px;
+}
+
+/* Tarjeta individual de número telefónico */
+.hotline-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  border: 1px solid #e4e4e4;
+  margin: -1px 0 0 -1px; /* Evita que los bordes dobles se superpongan feo */
+  background-color: #ffffff;
+}
+
+/* Número telefónico destacado */
+.hotline-number {
+  font-family: 'Fraunces', serif;
+  font-size: 40px;
+  font-weight: 300;
+  color: #c9884f;
+  line-height: 1;
+}
+
+/* Contenedor vertical de nombre y horario */
+.hotline-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hotline-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+.hotline-schedule {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #999;
+}
+
+/* ==========================================================================
+   7. INSTITUCIONES DE APOYO
+   ========================================================================== */
+
+/* Grilla para las tarjetas de instituciones */
+.instituciones-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Tarjeta interactiva de institución */
+.institucion-card {
+  text-align: left;
+  background-color: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-radius: 6px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.institucion-card:hover {
+  border-color: #c9884f; /* Resaltado al pasar el ratón */
+}
+
+/* Tag distintivo dentro de la tarjeta de institución */
+.institucion-tag {
+  align-self: flex-start;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.institucion-tag--support { background-color: #eef2f7; color: #3d5a80; }
+.institucion-tag--shelter { background-color: #eaf3ec; color: #4a7a5e; }
+
+.institucion-name {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 350;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.institucion-location {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #8c96a0;
+  margin: 0;
+}
+
+.institucion-ver {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: #c1121f;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   8. MODAL DE DETALLE DE INSTITUCIÓN
+   ========================================================================== */
+
+/* Fondo oscuro transparente con efecto desenfoque */
+.modal-overlay {
+  position: fixed;
+  inset: 0; /* Cubre toda la pantalla */
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(120, 140, 170, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Caja de contenido del modal */
+.modal-box {
+  width: 100%;
+  max-width: 480px;
+  background-color: #ffffff;
+  border-radius: 6px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+/* Encabezado del modal */
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 28px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.modal-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.35;
+}
+
+/* Botón 'X' para cerrar el modal */
+.modal-close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #d9d9d9;
+  background-color: #ffffff;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  background-color: #f2f2f2;
+}
+
+/* Cuerpo interno del modal */
+.modal-body {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Lista clave-valor del modal */
+.detalle-lista {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detalle-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detalle-item dt {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.detalle-item dd {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #1a1a1a;
+}
+
+/* Botón principal de llamada dentro del modal */
+.btn-llamar {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  padding: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #3d5a80;
+  border-radius: 4px;
+}
+
+.btn-llamar:hover {
+  background-color: #33496b;
+}

@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { HeaderAgentComponent } from '../../../components/headers/header-agent/header-agent';
 
 @Component({
-  imports: [],
+  imports: [HeaderAgentComponent],
   selector: 'app-unassigned-reports',
   styleUrl: './unassigned-reports.scss',
   templateUrl: './unassigned-reports.html',
 })
 export class UnassignedReports {
+  private readonly router = inject(Router);
+
   // Estados para controlar la visibilidad de los modales
   isDetailModalOpen: boolean = false;
   isClaimModalOpen: boolean = false;
@@ -38,5 +42,6 @@ export class UnassignedReports {
   // Acción del botón confirmar
   assignReport(): void {
     this.closeClaimModal();
+    this.router.navigate(['/assigned-reports']);
   }
 }
