@@ -1,11 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300&family=JetBrains+Mono:wght@200;400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:opsz,wght@9..144,300;400&family=JetBrains+Mono:wght@200;400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@1,9..40,300;1,9..40,400&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@1,9..40,600&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@1,9..40,500;1,9..40,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=JetBrains+Mono:wght@200;400;500&display=swap');
 
 :host {
   display: block;
@@ -35,13 +28,19 @@
   color: #ffffff;
   text-decoration: none;
   margin-left: 22px;
+  cursor: pointer; /* Muestra la manita al pasar el cursor */
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85; /* Ligera opacidad visual al pasar el cursor */
+  }
 }
 
 /* 3. Menú de navegación */
 .nav {
   display: flex;
   align-items: center;
-  gap: 36px; /* Ahora sí separa tanto los enlaces como el botón */
+  gap: 36px; /* Separa tanto los enlaces como el botón */
   margin-left: auto;
 }
 
@@ -53,10 +52,10 @@
   font-size: 15px;
   font-weight: 400;
   transition: opacity 0.2s ease;
-}
 
-.nav-link:hover {
-  opacity: 0.8;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 /* Botón "Agentes" */
@@ -71,11 +70,11 @@
   font-weight: 400;
   cursor: pointer;
   transition: all 0.2s ease;
-}
 
-.btn-agentes:hover {
-  border-color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.08);
+  &:hover {
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
 }
 
 /* Responsivo para móviles */

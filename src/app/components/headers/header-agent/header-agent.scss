@@ -5,15 +5,22 @@
   width: 100%;
 }
 
-/* 1. Header Base (Misma altura y color que el header general) */
+// Variables locales de color
+$brand-navy: #202e43;
+$brand-accent: #CA9264;
+$text-light: #ffffff;
+$danger-color: #ef4444;
+$danger-hover-bg: #fef2f2;
+
+/* 1. Header Base */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 80px;
   padding: 0 40px;
-  background-color: #202e43;
-  color: #ffffff;
+  background-color: $brand-navy;
+  color: $text-light;
   box-sizing: border-box;
 }
 
@@ -25,43 +32,41 @@
   font-weight: 500;
   letter-spacing: -0.10px;
   white-space: nowrap;
-  color: #ffffff;
+  color: $text-light;
   text-decoration: none;
   margin-left: 22px;
 }
 
-/* 3. Bloque Central (Denuncias / Sin Atender) */
+/* 3. Bloque Central */
 .center {
   display: flex;
   align-items: center;
   gap: 28px;
-}
 
-/* Enlace/Texto "Denuncias" y botón "Sin atender" (misma base, el recuadro es el estado activo) */
-.center .nav-link,
-.btn-sin-atender {
-  font-family: 'DM Sans', sans-serif;
-  color: #f1f5f9;
-  text-decoration: none;
-  font-size: 15px;
-  font-weight: 400;
-  border: none;
-  background-color: transparent;
-  border-radius: 4px;
-  padding: 8px 18px;
-  cursor: pointer;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
-}
+  .nav-link,
+  .btn-sin-atender {
+    font-family: 'DM Sans', sans-serif;
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 400;
+    border: none;
+    background-color: transparent;
+    border-radius: 6px;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
 
-.center .nav-link:hover,
-.btn-sin-atender:hover {
-  opacity: 0.8;
-}
+    &:hover {
+      opacity: 0.85;
+    }
 
-/* Fondo sutil del elemento activo según la ruta */
-.center .active {
-  background-color: rgba(255, 255, 255, 0.055);
-  color: #ebf0fa;
+    &.active {
+      background-color: rgba(255, 255, 255, 0.08);
+      color: #ebf0fa;
+      font-weight: 500;
+    }
+  }
 }
 
 /* 4. Perfil del Agente (Derecha) */
@@ -71,7 +76,6 @@
   gap: 14px;
 }
 
-/* Nombre del agente / Rango */
 .agent-name {
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
@@ -80,12 +84,12 @@
   white-space: nowrap;
 }
 
-/* Contenedor del avatar (ancla el menú desplegable) */
+/* Contenedor del avatar */
 .avatar-menu {
   position: relative;
 }
 
-/* Círculo Avatar con iniciales (abre el menú de usuario) */
+/* Círculo Avatar */
 .avatar {
   display: flex;
   align-items: center;
@@ -93,55 +97,95 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #3b5998; /* Azul cobalto idéntico a Figma */
-  color: #ffffff;
+  background-color: #3b5998;
+  color: $text-light;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   user-select: none;
-  border: none;
+  border: 2px solid rgba(255, 255, 255, 0.15);
   padding: 0;
   cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $brand-accent;
+    box-shadow: 0 0 0 3px rgba(202, 146, 100, 0.25);
+  }
 }
 
-/* Menú desplegable del avatar */
+/* 5. Menú Desplegable de Usuario */
 .avatar-dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + 10px);
   right: 0;
   z-index: 1000;
-  min-width: 180px;
+  min-width: 190px;
   background-color: #ffffff;
-  border-radius: 4px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  padding: 6px;
+  animation: dropdownFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Botón de Cerrar Sesión (Item único del desplegable) */
 .avatar-dropdown-item {
-  display: block;
-  width: calc(100% - 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
   box-sizing: border-box;
-  margin: 8px 12px;
-  padding: 8px 16px;
-  background-color: #ffffff;
-  border: 1px solid #3d5a80;
-  border-radius: 4px;
+  margin: 0;
+  padding: 10px 16px;
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
-  color: #3d5a80;
+  color: $danger-color;
   text-align: center;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: all 0.15s ease;
+
+  /* Icono vectorial SVG inyectado mediante mask */
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'%3E%3C/path%3E%3Cpolyline points='16 17 21 12 16 7'%3E%3C/polyline%3E%3Cline x1='21' y1='12' x2='9' y2='12'%3E%3C/line%3E%3C/svg%3E") no-repeat center / contain;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4'%3E%3C/path%3E%3Cpolyline points='16 17 21 12 16 7'%3E%3C/polyline%3E%3Cline x1='21' y1='12' x2='9' y2='12'%3E%3C/line%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  &:hover {
+    background-color: $danger-hover-bg;
+    color: darken($danger-color, 8%);
+    border-color: rgba(239, 68, 68, 0.15);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
-.avatar-dropdown-item:hover {
-  background-color: #3d5a80;
-  color: #ffffff;
+/* Animación de entrada sutil */
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Adaptación Responsiva para Móviles */
+/* Adaptación Responsiva */
 @media screen and (max-width: 600px) {
   .header {
     flex-wrap: wrap;
@@ -158,5 +202,9 @@
 
   .profile {
     margin-left: auto;
+  }
+
+  .avatar-dropdown {
+    right: 0;
   }
 }

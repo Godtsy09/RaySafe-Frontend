@@ -14,9 +14,13 @@ $border-light: #F3F4F6;
 
 .agents-container {
   max-width: 960px;
+  min-height: calc(100vh - 280px); // Ajuste para cubrir la altura completa descontando el footer
   margin: 0 auto;
-  padding: 40px 20px;
+  padding: 40px 20px 48px 20px; // Padding adaptado para conectar limpiamente con el footer
+  box-sizing: border-box;
   font-family: system-ui, -apple-system, sans-serif;
+  display: flex;
+  flex-direction: column;
 
   /* Encabezado con Institución y Título */
   .view-header {
