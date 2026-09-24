@@ -32,6 +32,12 @@ $border-light: #F3F4F6;
   padding: 40px 20px;
   font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
 
+  /* SOLUCIÓN: Usar min-height dinámico para empujar el footer */
+  min-height: calc(100vh - 220px); /* 220px aprox. equivale a la altura total del footer + header */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+
   /* Encabezado Principal */
   .view-header {
     margin-bottom: 24px;
