@@ -1,10 +1,12 @@
-import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HeaderUserComponent } from '../../../components/headers/header-user/header-user';
+import { StatsService } from '../../../services/stats.service';
 
 interface Departamento {
   nombre: string;
   total: number;
+  desglose: { categoria: string; cantidad: number; porcentaje: number }[];
 }
 
 interface DesgloseItem {
@@ -19,47 +21,55 @@ interface DesgloseItem {
   templateUrl: './abuse-stats.html',
   styleUrl: './abuse-stats.css',
 })
-export class AbuseStats {
-  //Datos como ejemplo, ya con el ednpoint de las estadisticas,
-  //este arreglo se reemplaza por la respuesta
-  protected readonly departamentos: Departamento[] = [
-    { nombre: 'Petén', total: 44 },
-    { nombre: 'Huehuetenango', total: 67 },
-    { nombre: 'Alta Verapaz', total: 89 },
-    { nombre: 'Quiché', total: 33 },
-    { nombre: 'Izabal', total: 34 },
-    { nombre: 'San Marcos', total: 72 },
-    { nombre: 'Totonicapán', total: 41 },
-    { nombre: 'Baja Verapaz', total: 18 },
-    { nombre: 'Zacapa', total: 22 },
-    { nombre: 'Quetzaltenango', total: 95 },
-    { nombre: 'Sololá', total: 23 },
-    { nombre: 'Chiquimula', total: 16 },
-    { nombre: 'El Progreso', total: 39 },
-    { nombre: 'Retalhuleu', total: 44 },
-    { nombre: 'Chimaltenango', total: 61 },
-    { nombre: 'Jalapa', total: 12 },
-    { nombre: 'Suchitepéquez', total: 52 },
-    { nombre: 'Sacatepéquez', total: 29 },
-    { nombre: 'Jutiapa', total: 58 },
-    { nombre: 'Escuintla', total: 76 },
-    { nombre: 'Guatemala', total: 145 },
-    { nombre: 'Santa Rosa', total: 43 },
-  ];
+export class AbuseStats implements OnInit {
+  private readonly statsService = inject(StatsService);
+  private readonly platformId = inject(PLATFORM_ID);
 
-  protected readonly totalNacional = 1156;
-  protected readonly totalDepartamentos = 22;
-
-  private readonly maxTotal = Math.max(...this.departamentos.map((d) => d.total));
-
-  private readonly tiposAbuso = [
-    { tipo: 'Abuso animal', porcentaje: 0.36 },
-    { tipo: 'Abuso infantil', porcentaje: 0.4 },
-    { tipo: 'Violencia de género', porcentaje: 0.19 },
-    { tipo: 'Abuso sexual', porcentaje: 0.05 },
-  ];
+  protected readonly departamentos = signal<Departamento[]>([]);
+  protected readonly totalNacional = signal(0);
+  protected readonly totalDepartamentos = signal(0);
+  protected readonly cargando = signal(true);
+  protected readonly error = signal(false);
 
   protected readonly departamentoSeleccionado = signal<Departamento | null>(null);
+
+  private readonly maxTotal = computed(() =>
+    Math.max(...this.departamentos().map((d) => d.total), 0),
+  );
+
+  ngOnInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.cargarDashboard();
+  }
+
+  protected reintentar(): void {
+    this.cargarDashboard();
+  }
+
+  private cargarDashboard(): void {
+    this.error.set(false);
+    this.cargando.set(true);
+
+    this.statsService.getDashboard().subscribe({
+      next: (data) => {
+        this.departamentos.set(
+          data.departamentos.map((d) => ({
+            nombre: d.nombre_departamento,
+            total: d.total_denuncias,
+            desglose: d.desglose_por_categoria,
+          })),
+        );
+        this.totalNacional.set(data.total_denuncias_nacional);
+        this.totalDepartamentos.set(data.total_departamentos);
+        this.departamentoSeleccionado.set(null);
+        this.cargando.set(false);
+      },
+      error: () => {
+        this.cargando.set(false);
+        this.error.set(true);
+      },
+    });
+  }
 
   protected seleccionar(depto: Departamento): void {
     this.departamentoSeleccionado.set(depto);
@@ -70,7 +80,11 @@ export class AbuseStats {
   }
 
   protected claseColor(total: number): string {
-    const ratio = total / this.maxTotal;
+    const maxTotal = this.maxTotal();
+
+    if (maxTotal === 0) return 'depto-nivel-1';
+
+    const ratio = total / maxTotal;
 
     if (ratio >= 0.75) return 'depto-nivel-4';
     if (ratio >= 0.5) return 'depto-nivel-3';
@@ -79,15 +93,11 @@ export class AbuseStats {
   }
 
   protected desglose(depto: Departamento): DesgloseItem[] {
-    const cantidades = this.tiposAbuso.map((t) => ({
-      tipo: t.tipo,
-      cantidad: Math.round(depto.total * t.porcentaje),
-    }));
+    const maxCantidad = Math.max(...depto.desglose.map((c) => c.cantidad), 1);
 
-    const maxCantidad = Math.max(...cantidades.map((c) => c.cantidad), 1);
-
-    return cantidades.map((c) => ({
-      ...c,
+    return depto.desglose.map((c) => ({
+      tipo: c.categoria,
+      cantidad: c.cantidad,
       ancho: (c.cantidad / maxCantidad) * 100,
     }));
   }

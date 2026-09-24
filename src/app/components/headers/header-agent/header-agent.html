@@ -1,13 +1,14 @@
 <header class="header">
   <span class="brand">RaySafe</span>
-  
+
   <div class="center">
     <a routerLink="/assigned-reports" class="nav-link">Denuncias</a>
     <button class="btn-sin-atender" type="button" routerLink="/unassigned-reports">Sin atender</button>
   </div>
 
   <div class="profile">
-    <span class="agent-name">Agente Gaitan · PNC</span>
-    <span class="avatar" aria-hidden="true">AG</span>
+    <span class="agent-name">{{ usuario()?.name ?? 'Agente' }}</span>
+    <span class="avatar" aria-hidden="true">{{ iniciales() }}</span>
+    <button type="button" class="btn-logout" (click)="cerrarSesion()">Cerrar sesión</button>
   </div>
 </header>

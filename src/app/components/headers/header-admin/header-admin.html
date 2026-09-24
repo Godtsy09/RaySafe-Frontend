@@ -1,6 +1,6 @@
 <header class="header">
   <span class="brand">RaySafe</span>
-  
+
   <div class="center">
     <button class="btn-agentes" type="button" routerLink="/agent-list">Agentes en la institución</button>
     <a routerLink="/register-agent" class="nav-link">Agregar Agentes</a>
@@ -8,7 +8,8 @@
   </div>
 
   <div class="profile">
-    <span class="admin-name">Juan Pérez</span>
-    <span class="avatar" aria-hidden="true">JP</span>
+    <span class="admin-name">{{ usuario()?.name ?? 'Administrador' }}</span>
+    <span class="avatar" aria-hidden="true">{{ iniciales() }}</span>
+    <button type="button" class="btn-logout" (click)="cerrarSesion()">Cerrar sesión</button>
   </div>
 </header>

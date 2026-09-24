@@ -11,19 +11,40 @@ import { CreateReport } from './views/user/create-report/create-report';
 import { AbuseStats } from './views/user/abuse-stats/abuse-stats';
 import { HelpResources } from './views/user/help-resources/help-resources';
 import { NotFound } from './views/not-found/not-found';
+import { roleGuard } from './guards/role.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
   { path: 'login', component: Login },
-  { path: 'register-agent', component: RegisterAgent },
   { path: 'create-report', component: CreateReport },
   { path: 'track-report', component: TrackReport },
   { path: 'abuse-stats', component: AbuseStats },
   { path: 'help-resources', component: HelpResources },
-  { path: 'unassigned-reports', component: UnassignedReports },
-  { path: 'assigned-reports', component: AssignedReports },
-  { path: 'agent-list', component: AgentList },
-  { path: 'agent-logs', component: AgentLogs },
+  {
+    path: 'unassigned-reports',
+    component: UnassignedReports,
+    canActivate: [roleGuard(['agente'])],
+  },
+  {
+    path: 'assigned-reports',
+    component: AssignedReports,
+    canActivate: [roleGuard(['agente'])],
+  },
+  {
+    path: 'agent-list',
+    component: AgentList,
+    canActivate: [roleGuard(['admin'])],
+  },
+  {
+    path: 'register-agent',
+    component: RegisterAgent,
+    canActivate: [roleGuard(['admin'])],
+  },
+  {
+    path: 'agent-logs',
+    component: AgentLogs,
+    canActivate: [roleGuard(['admin'])],
+  },
   { path: '**', component: NotFound },
 ];
