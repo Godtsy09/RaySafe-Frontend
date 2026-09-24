@@ -4,7 +4,7 @@
     <span class="denuncia-eyebrow">NUEVA DENUNCIA</span>
     <h1 class="denuncia-title">Formulario Anónimo</h1>
 
-    <form class="denuncia-form" (submit)="$event.preventDefault()">
+    <form class="denuncia-form" (submit)="enviarDenuncia($event)">
 
       <div class="form-group">
         <label class="form-label">Categoria la de denuncia (humano-animal)</label>
@@ -18,15 +18,24 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Tipo de abuso *</label>
-          <select class="form-control">
-            <option value="" disabled selected>Seleccionar tipo...</option>
+          <select class="form-control" name="tipoAbuso" [(ngModel)]="tipoAbuso">
+            <option value="" disabled>Seleccionar tipo...</option>
+            <option value="abuso_infantil">Abuso infantil</option>
+            <option value="violencia_genero">Violencia de género</option>
+            <option value="abuso_sexual">Abuso sexual</option>
+            <option value="abandono_animal">Abandono animal</option>
+            <option value="maltrato_animal">Maltrato animal</option>
           </select>
         </div>
 
         <div class="form-group">
           <label class="form-label">Nivel de riesgo *</label>
-          <select class="form-control">
-            <option value="" disabled selected>Seleccionar nivel...</option>
+          <select class="form-control" name="nivelRiesgo" [(ngModel)]="nivelRiesgo">
+            <option value="" disabled>Seleccionar nivel...</option>
+            <option value="bajo">Bajo</option>
+            <option value="medio">Medio</option>
+            <option value="alto">Alto</option>
+            <option value="critico">Crítico</option>
           </select>
         </div>
       </div>
@@ -35,6 +44,8 @@
         <label class="form-label">Descripción *</label>
         <textarea
           class="form-control textarea"
+          name="descripcion"
+          [(ngModel)]="descripcion"
           placeholder="Describe los hechos: ¿que paso?, ¿como ocurrio?, ¿quienes estaban involucrados?"
         ></textarea>
       </div>
@@ -50,6 +61,8 @@
         <input
           type="text"
           class="form-control location-address"
+          name="direccion"
+          [(ngModel)]="direccion"
           placeholder="Direccion o referencia (ej: Zona 3, Calle 4-50)"
         />
       </div>
@@ -151,6 +164,32 @@
         <button type="button" class="btn-confirm" (click)="cerrarEvidencia()">Confirmar archivos</button>
       </div>
 
+    </div>
+  </div>
+}
+
+@if (denunciaEnviada) {
+  <div class="modal-overlay" (click)="cerrarDenunciaEnviada()">
+    <div class="modal-box modal-box--feedback" (click)="$event.stopPropagation()">
+      <div class="feedback-icon feedback-icon--success" aria-hidden="true">✓</div>
+      <h2 class="feedback-title">Denuncia realizada</h2>
+      <p class="modal-text feedback-text">
+        La denuncia fue realizada correctamente. ¡Gracias por reportar!
+      </p>
+      <button type="button" class="btn-confirm" (click)="cerrarDenunciaEnviada()">Aceptar</button>
+    </div>
+  </div>
+}
+
+@if (errorDenuncia) {
+  <div class="modal-overlay" (click)="cerrarError()">
+    <div class="modal-box modal-box--feedback" (click)="$event.stopPropagation()">
+      <div class="feedback-icon feedback-icon--error" aria-hidden="true">!</div>
+      <h2 class="feedback-title">Error al enviar denuncia</h2>
+      <p class="modal-text feedback-text">
+        Verifica que todos los campos obligatorios estén completos e inténtalo de nuevo.
+      </p>
+      <button type="button" class="btn-confirm" (click)="cerrarError()">Entendido</button>
     </div>
   </div>
 }

@@ -2,12 +2,26 @@
   <span class="brand">RaySafe</span>
   
   <div class="center">
-    <a routerLink="/assigned-reports" class="nav-link">Denuncias</a>
-    <button class="btn-sin-atender" type="button" routerLink="/unassigned-reports">Sin atender</button>
+    <a routerLink="/assigned-reports" routerLinkActive="active" class="nav-link">Denuncias</a>
+    <button class="btn-sin-atender" type="button" routerLink="/unassigned-reports" routerLinkActive="active">Sin atender</button>
   </div>
 
   <div class="profile">
     <span class="agent-name">Agente Gaitan · PNC</span>
-    <span class="avatar" aria-hidden="true">AG</span>
+    <div class="avatar-menu">
+      <button
+        class="avatar"
+        type="button"
+        (click)="toggleMenu()"
+        aria-haspopup="true"
+        [attr.aria-expanded]="menuAbierto"
+        aria-label="Menú de usuario"
+      >AG</button>
+      @if (menuAbierto) {
+        <div class="avatar-dropdown" role="menu">
+          <button class="avatar-dropdown-item" type="button" role="menuitem" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
+      }
+    </div>
   </div>
 </header>

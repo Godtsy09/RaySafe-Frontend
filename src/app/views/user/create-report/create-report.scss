@@ -345,3 +345,51 @@ select.form-control {
 .btn-confirm:hover {
   background-color: #33496b;
 }
+
+/* ---- Modales de feedback (éxito / error) ---- */
+.modal-box--feedback {
+  max-width: 460px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+}
+
+.feedback-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  color: #ffffff;
+}
+
+.feedback-icon--success {
+  background-color: #2f9e44;
+}
+
+.feedback-icon--error {
+  background-color: #c1121f;
+}
+
+.feedback-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.feedback-text {
+  margin: 0;
+}
+
+.modal-box--feedback .btn-confirm {
+  margin-top: 8px;
+}
