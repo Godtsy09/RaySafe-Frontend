@@ -37,36 +37,31 @@
   gap: 28px;
 }
 
-/* Enlace/Texto "Denuncias" */
-.center .nav-link {
+/* Enlace/Texto "Denuncias" y botón "Sin atender" (misma base, el recuadro es el estado activo) */
+.center .nav-link,
+.btn-sin-atender {
   font-family: 'DM Sans', sans-serif;
   color: #f1f5f9;
   text-decoration: none;
   font-size: 15px;
   font-weight: 400;
-  transition: opacity 0.2s ease;
+  border: none;
+  background-color: transparent;
+  border-radius: 4px;
+  padding: 8px 18px;
+  cursor: pointer;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
-.center .nav-link:hover {
+.center .nav-link:hover,
+.btn-sin-atender:hover {
   opacity: 0.8;
 }
 
-/* Botón / Badge "Sin atender" estilo Figma */
-.btn-sin-atender {
-  font-family: 'DM Sans', sans-serif;
-  background-color: rgba(255, 255, 255, 0.055); /* Bloque azul claro sutil */
+/* Fondo sutil del elemento activo según la ruta */
+.center .active {
+  background-color: rgba(255, 255, 255, 0.055);
   color: #ebf0fa;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 18px;
-  font-size: 15px;
-  font-weight: 400;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btn-sin-atender:hover {
-  background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* 4. Perfil del Agente (Derecha) */
@@ -85,7 +80,12 @@
   white-space: nowrap;
 }
 
-/* Círculo Avatar con iniciales */
+/* Contenedor del avatar (ancla el menú desplegable) */
+.avatar-menu {
+  position: relative;
+}
+
+/* Círculo Avatar con iniciales (abre el menú de usuario) */
 .avatar {
   display: flex;
   align-items: center;
@@ -99,6 +99,46 @@
   font-size: 14px;
   font-weight: 500;
   user-select: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Menú desplegable del avatar */
+.avatar-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1000;
+  min-width: 180px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.avatar-dropdown-item {
+  display: block;
+  width: calc(100% - 24px);
+  box-sizing: border-box;
+  margin: 8px 12px;
+  padding: 8px 16px;
+  background-color: #ffffff;
+  border: 1px solid #3d5a80;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3d5a80;
+  text-align: center;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.avatar-dropdown-item:hover {
+  background-color: #3d5a80;
+  color: #ffffff;
 }
 
 /* Adaptación Responsiva para Móviles */

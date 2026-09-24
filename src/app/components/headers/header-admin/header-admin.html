@@ -2,13 +2,27 @@
   <span class="brand">RaySafe</span>
   
   <div class="center">
-    <button class="btn-agentes" type="button" routerLink="/agent-list">Agentes en la institución</button>
-    <a routerLink="/register-agent" class="nav-link">Agregar Agentes</a>
-    <a routerLink="/agent-logs" class="nav-link">Registros</a>
+    <button class="btn-agentes" type="button" routerLink="/agent-list" routerLinkActive="active">Agentes en la institución</button>
+    <a routerLink="/register-agent" routerLinkActive="active" class="nav-link">Agregar Agentes</a>
+    <a routerLink="/agent-logs" routerLinkActive="active" class="nav-link">Registros</a>
   </div>
 
   <div class="profile">
     <span class="admin-name">Juan Pérez</span>
-    <span class="avatar" aria-hidden="true">JP</span>
+    <div class="avatar-menu">
+      <button
+        class="avatar"
+        type="button"
+        (click)="toggleMenu()"
+        aria-haspopup="true"
+        [attr.aria-expanded]="menuAbierto"
+        aria-label="Menú de usuario"
+      >JP</button>
+      @if (menuAbierto) {
+        <div class="avatar-dropdown" role="menu">
+          <button class="avatar-dropdown-item" type="button" role="menuitem" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
+      }
+    </div>
   </div>
 </header>

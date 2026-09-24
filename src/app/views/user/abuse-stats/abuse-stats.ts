@@ -17,7 +17,7 @@ interface DesgloseItem {
   selector: 'app-abuse-stats',
   imports: [CommonModule, HeaderUserComponent],
   templateUrl: './abuse-stats.html',
-  styleUrl: './abuse-stats.css',
+  styleUrl: './abuse-stats.scss',
 })
 export class AbuseStats {
   //Datos como ejemplo, ya con el ednpoint de las estadisticas,

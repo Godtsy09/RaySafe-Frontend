@@ -24,7 +24,7 @@ interface Institucion {
 @Component({
   imports: [HeaderUserComponent],
   selector: 'app-help-resources',
-  styleUrl: './help-resources.css',
+  styleUrl: './help-resources.scss',
   templateUrl: './help-resources.html',
 })
 export class HelpResources {

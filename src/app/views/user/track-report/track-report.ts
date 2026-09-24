@@ -21,7 +21,7 @@ interface ResultadoDenuncia {
   selector: 'app-track-report',
   imports: [CommonModule, FormsModule, HeaderUserComponent],
   templateUrl: './track-report.html',
-  styleUrl: './track-report.css',
+  styleUrl: './track-report.scss',
 })
 export class TrackReport {
   protected idPublico = '';
