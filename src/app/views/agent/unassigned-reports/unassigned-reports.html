@@ -15,7 +15,6 @@
                     <tr>
                         <th>ID</th>
                         <th>Tipo de abuso</th>
-                        <th>Nivel de Riesgo</th>
                         <th>Ubicación</th>
                         <th>Estado</th>
                         <th>Fecha</th>
@@ -24,27 +23,33 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="log-id">RS-0060</td>
+                        <td class="log-id">
+                            <span>RS-</span>
+                            <span>0049</span>
+                        </td>
                         <td class="abuse-type">Abuso infantil</td>
-                        <td><span class="badge risk-low">low</span></td>
                         <td class="log-location">Zona 5, Ciudad Capital</td>
                         <td><span class="status info">Recibida</span></td>
                         <td class="log-date">17 sep 2025</td>
-                        <td class="text-right action-buttons">
-                            <button class="btn-info" (click)="openDetailModal()">Ver detalle</button>
-                            <button class="btn-primary" (click)="openClaimModal()">Tomar denuncia</button>
+                        <td class="text-right">
+                            <div class="action-buttons">
+                                <button class="btn-primary" (click)="openDetailModal()">Ver detalle</button>
+                            </div>
                         </td>
                     </tr>
                     <tr>
-                        <td class="log-id">RS-0056</td>
+                        <td class="log-id">
+                            <span>RS-</span>
+                            <span>0049</span>
+                        </td>
                         <td class="abuse-type">Abandono animal</td>
-                        <td><span class="badge risk-critical">critical</span></td>
                         <td class="log-location">Zona 2, Este</td>
                         <td><span class="status info">Recibida</span></td>
                         <td class="log-date">11 ago 2025</td>
-                        <td class="text-right action-buttons">
-                            <button class="btn-info" (click)="openDetailModal()">Ver detalle</button>
-                            <button class="btn-primary" (click)="openClaimModal()">Tomar denuncia</button>
+                        <td class="text-right">
+                            <div class="action-buttons">
+                                <button class="btn-primary" (click)="openDetailModal()">Ver detalle</button>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -65,10 +70,9 @@
         </div>
     </div>
 
-    <!-- Modal 1: Ver Detalles (Sin datos de agente/notas) -->
+    <!-- Modal 1: Ver Detalles -->
     <div class="modal-overlay" [class.active]="isDetailModalOpen" (click)="closeDetailModal()">
         <div class="modal-card modal-large" (click)="$event.stopPropagation()">
-
             <div class="modal-header">
                 <div class="header-title-group">
                     <h2>Detalles de Denuncia Sin Asignar</h2>
@@ -78,10 +82,8 @@
             </div>
 
             <div class="modal-body">
-                <!-- DATOS GENERALES -->
                 <div class="section-block">
                     <h3 class="section-title">Información del Hecho</h3>
-
                     <div class="grid-3">
                         <div class="info-group">
                             <span class="label">Nivel de Riesgo</span>
@@ -112,10 +114,8 @@
 
                 <hr class="divider" />
 
-                <!-- EVIDENCIAS -->
                 <div class="section-block">
                     <h3 class="section-title">Evidencia Adjunta</h3>
-
                     <details class="evidence-accordion">
                         <summary class="accordion-header">
                             <span>📎 Ver Archivos de Evidencia (1 adjunto)</span>
@@ -138,11 +138,10 @@
                 <button class="btn-secondary" (click)="closeDetailModal()">Cerrar</button>
                 <button class="btn-primary" (click)="confirmClaimFromDetail()">Tomar Denuncia</button>
             </div>
-
         </div>
     </div>
 
-    <!-- Modal 2: Confirmación para Tomar Denuncia -->
+    <!-- Modal 2: Confirmación -->
     <div class="modal-overlay" [class.active]="isClaimModalOpen" (click)="closeClaimModal()">
         <div class="modal-card modal-small" (click)="$event.stopPropagation()">
             <div class="modal-header">
@@ -151,8 +150,7 @@
             </div>
             <div class="modal-body">
                 <p>¿Deseas asumir el seguimiento de la denuncia <strong>RS-0060</strong>?</p>
-                <p class="text-subtle">El estado pasará a "En revisión" y quedarás registrado como el agente
-                    responsable.</p>
+                <p class="text-subtle">El estado pasará a "En revisión" y quedarás registrado como el agente responsable.</p>
             </div>
             <div class="modal-footer-confirm">
                 <button class="btn-secondary" (click)="closeClaimModal()">Cancelar</button>
