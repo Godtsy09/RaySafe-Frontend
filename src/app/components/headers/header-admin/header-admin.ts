@@ -1,5 +1,6 @@
 import { Component, ElementRef, HostListener, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-header-admin',
@@ -10,6 +11,10 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 export class HeaderAdminComponent {
   private readonly router = inject(Router);
   private readonly elementRef = inject(ElementRef);
+  private readonly authService = inject(AuthService);
+
+  protected readonly usuario = this.authService.user;
+  protected readonly iniciales = this.authService.iniciales;
 
   protected menuAbierto = false;
 
@@ -28,6 +33,7 @@ export class HeaderAdminComponent {
 
   cerrarSesion(): void {
     this.menuAbierto = false;
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

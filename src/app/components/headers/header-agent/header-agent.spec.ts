@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router } from '@angular/router';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -20,6 +21,7 @@ describe('HeaderAgentComponent', () => {
           { path: 'assigned-reports', component: StubComponent },
           { path: 'unassigned-reports', component: StubComponent },
         ]),
+        provideHttpClient(),
       ],
     }).compileComponents();
 

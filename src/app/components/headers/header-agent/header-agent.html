@@ -7,7 +7,7 @@
   </div>
 
   <div class="profile">
-    <span class="agent-name">Agente Gaitan · PNC</span>
+    <span class="agent-name">{{ usuario()?.name ?? 'Agente' }} · PNC</span>
     <div class="avatar-menu">
       <button
         class="avatar"
@@ -16,7 +16,7 @@
         aria-haspopup="true"
         [attr.aria-expanded]="menuAbierto"
         aria-label="Menú de usuario"
-      >AG</button>
+      >{{ iniciales() }}</button>
       @if (menuAbierto) {
         <div class="avatar-dropdown" role="menu">
           <button class="avatar-dropdown-item" type="button" role="menuitem" (click)="cerrarSesion()">Cerrar sesión</button>

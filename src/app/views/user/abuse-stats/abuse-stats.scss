@@ -63,6 +63,59 @@
    3. ESTRUCTURA / LAYOUT DE DOS COLUMNAS
    ========================================================================== */
 
+/* Estado de carga y error (reemplazan el layout mientras se obtienen datos) */
+.estadisticas-loader,
+.estadisticas-error {
+  background-color: #ffffff;
+  border: 1px solid #9ca3ac;
+  border-radius: 0;
+  padding: 64px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.estadisticas-loader-spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #24354c;
+  border-radius: 50%;
+  animation: estadisticas-girar 0.8s linear infinite;
+}
+
+@keyframes estadisticas-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.estadisticas-loader-texto {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #777777;
+  margin: 0;
+}
+
+.estadisticas-error-texto {
+  font-size: 15px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.estadisticas-error-boton {
+  background-color: #24354c;
+  color: #ffffff;
+  border: none;
+  border-radius: 0;
+  padding: 10px 24px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 /* Divide la pantalla en 2: Grid de deptos (izquierda) y Panel de datos (derecha) */
 .estadisticas-layout {
   display: grid;
