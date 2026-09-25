@@ -15,7 +15,6 @@ export class HeaderAdminComponent {
 
   protected readonly usuario = this.authService.user;
   protected readonly iniciales = this.authService.iniciales;
-  protected readonly institutionName = this.authService.institutionName;
 
   protected menuAbierto = false;
 

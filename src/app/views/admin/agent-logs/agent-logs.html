@@ -3,7 +3,7 @@
 <section class="agent-logs-container">
   <!-- Encabezado -->
   <div class="view-header">
-    <div class="breadcrumbs">PNC ・ ZONA 3</div>
+    <div class="breadcrumbs">{{ auth.institutionName() }}</div>
     <h1 class="view-title">Registros de denuncias</h1>
   </div>
 
@@ -12,7 +12,9 @@
     <input 
       type="text" 
       class="filter-input" 
-      placeholder="Filtrar por ID, agente, tipo o zona..." 
+      placeholder="Filtrar por ID público, agente, tipo de abuso, ubicación..." 
+      [value]="searchTerm()"
+      (input)="onSearchChange($event.target.value)"
     />
   </div>
 
@@ -32,77 +34,58 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="log-id">RS-0049</td>
-            <td class="abuse-type">Abuso infantil</td>
-            <td class="agent-name">Carlos García</td>
-            <td class="log-date">22 ago 2025</td>
-            <td class="log-location">Zona 3, Ciudad Capital</td>
-            <td><span class="status warning">En Investigación</span></td>
-            <td class="text-right">
-              <button class="btn-info" (click)="openModal()">Ver detalles</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="log-id">RS-0048</td>
-            <td class="abuse-type">Maltrato animal</td>
-            <td class="agent-name">Sofia Mendez</td>
-            <td class="log-date">21 ago 2025</td>
-            <td class="log-location">Zona 7, Sur</td>
-            <td><span class="status danger">Desestimada</span></td>
-            <td class="text-right">
-              <button class="btn-info" (click)="openModal()">Ver detalles</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="log-id">RS-0047</td>
-            <td class="abuse-type">Violencia género</td>
-            <td class="agent-name">Ana Morales</td>
-            <td class="log-date">20 ago 2025</td>
-            <td class="log-location">Zona 1, Norte</td>
-            <td><span class="status warning">En Investigación</span></td>
-            <td class="text-right">
-              <button class="btn-info" (click)="openModal()">Ver detalles</button>
-            </td>
-          </tr>
-          <tr>
-            <td class="log-id">RS-0043</td>
-            <td class="abuse-type">Abandono animal</td>
-            <td class="agent-name">Roberto Cordon</td>
-            <td class="log-date">15 ago 2025</td>
-            <td class="log-location">Zona 2, Este</td>
-            <td><span class="status success">Resuelta</span></td>
-            <td class="text-right">
-              <button class="btn-info" (click)="openModal()">Ver detalles</button>
-            </td>
-          </tr>
+          @if (loading()) {
+            <tr>
+              <td colspan="7" class="text-center">Cargando...</td>
+            </tr>
+          } @else if (reports().length === 0) {
+            <tr>
+              <td colspan="7" class="text-center">No hay registros</td>
+            </tr>
+          } @else {
+            @for (report of reports(); track report.id) {
+              <tr>
+                <td class="log-id">{{ report.publicId }}</td>
+                <td class="abuse-type">{{ report.abuseType }}</td>
+                <td class="agent-name">{{ report.agentName ?? 'Sin asignar' }}</td>
+                <td class="log-date">{{ formatDate(report.createdAt) }}</td>
+                <td class="log-location">{{ report.city ?? '' }}{{ report.city && report.department ? ', ' : '' }}{{ report.department ?? '' }}</td>
+                <td><span class="status" [class.warning]="getStatusClass(report.status) === 'warning'" [class.success]="getStatusClass(report.status) === 'success'" [class.danger]="getStatusClass(report.status) === 'danger'">{{ report.status }}</span></td>
+                <td class="text-right">
+                  <button class="btn-info" (click)="openModal(report)">Ver detalles</button>
+                </td>
+              </tr>
+            }
+          }
         </tbody>
       </table>
     </div>
 
     <!-- Paginación -->
     <div class="pagination">
-      <button class="btn-pagination">← Previous</button>
+      <button class="btn-pagination" (click)="onPageChange(page() - 1)" [disabled]="page() === 1">← Previous</button>
       <div class="page-numbers">
-        <span class="page active">1</span>
-        <span class="page">2</span>
-        <span class="page">3</span>
-        <span class="dots">...</span>
-        <span class="page">10</span>
+        @for (p of pageNumbers(); track $index) {
+          @if (p === '...') {
+            <span class="dots">...</span>
+          } @else {
+            <span class="page" [class.active]="page() === p" (click)="onPageChange(p)">{{ p }}</span>
+          }
+        }
       </div>
-      <button class="btn-pagination">Next →</button>
+      <button class="btn-pagination" (click)="onPageChange(page() + 1)" [disabled]="page() === totalPages()">Next →</button>
     </div>
   </div>
 
   <!-- Modal "Ver Detalles" (Solo Lectura) -->
-  <div class="modal-overlay" [class.active]="isModalOpen" (click)="closeModal()">
+  <div class="modal-overlay" [class.active]="isModalOpen()" (click)="closeModal()">
     <div class="modal-card modal-large" (click)="$event.stopPropagation()">
       
       <!-- Encabezado del Modal -->
       <div class="modal-header">
         <div class="header-title-group">
           <h2>Expediente de Denuncia</h2>
-          <span class="public-badge">RS-0049</span>
+          <span class="public-badge">{{ selectedReport()?.publicId }}</span>
         </div>
         <button class="btn-close" (click)="closeModal()">&times;</button>
       </div>
@@ -116,28 +99,26 @@
           <div class="grid-3">
             <div class="info-group">
               <span class="label">Nivel de Riesgo</span>
-              <span class="badge risk-high">Crítico</span>
+              <span class="badge" [class.risk-high]="selectedReport()?.riskLevel === 'critical'" [class.risk-medium]="selectedReport()?.riskLevel === 'medium'" [class.risk-low]="selectedReport()?.riskLevel === 'low'">{{ selectedReport()?.riskLevel ?? 'No especificado' }}</span>
             </div>
             <div class="info-group">
               <span class="label">Tipo de Abuso</span>
-              <span class="value">Abuso infantil (Humano)</span>
+              <span class="value">{{ selectedReport()?.abuseType?.name }} ({{ selectedReport()?.abuseType?.category === 'human' ? 'Humano' : 'Animal' }})</span>
             </div>
             <div class="info-group">
               <span class="label">Fecha de Ingreso</span>
-              <span class="value">22/08/2025 - 14:30 hs</span>
+              <span class="value">{{ formatDateTime(selectedReport()?.createdAt ?? '') }}</span>
             </div>
           </div>
 
           <div class="info-group margin-top">
             <span class="label">Ubicación y Dirección Específica</span>
-            <span class="value">Zona 3, Ciudad Capital ・ 4ta Avenida 12-45, Barrio El Carmen</span>
+            <span class="value">{{ selectedReport()?.location?.city ?? '' }}{{ selectedReport()?.location?.city && selectedReport()?.location?.department ? ', ' : '' }}{{ selectedReport()?.location?.department ?? '' }}{{ selectedReport()?.specificAddress ? ' ・ ' + selectedReport()?.specificAddress : '' }}</span>
           </div>
 
           <div class="info-group margin-top">
             <span class="label">Relato de la Denuncia</span>
-            <p class="description-box">
-              Vecinos reportan llantos continuos e indicios de falta de atención a un menor durante las noches en el inmueble indicado. No se observa presencia de adultos responsables durante largos períodos.
-            </p>
+            <p class="description-box">{{ selectedReport()?.description }}</p>
           </div>
         </div>
 
@@ -148,42 +129,46 @@
           <h3 class="section-title">Asignación y Evidencia</h3>
           
           <div class="agent-card">
-            <div class="agent-avatar">CG</div>
+            <div class="agent-avatar">{{ getAvatarInitials(selectedReport()?.agent?.name ?? '') }}</div>
             <div class="agent-details">
               <span class="agent-title">Agente a cargo:</span>
-              <span class="agent-name">Carlos García</span>
-              <span class="agent-email">c.garcia@pnc.gob.gt ・ <span class="badge-status-active">Activo</span></span>
+              <span class="agent-name">{{ selectedReport()?.agent?.name ?? 'Sin asignar' }}</span>
+              <span class="agent-email">
+                {{ selectedReport()?.agent?.email ?? '' }}
+                @if (selectedReport()?.agent) {
+                  <span class="badge-status-{{ selectedReport()!.agent!.active ? 'active' : 'inactive' }}">{{ selectedReport()!.agent!.active ? 'Activo' : 'Inactivo' }}</span>
+                }
+              </span>
             </div>
             
-            <!-- Corrección: Se elimina el punto en class y se agrega la clase status warning -->
             <div class="info-group">
               <span class="label">Estado del Caso</span>
-              <span class="status warning">En Investigación</span>
+              <span class="status" [class.warning]="getStatusClass(selectedReport()?.status?.name ?? '') === 'warning'" [class.success]="getStatusClass(selectedReport()?.status?.name ?? '') === 'success'" [class.danger]="getStatusClass(selectedReport()?.status?.name ?? '') === 'danger'">{{ selectedReport()?.status?.name }}</span>
             </div>
           </div>
 
           <!-- Acordeón Desplegable para Evidencias -->
           <details class="evidence-accordion margin-top">
             <summary class="accordion-header">
-              <span>📎 Ver Archivos de Evidencia (2 adjuntos)</span>
+              <span>📎 Ver Archivos de Evidencia ({{ selectedReport()?.evidence?.length ?? 0 }} adjuntos)</span>
             </summary>
             <div class="accordion-content">
-              <div class="evidence-item">
-                <span class="file-icon">📷</span>
-                <div class="file-info">
-                  <span class="file-name">foto_fachada_inmueble.jpg</span>
-                  <span class="file-type">Imagen JPEG</span>
+              @if (selectedReport()?.evidence?.length === 0) {
+                <div class="evidence-item">
+                  <span class="file-info">Sin evidencia adjunta</span>
                 </div>
-                <a href="#" target="_blank" class="btn-link">Ver archivo</a>
-              </div>
-              <div class="evidence-item">
-                <span class="file-icon">🎵</span>
-                <div class="file-info">
-                  <span class="file-name">audio_grabacion_ambiente.mp3</span>
-                  <span class="file-type">Audio MP3</span>
-                </div>
-                <a href="#" target="_blank" class="btn-link">Ver archivo</a>
-              </div>
+              } @else {
+                @for (evidence of selectedReport()?.evidence ?? []; track evidence.id) {
+                  <div class="evidence-item">
+                    <span class="file-icon">{{ getFileIcon(evidence.fileType) }}</span>
+                    <div class="file-info">
+                      <span class="file-name">{{ getFileName(evidence.fileUrl) }}</span>
+                      <span class="file-type">{{ evidence.fileType ?? 'Archivo' }}</span>
+                    </div>
+                    <a [href]="evidence.fileUrl" target="_blank" class="btn-link">Ver archivo</a>
+                  </div>
+                }
+              }
             </div>
           </details>
         </div>
@@ -193,38 +178,39 @@
         <!-- SECCIÓN 3: BITÁCORA Y NOTAS DEL AGENTE -->
         <div class="section-block">
           <h3 class="section-title">Bitácora de Avances y Notas de Investigación</h3>
-          <!-- Corrección: Etiqueta fuera de notes-feed con margen inferior -->
           <span class="label" style="margin-bottom: 12px; display: block;">Notas realizadas por el agente:</span>
 
           <!-- Feed de Notas Registradas -->
           <div class="notes-feed">
-            <div class="note-card">
-              <div class="note-header">
-                <span class="author">Carlos García (Agente)</span>
-                <span class="date">23 ago 2025 - 09:15 hs</span>
+            @if (selectedReport()?.notes?.length === 0) {
+              <div class="note-card">
+                <p class="note-body">Sin notas registradas</p>
               </div>
-              <p class="note-body">
-                Se realizó la primera inspección en la dirección especificada. Se entabló diálogo con los vecinos colindantes para recopilar testimonios preliminares.
-              </p>
-            </div>
-
-            <div class="note-card">
-              <div class="note-header">
-                <span class="author">Carlos García (Agente)</span>
-                <span class="date">22 ago 2025 - 16:00 hs</span>
-              </div>
-              <p class="note-body">
-                Se recibió el expediente asignado. Se inicia el protocolo de verificación en coordinación con la unidad local.
-              </p>
-            </div>
+            } @else {
+              @for (note of selectedReport()?.notes ?? []; track note.id) {
+                <div class="note-card">
+                  <div class="note-header">
+                    <span class="author">{{ note.agentName }}</span>
+                    <span class="date">{{ formatDateTime(note.createdAt) }}</span>
+                  </div>
+                  <p class="note-body">{{ note.content }}</p>
+                </div>
+              }
+            }
           </div>
 
           <!-- Historial de Transición de Estado -->
           <div class="status-history-compact margin-top">
-            <span class="label">Última actualización de estado:</span>
-            <p class="history-text">
-              Pasó a <span class="status warning">En Investigación</span> por <strong>Carlos García</strong> el 22 ago 2025 - 15:10 hs.
-            </p>
+            <span class="label">Historial de cambios de estado:</span>
+            @if (selectedReport()?.statusHistory?.length === 0) {
+              <p class="history-text">Sin cambios de estado registrados</p>
+            } @else {
+              @for (history of selectedReport()?.statusHistory ?? []; track history.id) {
+                <p class="history-text">
+                  Pasó a <span class="status" [class.warning]="getStatusClass(history.newStatusName) === 'warning'" [class.success]="getStatusClass(history.newStatusName) === 'success'" [class.danger]="getStatusClass(history.newStatusName) === 'danger'">{{ history.newStatusName }}</span> por <strong>{{ history.agentName ?? 'Sistema' }}</strong> el {{ formatDateTime(history.date) }}{{ history.comment ? ': ' + history.comment : '' }}.
+                </p>
+              }
+            }
           </div>
 
         </div>
