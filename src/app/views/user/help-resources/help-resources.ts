@@ -1,13 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { forkJoin } from 'rxjs';
 import { HeaderUserComponent } from '../../../components/headers/header-user/header-user';
-
-//url es el enlace de descarga del documento pdf en la bd, por ahora va a quedar vacio y el
-//template usa # como placeholder hasta que llegue de la base de datos
+import {
+  EducationalGuide,
+  HelpResource,
+  HelpResourcesService,
+} from '../../../services/help-resources.service';
 
 interface Pdf {
   nombre: string;
+  descripcion: string;
   tag: string;
-  paginas: number;
   claseIcono: string;
   url: string;
 }
@@ -21,47 +25,124 @@ interface Institucion {
   horario: string;
 }
 
+interface Hotline {
+  nombre: string;
+  numero: string;
+  horario: string;
+}
+
+const clasesIconoPdf = [
+  'pdf-icon--blue',
+  'pdf-icon--red',
+  'pdf-icon--green',
+  'pdf-icon--purple',
+  'pdf-icon--tan',
+  'pdf-icon--gray',
+];
+
 @Component({
   imports: [HeaderUserComponent],
   selector: 'app-help-resources',
   styleUrl: './help-resources.scss',
   templateUrl: './help-resources.html',
 })
-export class HelpResources {
-  
-  //Datos sobrepuestos de los 6 PDFs mostrados en la vista
-  //queda pendiente cambiar ete array por al consulta a la base de datos
-  readonly pdfs: Pdf[] = [
-    { nombre: 'Ley para Prevenir, Sancionar y Erradicar la Violencia Intrafamiliar (Decreto 97-96)', tag: 'Legal', paginas: 34, claseIcono: 'pdf-icon--blue', url: '' },
-    { nombre: 'Legislación guatemalteca contra la violencia hacia la mujer y la niñez', tag: 'Legal', paginas: 28, claseIcono: 'pdf-icon--red', url: '' },
-    { nombre: 'Peores formas de trabajo infantil en Guatemala: avances y retos', tag: 'Infantil', paginas: 20, claseIcono: 'pdf-icon--purple', url: '' },
-    { nombre: 'Las instituciones educativas frente al maltrato infantil', tag: 'Educación', paginas: 16, claseIcono: 'pdf-icon--green', url: '' },
-    { nombre: 'Normativa de la Unidad de Bienestar Animal de Guatemala', tag: 'Animal', paginas: 12, claseIcono: 'pdf-icon--tan', url: '' },
-    { nombre: 'Marco regulatorio de la Unidad de Bienestar Animal (Acuerdo Ministerial)', tag: 'Animal', paginas: 14, claseIcono: 'pdf-icon--gray', url: '' },
-  ];
+export class HelpResources implements OnInit {
+  private readonly helpResourcesService = inject(HelpResourcesService);
+  private readonly platformId = inject(PLATFORM_ID);
 
-  //Datos sobrepuestos de las instituciones de apoyo mostradas en la vista
-  //queda pendiente cambiar ete array por al consulta a la bd
-  //(instituciones con type 'support_center' | 'shelter').
-  readonly instituciones: Institucion[] = [
-    { tipo: 'Centro de apoyo', claseTag: 'institucion-tag--support', nombre: 'Centro de Apoyo Integral a la Mujer (CAIMU)', ubicacion: 'Zona 1, Ciudad de Guatemala', telefono: '3630-7574', horario: 'Lunes a viernes 8:00-16:00' },
-    { tipo: 'Centro de apoyo', claseTag: 'institucion-tag--support', nombre: 'Procuraduría de la Niñez y Adolescencia', ubicacion: 'Zona 4, Ciudad de Guatemala', telefono: '2410-0900', horario: 'Lunes a viernes 8:00-16:00' },
-    { tipo: 'Centro de apoyo', claseTag: 'institucion-tag--support', nombre: 'Secretaría contra la Violencia Sexual, Explotación y Trata (SVET)', ubicacion: 'Zona 9, Ciudad de Guatemala', telefono: '2295-7800', horario: 'Lunes a viernes 8:00-17:00' },
-    { tipo: 'Centro de apoyo', claseTag: 'institucion-tag--support', nombre: 'Centro de Atención UBA', ubicacion: 'Zona 12, Ciudad de Guatemala', telefono: '2470-2323', horario: 'Lunes a viernes 8:00-17:00' },
-    { tipo: 'Refugio', claseTag: 'institucion-tag--shelter', nombre: 'Refugio de la Niñez', ubicacion: 'Zona 7, Ciudad de Guatemala', telefono: '2260-4260', horario: '24 horas' },
-    { tipo: 'Refugio', claseTag: 'institucion-tag--shelter', nombre: 'Casa de Acogida para Mujeres', ubicacion: 'Mixco, Guatemala', telefono: '2429-1000', horario: '24 horas' },
-    { tipo: 'Refugio', claseTag: 'institucion-tag--shelter', nombre: 'Refugio Animal Huellitas Felices', ubicacion: 'Villa Nueva, Guatemala', telefono: '5520-1234', horario: 'Lunes a viernes 8:00-17:00' },
-    { tipo: 'Refugio', claseTag: 'institucion-tag--shelter', nombre: 'Santuario Animal Nueva Esperanza', ubicacion: 'Santa Lucía Cotzumalguapa, Escuintla', telefono: '7890-4567', horario: 'Domingo a sábado 9:00-17:00' },
-  ];
+  protected readonly pdfs = signal<Pdf[]>([]);
+  protected readonly hotlines = signal<Hotline[]>([]);
+  protected readonly instituciones = signal<Institucion[]>([]);
+  protected readonly cargando = signal(true);
+  protected readonly error = signal(false);
 
-  //Es el estado del modal de detalle de institución: cerrado por defecto.
-  institucionSeleccionada: Institucion | null = null;
+  protected institucionSeleccionada: Institucion | null = null;
 
-  abrirDetalle(institucion: Institucion): void {
+  ngOnInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.cargar();
+  }
+
+  protected reintentar(): void {
+    this.cargar();
+  }
+
+  private cargar(): void {
+    this.error.set(false);
+    this.cargando.set(true);
+
+    forkJoin({
+      recursos: this.helpResourcesService.getHelpResources(),
+      guias: this.helpResourcesService.getEducationalGuides(),
+    }).subscribe({
+      next: ({ recursos, guias }) => {
+        this.pdfs.set(HelpResources.guiasAPdfs(guias));
+        this.hotlines.set(
+          recursos.filter((r) => r.type === 'emergency_line').map(HelpResources.aHotline),
+        );
+        this.instituciones.set(
+          recursos.filter((r) => r.type !== 'emergency_line').map(HelpResources.aInstitucion),
+        );
+        this.cargando.set(false);
+      },
+      error: () => {
+        this.cargando.set(false);
+        this.error.set(true);
+      },
+    });
+  }
+
+  protected abrirDetalle(institucion: Institucion): void {
     this.institucionSeleccionada = institucion;
   }
 
-  cerrarModal(): void {
+  protected cerrarModal(): void {
     this.institucionSeleccionada = null;
+  }
+
+  private static guiasAPdfs(guias: EducationalGuide[]): Pdf[] {
+    return guias.map((guia, index) => ({
+      nombre: guia.title,
+      descripcion: guia.description ?? '',
+      tag: guia.category ? HelpResources.tituloCategoria(guia.category) : 'General',
+      claseIcono: clasesIconoPdf[index % clasesIconoPdf.length],
+      url: guia.pdf_file_url,
+    }));
+  }
+
+  private static tituloCategoria(categoria: string): string {
+    return categoria
+      .split(' - ')
+      .map((palabra) => palabra.trim().charAt(0).toUpperCase() + palabra.trim().slice(1))
+      .join(' - ');
+  }
+
+  private static aHotline(recurso: HelpResource): Hotline {
+    const soloDigitos = (recurso.phone ?? '').replace(/\D/g, '');
+    return {
+      nombre: recurso.name,
+      numero: HelpResources.formatearTelefono(soloDigitos.replace(/^502(?=\d{8})/, '')),
+      horario: recurso.schedule ?? '24 horas',
+    };
+  }
+
+  private static aInstitucion(recurso: HelpResource): Institucion {
+    const esRefugio = recurso.type === 'shelter';
+    return {
+      tipo: esRefugio ? 'Refugio' : 'Centro de apoyo',
+      claseTag: esRefugio ? 'institucion-tag--shelter' : 'institucion-tag--support',
+      nombre: recurso.name,
+      ubicacion: recurso.address ?? [recurso.city, recurso.department].filter(Boolean).join(', '),
+      telefono: HelpResources.formatearTelefono(recurso.phone),
+      horario: recurso.schedule ?? 'Sin horario',
+    };
+  }
+
+  private static formatearTelefono(telefono: string | null): string {
+    if (!telefono) return '';
+    const soloDigitos = telefono.replace(/\D/g, '');
+    return soloDigitos.length === 8
+      ? `${soloDigitos.slice(0, 4)}-${soloDigitos.slice(4)}`
+      : telefono;
   }
 }
