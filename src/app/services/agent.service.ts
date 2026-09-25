@@ -28,6 +28,24 @@ export interface AgentListResult {
   data: AgentListItem[];
 }
 
+export interface CreateAgentPayload {
+  name: string;
+  email: string;
+  password: string;
+  role: 'agent' | 'admin';
+}
+
+export interface CreateAgentResponse {
+  id: number;
+  name: string;
+  email: string;
+  roleId: number;
+  roleName: string;
+  active: boolean;
+  createdAt: string;
+  institutionId: number;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AgentService {
   private readonly http = inject(HttpClient);
@@ -39,6 +57,10 @@ export class AgentService {
 
   getAgentDetail(id: number): Observable<AgentDetail> {
     return this.http.get<AgentDetail>(`/api/admin/agents/${id}`);
+  }
+
+  createAgent(data: CreateAgentPayload): Observable<CreateAgentResponse> {
+    return this.http.post<CreateAgentResponse>('/api/admin/agents', data);
   }
 
   updateAgent(id: number, data: { roleId?: number; active?: boolean }): Observable<AgentDetail> {

@@ -669,7 +669,104 @@ $border-light: #F3F4F6;
             border-color: #ffffff;
           }
         }
+}
+    }
+  }
+
+  /* ==========================================================================
+     NUEVOS ESTILOS: Gestión de Estado (Sección 2 - Modal)
+     ========================================================================== */
+  .status-management {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    .current-status {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid $border-color;
+
+      .label {
+        font-weight: 600;
+        color: #374151;
       }
     }
+
+    .status-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 4px 12px;
+      border-radius: 4px;
+      display: inline-block;
+
+      &.warning {
+        background-color: #FEF3C7;
+        color: #F59E0B;
+      }
+
+      &.success {
+        background-color: #DCFCE7;
+        color: #10B981;
+      }
+
+      &.danger {
+        background-color: #FEE2E2;
+        color: #EF4444;
+      }
+    }
+
+    .status-change-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+
+      .label {
+        margin-bottom: 0.25rem;
+        display: block;
+      }
+
+      .status-selector-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        flex: 1;
+
+        .status-select {
+          flex: 1;
+          min-width: 200px;
+          padding: 8px 12px;
+          border: 1px solid $border-color;
+          border-radius: 6px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: $text-dark;
+          background-color: #ffffff;
+          outline: none;
+          cursor: pointer;
+          transition: border-color 0.15s ease;
+
+          &:focus {
+            border-color: $brand-blue;
+          }
+        }
+
+        .btn-primary {
+          white-space: nowrap;
+          padding: 8px 16px;
+        }
+      }
+    }
+  }
+
+  /* Override para badge de riesgo en tabla (risk-critical) */
+  .badge.risk-critical {
+    background-color: #FEE2E2;
+    color: #991B1B;
   }
 }
