@@ -4,27 +4,45 @@
     <span class="denuncia-eyebrow">NUEVA DENUNCIA</span>
     <h1 class="denuncia-title">Formulario Anónimo</h1>
 
+    @if (cargandoCatalogos()) {
+      <p class="catalogo-nota">Cargando catálogos…</p>
+    } @else if (errorCatalogos()) {
+      <p class="catalogo-nota catalogo-nota--error">
+        No se pudieron cargar los catálogos. Recarga la página para intentarlo de nuevo.
+      </p>
+    }
+
     <form class="denuncia-form" (submit)="enviarDenuncia($event)">
 
       <div class="form-group">
-        <label class="form-label">Categoria la de denuncia (humano-animal)</label>
-        <select class="form-control">
-          <option value="" disabled selected>Seleccionar categoria...</option>
-          <option value="humano">Humano</option>
-          <option value="animal">Animal</option>
+        <label class="form-label">Categoría de la denuncia *</label>
+        <select
+          class="form-control"
+          name="categoria"
+          [(ngModel)]="categoria"
+          [attr.disabled]="cargandoCatalogos() ? '' : null"
+          (ngModelChange)="onCategoriaChange()"
+        >
+          <option value="" disabled>Seleccionar categoría...</option>
+          @for (cat of categorias; track cat.valor) {
+            <option [ngValue]="cat.valor">{{ cat.etiqueta }}</option>
+          }
         </select>
       </div>
 
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Tipo de abuso *</label>
-          <select class="form-control" name="tipoAbuso" [(ngModel)]="tipoAbuso">
+          <select
+            class="form-control"
+            name="tipoAbuso"
+            [(ngModel)]="tipoAbuso"
+            [attr.disabled]="!categoria ? '' : null"
+          >
             <option value="" disabled>Seleccionar tipo...</option>
-            <option value="abuso_infantil">Abuso infantil</option>
-            <option value="violencia_genero">Violencia de género</option>
-            <option value="abuso_sexual">Abuso sexual</option>
-            <option value="abandono_animal">Abandono animal</option>
-            <option value="maltrato_animal">Maltrato animal</option>
+            @for (tipo of tiposFiltrados(); track tipo.id) {
+              <option [ngValue]="tipo.id">{{ tipo.name }}</option>
+            }
           </select>
         </div>
       </div>
@@ -40,11 +58,33 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Ubicación *</label>
+        <label class="form-label">Ubicación</label>
 
         <div class="form-row">
-          <input type="text" class="form-control" value="Guatemala" />
-          <input type="text" class="form-control" value="Ciudad de Guatemala" />
+          <select
+            class="form-control"
+            name="departamento"
+            [(ngModel)]="departamento"
+            [attr.disabled]="cargandoCatalogos() ? '' : null"
+            (ngModelChange)="onDepartamentoChange()"
+          >
+            <option value="" disabled>Departamento</option>
+            @for (depto of departamentos(); track depto) {
+              <option [ngValue]="depto">{{ depto }}</option>
+            }
+          </select>
+
+          <select
+            class="form-control"
+            name="municipio"
+            [(ngModel)]="municipio"
+            [attr.disabled]="!departamento ? '' : null"
+          >
+            <option value="" disabled>Municipio</option>
+            @for (mun of municipios(); track mun.id) {
+              <option [ngValue]="mun.city">{{ mun.city }}</option>
+            }
+          </select>
         </div>
 
         <input
@@ -68,16 +108,46 @@
           <div class="archivos-lista">
             @for (archivo of archivos; track $index) {
               <div class="archivo-item">
-                <span class="archivo-icono">📎</span>
+                @if (archivo.preview) {
+                  <div class="archivo-preview">
+                    @if (esTipo(archivo, 'image')) {
+                      <img [src]="archivo.preview" [alt]="archivo.nombre" />
+                    } @else if (esTipo(archivo, 'video')) {
+                      <video [src]="archivo.preview" controls muted preload="metadata"></video>
+                    } @else if (esTipo(archivo, 'audio')) {
+                      <audio [src]="archivo.preview" controls></audio>
+                    }
+                  </div>
+                } @else {
+                  <span class="archivo-icono">📎</span>
+                }
                 <span class="archivo-info">
                   <span class="archivo-nombre">{{ archivo.nombre }}</span>
                   <span class="archivo-detalle">{{ formatearTamano(archivo.tamano) }} · {{ archivo.tipo }}</span>
+                  <input
+                    type="text"
+                    class="archivo-descripcion"
+                    placeholder="Descripción de este archivo (opcional)"
+                    [(ngModel)]="archivo.descripcion"
+                    [ngModelOptions]="{ standalone: true }"
+                    [disabled]="enviando"
+                  />
                 </span>
+                @if (enviando) {
+                  <span
+                    class="archivo-estado"
+                    [class.archivo-estado--exito]="archivo.estado === 'exito'"
+                    [class.archivo-estado--fallo]="archivo.estado === 'fallo'"
+                  >
+                    {{ etiquetaEstado(archivo) }}
+                  </span>
+                }
                 <button
                   type="button"
                   class="archivo-eliminar"
                   aria-label="Quitar archivo"
                   (click)="eliminarArchivo($index)"
+                  [disabled]="enviando"
                 >
                   ✕
                 </button>
@@ -89,12 +159,28 @@
 
       <div class="form-group">
         <label class="form-label">Email (opcional — para recibir actualizaciones)</label>
-        <input type="email" class="form-control" placeholder="tucorreo@ejemplo.com" />
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="tucorreo@ejemplo.com"
+        />
       </div>
 
       <div class="form-actions">
         <button type="button" class="btn btn-cancel" routerLink="/home">Cancelar</button>
-        <button type="submit" class="btn btn-submit">Enviar denuncia</button>
+        <button type="submit" class="btn btn-submit" [disabled]="enviando">
+          @if (enviando) {
+            @if (archivos.length > 0) {
+              Subiendo evidencia {{ archivoActual() }} de {{ archivos.length }}…
+            } @else {
+              Enviando…
+            }
+          } @else {
+            Enviar denuncia
+          }
+        </button>
       </div>
 
     </form>
@@ -116,8 +202,15 @@
           Solo las autoridades con acceso al caso pueden verlos.
         </p>
 
-        <label class="dropzone dropzone--modal">
-          <p class="dropzone-text">Seleccione o arrastre archivos</p>
+        <label
+          class="dropzone dropzone--modal"
+          [class.dropzone--drag]="arrastrando"
+          (dragenter)="onDragEnter($event)"
+          (dragleave)="onDragLeave($event)"
+          (dragover)="onDragOver($event)"
+          (drop)="onDropArchivos($event)"
+        >
+          <p class="dropzone-text">Seleccione, arrastre o suelte archivos</p>
           <p class="dropzone-hint">JPG · PNG · MP4 · PDF</p>
           <input
             type="file"
@@ -132,10 +225,28 @@
           <div class="archivos-lista modal-lista">
             @for (archivo of archivos; track $index) {
               <div class="archivo-item">
-                <span class="archivo-icono">📎</span>
+                @if (archivo.preview) {
+                  <div class="archivo-preview">
+                    @if (esTipo(archivo, 'image')) {
+                      <img [src]="archivo.preview" [alt]="archivo.nombre" />
+                    } @else if (esTipo(archivo, 'video')) {
+                      <video [src]="archivo.preview" controls muted preload="metadata"></video>
+                    } @else if (esTipo(archivo, 'audio')) {
+                      <audio [src]="archivo.preview" controls></audio>
+                    }
+                  </div>
+                } @else {
+                  <span class="archivo-icono">📎</span>
+                }
                 <span class="archivo-info">
                   <span class="archivo-nombre">{{ archivo.nombre }}</span>
                   <span class="archivo-detalle">{{ formatearTamano(archivo.tamano) }} · {{ archivo.tipo }}</span>
+                  <input
+                    type="text"
+                    class="archivo-descripcion"
+                    placeholder="Descripción de este archivo (opcional)"
+                    [(ngModel)]="archivo.descripcion"
+                  />
                 </span>
                 <button
                   type="button"
@@ -157,15 +268,55 @@
   </div>
 }
 
-@if (denunciaEnviada) {
+@if (denunciaEnviada && denunciaCreada) {
   <div class="modal-overlay" (click)="cerrarDenunciaEnviada()">
     <div class="modal-box modal-box--feedback" (click)="$event.stopPropagation()">
       <div class="feedback-icon feedback-icon--success" aria-hidden="true">✓</div>
       <h2 class="feedback-title">Denuncia realizada</h2>
       <p class="modal-text feedback-text">
-        La denuncia fue realizada correctamente. ¡Gracias por reportar!
+        La denuncia fue creada correctamente. Guarda estos datos para consultarla más adelante.
       </p>
-      <button type="button" class="btn-confirm" (click)="cerrarDenunciaEnviada()">Aceptar</button>
+
+      <div class="credenciales">
+        <div class="credencial">
+          <span class="credencial-label">ID Público</span>
+          <span class="credencial-valor">{{ denunciaCreada.public_id }}</span>
+          <button
+            type="button"
+            class="btn-copiar"
+            (click)="copiarCampo('public_id')"
+          >
+            {{ campoCopiado === 'public_id' ? '✓ Copiado' : 'Copiar' }}
+          </button>
+        </div>
+        <div class="credencial">
+          <span class="credencial-label">Token de seguimiento</span>
+          <span class="credencial-valor">{{ denunciaCreada.token }}</span>
+          <button
+            type="button"
+            class="btn-copiar"
+            (click)="copiarCampo('token')"
+          >
+            {{ campoCopiado === 'token' ? '✓ Copiado' : 'Copiar' }}
+          </button>
+        </div>
+      </div>
+
+      <p class="modal-text feedback-text feedback-text--warn">
+        El token solo se muestra una vez. Lo necesitarás para consultar los detalles y adjuntar evidencia.
+      </p>
+
+      @if (archivosFallidos > 0) {
+        <p class="modal-text feedback-text feedback-text--warn">
+          @if (archivosFallidos === archivos.length) {
+            No se pudieron subir los {{ archivosFallidos }} archivo(s). Puedes adjuntarlos luego consultando la denuncia con el token.
+          } @else {
+            Se subieron algunos archivos, pero {{ archivosFallidos }} no se pudieron subir. Puedes adjuntarlos luego consultando la denuncia con el token.
+          }
+        </p>
+      }
+
+      <button type="button" class="btn-confirm" (click)="cerrarDenunciaEnviada()">Entendido</button>
     </div>
   </div>
 }
@@ -176,7 +327,7 @@
       <div class="feedback-icon feedback-icon--error" aria-hidden="true">!</div>
       <h2 class="feedback-title">Error al enviar denuncia</h2>
       <p class="modal-text feedback-text">
-        Verifica que todos los campos obligatorios estén completos e inténtalo de nuevo.
+        {{ mensajeError }}
       </p>
       <button type="button" class="btn-confirm" (click)="cerrarError()">Entendido</button>
     </div>

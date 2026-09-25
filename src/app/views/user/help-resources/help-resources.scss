@@ -60,6 +60,82 @@
 }
 
 /* ==========================================================================
+   3.1 ESTADOS DE CARGA Y ERROR
+   ========================================================================== */
+
+/* Contenedor del spinner + texto mientras cargan los datos */
+.recursos-loader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 0;
+}
+
+/* Spinner circular animado */
+.recursos-loader-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #c1121f;
+  border-radius: 50%;
+  animation: recursos-spin 0.8s linear infinite;
+}
+
+@keyframes recursos-spin {
+  to { transform: rotate(360deg); }
+}
+
+.recursos-loader-texto {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #6b6b6b;
+  margin: 0;
+}
+
+/* Caja de error con mensaje y botón de reintento */
+.recursos-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid #f1c2c6;
+  background-color: #fdf3f4;
+  border-radius: 6px;
+}
+
+.recursos-error-texto {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #a33b45;
+  margin: 0;
+}
+
+.recursos-error-boton {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: #c1121f;
+  cursor: pointer;
+}
+
+.recursos-error-boton:hover {
+  background-color: #a3121c;
+}
+
+/* Mensaje cuando una sección no tiene datos */
+.recursos-vacio {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: #8c96a0;
+  margin: 0;
+}
+
+/* ==========================================================================
    4. TARJETAS DE PDF / GUÍAS EDUCATIVAS
    ========================================================================== */
 
@@ -107,6 +183,14 @@
 .pdf-icon--lavender { background-color: #f0edf6; color: #7a5f9e; }
 .pdf-icon--tan      { background-color: #f2ece2; color: #a17a45; }
 
+/* Fila superior de la tarjeta: ícono PDF + tag de categoría */
+.pdf-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 /* Nombre o título del documento PDF */
 .pdf-name {
   font-family: 'DM Sans', sans-serif;
@@ -115,6 +199,19 @@
   line-height: 1.4;
   color: #1a1a1a;
   margin: 0;
+}
+
+/* Breve descripción del documento, limitada a dos líneas */
+.pdf-description {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b6b6b;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* Fila inferior de metadata (Tag de categoría y número de páginas) */
@@ -155,6 +252,15 @@
   text-decoration: underline;
 }
 
+.pdf-download--disabled {
+  color: #b0b6bd;
+  cursor: default;
+}
+
+.pdf-download--disabled:hover {
+  text-decoration: none;
+}
+
 /* ==========================================================================
    5. TÍTULOS GENERALES DE SECCIÓN
    ========================================================================== */
@@ -183,8 +289,10 @@
 /* Tarjeta individual de número telefónico */
 .hotline-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
+  text-align: center;
+  gap: 6px;
   padding: 20px 24px;
   border: 1px solid #e4e4e4;
   margin: -1px 0 0 -1px; /* Evita que los bordes dobles se superpongan feo */
@@ -234,6 +342,7 @@
 /* Tarjeta interactiva de institución */
 .institucion-card {
   text-align: left;
+  font-family: inherit;
   background-color: #ffffff;
   border: 1px solid #e4e4e4;
   border-radius: 6px;
@@ -406,4 +515,42 @@
 
 .btn-llamar:hover {
   background-color: #33496b;
+}
+
+/* ==========================================================================
+   9. RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .pdf-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hotlines-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .instituciones-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .recursos-container {
+    padding: 40px 20px 80px;
+  }
+
+  .recursos-title {
+    font-size: 32px;
+  }
+
+  .pdf-grid,
+  .hotlines-grid,
+  .instituciones-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hotline-card {
+    padding: 16px 20px;
+  }
 }

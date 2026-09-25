@@ -30,43 +30,210 @@
         />
       </div>
 
-      <button type="button" class="btn-consultar" (click)="consultarDenuncia()">
-        Consultar denuncia
+      <button type="button" class="btn-consultar" (click)="consultarDenuncia()" [disabled]="cargando()">
+        @if (cargando()) { Consultando… } @else { Consultar denuncia }
       </button>
 
     </div>
 
-    <!-- Resultado: aparece debajo del botón naranja al consultar -->
-    <div class="resultado-card" *ngIf="resultado() as denuncia">
-
-      <div class="resultado-header">
-        <span class="resultado-id">{{ denuncia.idPublico }}</span>
-        <span
-          class="resultado-badge"
-          [class.resultado-badge--recibida]="denuncia.estadoActual === 'recibida'"
-          [class.resultado-badge--proceso]="denuncia.estadoActual === 'en_investigacion'"
-          [class.resultado-badge--resuelta]="denuncia.estadoActual === 'resuelta'"
-        >
-          {{ etiquetaEstado(denuncia.estadoActual) }}
-        </span>
+    @if (errorConsulta()) {
+      <div class="error-card">
+        <span class="error-titulo">No se pudo consultar la denuncia</span>
+        <p class="error-texto">{{ mensajeError() }}</p>
       </div>
+    }
 
-      <ul class="pasos-lista">
-        <li
-          class="paso-item"
-          *ngFor="let paso of denuncia.pasos"
-          [class.paso-item--completado]="paso.completado && !paso.actual"
-          [class.paso-item--actual]="paso.actual"
-          [class.paso-item--pendiente]="!paso.completado && !paso.actual"
-        >
-          <span class="paso-icono">
-            <span *ngIf="paso.completado || paso.actual">✓</span>
-          </span>
-          <span class="paso-nombre">{{ paso.nombre }}</span>
-        </li>
-      </ul>
+    @if (resultado(); as info) {
+      <div class="resultado-card">
 
-    </div>
+        <div class="resultado-header">
+          <span class="resultado-id">{{ info.public_id }}</span>
+          <span class="resultado-badge">{{ info.status_name }}</span>
+        </div>
+
+        <ul class="pasos-lista">
+          @for (paso of pasos(info); track paso.nombre) {
+            <li
+              class="paso-item"
+              [class.paso-item--completado]="paso.completado && !paso.actual"
+              [class.paso-item--actual]="paso.actual"
+              [class.paso-item--pendiente]="!paso.completado && !paso.actual"
+            >
+              <span class="paso-icono">
+                @if (paso.completado || paso.actual) { <span>✓</span> }
+              </span>
+              <span class="paso-nombre">{{ paso.nombre }}</span>
+            </li>
+          }
+        </ul>
+
+        @if (esCompleta(info)) {
+          <div class="detalle-seccion">
+            <h2 class="detalle-titulo">Detalles completos</h2>
+
+            <dl class="detalle-lista">
+              <div class="detalle-item">
+                <dt class="detalle-label">Tipo de abuso</dt>
+                <dd class="detalle-valor">{{ info.abuse_type_name }} ({{ info.abuse_type_category }})</dd>
+              </div>
+              @if (info.institution_name) {
+                <div class="detalle-item">
+                  <dt class="detalle-label">Institución asignada</dt>
+                  <dd class="detalle-valor">{{ info.institution_name }}</dd>
+                </div>
+              }
+              <div class="detalle-item">
+                <dt class="detalle-label">Descripción</dt>
+                <dd class="detalle-valor">{{ info.description }}</dd>
+              </div>
+              @if (info.specific_address) {
+                <div class="detalle-item">
+                  <dt class="detalle-label">Dirección</dt>
+                  <dd class="detalle-valor">{{ info.specific_address }}</dd>
+                </div>
+              }
+              @if (info.city || info.department) {
+                <div class="detalle-item">
+                  <dt class="detalle-label">Ubicación</dt>
+                  <dd class="detalle-valor">{{ ubicacion(info) }}</dd>
+                </div>
+              }
+              @if (info.notification_email) {
+                <div class="detalle-item">
+                  <dt class="detalle-label">Email de contacto</dt>
+                  <dd class="detalle-valor">{{ info.notification_email }}</dd>
+                </div>
+              }
+              <div class="detalle-item">
+                <dt class="detalle-label">Fecha de creación</dt>
+                <dd class="detalle-valor">{{ formatearFecha(info.created_at) }}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="evidencia-seccion">
+            <button
+              type="button"
+              class="evidencia-header"
+              (click)="alternarEvidencia()"
+              [attr.aria-expanded]="evidenciaDesplegada()"
+            >
+              <h2 class="detalle-titulo">
+                Evidencia @if (evidencias().length > 0) { ({{ evidencias().length }}) }
+              </h2>
+              <span
+                class="evidencia-flecha"
+                [class.evidencia-flecha--abierta]="evidenciaDesplegada()"
+                aria-hidden="true"
+              >▸</span>
+            </button>
+
+            @if (evidenciaDesplegada()) {
+              <div class="evidencia-contenido">
+
+              @if (evidencias().length === 0 && !subiendoEvidencia()) {
+                <p class="evidencia-vacia">Aún no se ha adjuntado evidencia.</p>
+              }
+
+            <ul class="evidencia-lista">
+              @for (evidencia of evidencias(); track evidencia.id) {
+                <li class="evidencia-item">
+                  @if (evidencia.fileType === 'image') {
+                    <a class="evidencia-miniatura" [href]="evidencia.fileUrl" target="_blank" rel="noopener">
+                      <img [src]="evidencia.fileUrl" [alt]="nombreEvidencia(evidencia)" />
+                    </a>
+                  } @else {
+                    <span class="evidencia-icono">{{ iconoEvidencia(evidencia) }}</span>
+                  }
+                  <span class="evidencia-info">
+                    <a class="evidencia-nombre" [href]="evidencia.fileUrl" target="_blank" rel="noopener">
+                      {{ nombreEvidencia(evidencia) }}
+                    </a>
+                    @if (editandoId() === evidencia.id) {
+                      <div class="evidencia-editar">
+                        <input
+                          type="text"
+                          class="evidencia-editar-input"
+                          [(ngModel)]="edicionBorrador"
+                        />
+                        @if (errorEdicion()) {
+                          <span class="evidencia-editar-error">No se pudo guardar la descripción. Inténtalo de nuevo.</span>
+                        }
+                        <div class="evidencia-editar-acciones">
+                          <button type="button" class="evidencia-editar-btn" (click)="guardarEdicion()">
+                            Guardar
+                          </button>
+                          <button type="button" class="evidencia-editar-btn evidencia-editar-btn--cancelar" (click)="cancelarEdicion()">
+                            Cancelar
+                          </button>
+                        </div>
+                      </div>
+                    } @else {
+                      <span class="evidencia-comentario">
+                        {{ evidencia.description ?? 'Sin descripción' }}
+                      </span>
+                      <button
+                        type="button"
+                        class="evidencia-editar-enlace"
+                        [disabled]="subiendoEvidencia()"
+                        (click)="empezarEdicion(evidencia)"
+                      >
+                        Editar descripción
+                      </button>
+                    }
+                    <span class="evidencia-detalle">
+                      {{ etiquetaTipo(evidencia) }} · {{ formatearFecha(evidencia.uploadedAt) }}
+                    </span>
+                  </span>
+                </li>
+              }
+            </ul>
+
+            @if (subiendoEvidencia()) {
+              <p class="evidencia-subiendo">Subiendo evidencia…</p>
+            }
+
+            @if (errorEvidencia()) {
+              <p class="evidencia-error">
+                Algunos archivos no se pudieron subir. Verifica el tamaño (máximo 10 MB) e inténtalo de nuevo.
+              </p>
+            }
+
+            <label
+              class="dropzone"
+              [class.dropzone--drag]="arrastrando"
+              (dragenter)="onDragEnter($event)"
+              (dragleave)="onDragLeave($event)"
+              (dragover)="onDragOver($event)"
+              (drop)="onDropArchivos($event)"
+            >
+              <span class="dropzone-text">Adjuntar nueva evidencia</span>
+              <input
+                type="file"
+                class="dropzone-input"
+                multiple
+                hidden
+                (change)="onEvidenciasNuevas($event)"
+              />
+            </label>
+            <input
+              type="text"
+              class="form-control evidencia-descripcion"
+              placeholder="Descripción de la evidencia (opcional)"
+              [(ngModel)]="descripcionEvidencia"
+            />
+
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="detalle-aviso">
+            Añade el token secreto para ver los detalles completos y la evidencia de esta denuncia.
+          </p>
+        }
+
+      </div>
+    }
 
   </section>
 </div>
