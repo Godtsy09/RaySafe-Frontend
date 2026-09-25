@@ -10,6 +10,8 @@ export interface PublicUser {
   name: string;
   email: string;
   role: Role;
+  institutionId: number;
+  institutionName: string;
 }
 
 export interface LoginResult {
@@ -43,6 +45,9 @@ export class AuthService {
       .map((parte) => parte.charAt(0).toUpperCase())
       .join('');
   });
+
+  readonly institutionId = computed(() => this.userSignal()?.institutionId ?? 0);
+  readonly institutionName = computed(() => this.userSignal()?.institutionName ?? '');
 
   login(email: string, password: string): Observable<LoginResult> {
     return this.http

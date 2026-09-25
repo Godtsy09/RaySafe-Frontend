@@ -46,6 +46,18 @@ $danger-hover-bg: #fef2f2;
   gap: 28px;
   justify-self: center; /* Garantiza el centro exacto */
 
+  .institution-badge {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 16px;
+    font-weight: 500;
+    color: #CA9264;
+    white-space: nowrap;
+    margin-right: 16px;
+    padding-right: 16px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
   /* Ítems del centro (misma base, el recuadro es el estado activo) */
   .btn-agentes,
   .nav-link {
