@@ -30,7 +30,7 @@
         <input
         type="email"
         id="email"
-        placeholder="nombre@pnc.gob.gt"
+        placeholder="nombre@dominio.com"
         required
         [(ngModel)]="formData.email"
         name="email"
@@ -63,7 +63,7 @@
     }
 
     @if (success) {
-      <div class="success-message">Agente creado correctamente. Redirigiendo...</div>
+      <div class="success-message">{{ successMessage }} Redirigiendo...</div>
     }
 
     <button type="submit" class="submit-btn" [disabled]="submitting">

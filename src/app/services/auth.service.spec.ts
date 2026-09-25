@@ -17,7 +17,14 @@ describe('AuthService', () => {
 
   const result: LoginResult = {
     token: 'un-token-de-prueba',
-    user: { id: 1, name: 'Ana Pérez', email: 'ana@raysafe.gt', role: 'agente' },
+    user: {
+      id: 1,
+      name: 'Ana Pérez',
+      email: 'ana@raysafe.gt',
+      role: 'agente',
+      institutionId: 3,
+      institutionName: 'Institución de Prueba',
+    },
   };
 
   const configurarTestBed = () => {
@@ -100,7 +107,14 @@ describe('AuthService', () => {
 
   it('refrescarUsuario actualiza los datos del usuario', () => {
     service.guardarSesion(result);
-    service.refrescarUsuario({ id: 1, name: 'Nuevo Nombre', email: 'ana@raysafe.gt', role: 'admin' as Role });
+    service.refrescarUsuario({
+      id: 1,
+      name: 'Nuevo Nombre',
+      email: 'ana@raysafe.gt',
+      role: 'admin' as Role,
+      institutionId: 3,
+      institutionName: 'Institución de Prueba',
+    });
 
     expect(service.user()?.name).toBe('Nuevo Nombre');
     expect(service.rol()).toBe('admin');

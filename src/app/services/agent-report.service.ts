@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface UnassignedReportItem {
   id: number;
   public_id: string;
   abuse_type: string;
-  ubicacion: number | null;
+  ubicacion: string | null;
   estado: string;
   created_at: string;
 }
@@ -98,6 +98,15 @@ export interface TakenReportDetail {
   fecha_asignacion: string;
 }
 
+// El backend envuelve la denuncia asignada en { message, report }.
+export interface TakeReportResponse {
+  message: string;
+  report: TakenReportDetail;
+}
+
+// Coincide con el ENUM risk_level y con takeReportSchema del backend.
+export type RiskLevel = 'low' | 'medium' | 'high' | 'critical';
+
 export interface CreateNoteResponse {
   id: number;
   report_id: number;
@@ -131,41 +140,28 @@ export class AgentReportService {
   }
 
   // Unassigned reports (pool institucional)
-  getUnassigned(page: number): Observable<{
-    total: number;
-    page: number;
-    totalPages: number;
-    data: UnassignedReportItem[];
-  }> {
-    return this.http.get<{
-      total: number;
-      page: number;
-      totalPages: number;
-      data: UnassignedReportItem[];
-    }>(`/api/agent/reports/unassigned?page=${page}&limit=5`);
+  getUnassigned(page: number, limit = 5): Observable<UnassignedResult> {
+    return this.http.get<UnassignedResult>('/api/agent/reports/unassigned', {
+      params: new HttpParams().set('page', page).set('limit', limit),
+    });
   }
 
   getUnassignedDetail(id: number): Observable<UnassignedReportDetail> {
     return this.http.get<UnassignedReportDetail>(`/api/agent/reports/unassigned/${id}`);
   }
 
-  takeReport(id: number, riskLevel: string): Observable<TakenReportDetail> {
-    return this.http.post<TakenReportDetail>(`/api/agent/reports/unassigned/${id}/take`, { risk_level: riskLevel });
+  takeReport(id: number, riskLevel: RiskLevel): Observable<TakeReportResponse> {
+    return this.http.post<TakeReportResponse>(
+      `/api/agent/reports/unassigned/${id}/take`,
+      { risk_level: riskLevel },
+    );
   }
 
   // Assigned reports (mis reportes)
-  getMyReports(page: number): Observable<{
-    total: number;
-    page: number;
-    totalPages: number;
-    data: AssignedReportItem[];
-  }> {
-    return this.http.get<{
-      total: number;
-      page: number;
-      totalPages: number;
-      data: AssignedReportItem[];
-    }>(`/api/agent/reports?page=${page}&limit=5`);
+  getMyReports(page: number, limit = 5): Observable<AssignedResult> {
+    return this.http.get<AssignedResult>('/api/agent/reports', {
+      params: new HttpParams().set('page', page).set('limit', limit),
+    });
   }
 
   getMyReportDetail(id: number): Observable<ReportDetail> {

@@ -197,6 +197,19 @@ export class AssignedReports implements OnInit {
     });
   }
 
+  // "Cobán, Alta Verapaz ・ Zona 5" | "Cobán" | "" — misma salida que la
+  // interpolación encadenada que reemplazó, sin optional-chains redundantes.
+  formatLocation(
+    location: ReportDetail['location'],
+    specificAddress: string | null,
+  ): string {
+    const city = location?.city ?? '';
+    const department = location?.department ?? '';
+    const place = city && department ? `${city}, ${department}` : city || department;
+
+    return specificAddress ? `${place} ・ ${specificAddress}` : place;
+  }
+
   getStatusClass(status: string): string {
     const s = status.toLowerCase();
     if (s.includes('investig')) return 'warning';

@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HeaderAgentComponent } from '../../../components/headers/header-agent/header-agent';
-import { AgentReportService, UnassignedReportItem, UnassignedResult, UnassignedReportDetail } from '../../../services/agent-report.service';
+import { AgentReportService, RiskLevel, UnassignedReportDetail, UnassignedReportItem } from '../../../services/agent-report.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -19,13 +19,19 @@ export class UnassignedReports implements OnInit {
 
   protected readonly reports = signal<UnassignedReportItem[]>([]);
   protected readonly selectedReport = signal<UnassignedReportDetail | null>(null);
+
+  // "loading" solo refleja la carga de la lista. Abrir un detalle o tomar la
+  // denuncia ya no reemplaza la tabla por "Cargando...".
   protected readonly loading = signal(false);
+  // Alimenta el [disabled] del botón "Tomar Denuncia" y evita el doble envío.
+  protected readonly taking = signal(false);
+
   protected readonly error = signal<string | null>(null);
   protected readonly page = signal(1);
   protected readonly totalPages = signal(0);
   protected readonly isDetailOpen = signal(false);
   protected readonly isClaimOpen = signal(false);
-  protected readonly selectedRisk = signal('medium');
+  protected readonly selectedRisk = signal<RiskLevel>('medium');
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -56,16 +62,15 @@ export class UnassignedReports implements OnInit {
   }
 
   openDetail(report: UnassignedReportItem): void {
-    this.loading.set(true);
+    this.error.set(null);
+
     this.reportService.getUnassignedDetail(report.id).subscribe({
       next: (detail) => {
         this.selectedReport.set(detail);
         this.isDetailOpen.set(true);
-        this.loading.set(false);
       },
       error: (err) => {
         this.error.set(err?.error?.error ?? 'Error al cargar detalle');
-        this.loading.set(false);
       },
     });
   }
@@ -77,16 +82,20 @@ export class UnassignedReports implements OnInit {
 
   takeReport(): void {
     const report = this.selectedReport();
-    if (!report) return;
+    if (!report || this.taking()) return;
 
-    this.loading.set(true);
+    this.taking.set(true);
+    this.error.set(null);
+
     this.reportService.takeReport(report.id, this.selectedRisk()).subscribe({
       next: () => {
+        this.taking.set(false);
         this.isClaimOpen.set(false);
+        this.closeDetailModal();
         this.loadReports();
       },
       error: (err) => {
-        this.loading.set(false);
+        this.taking.set(false);
         this.error.set(err?.error?.error ?? 'Error al tomar denuncia');
       },
     });
@@ -103,18 +112,10 @@ export class UnassignedReports implements OnInit {
 
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('es-GT', { day: '2-digit', month: 'short', year: 'numeric' });
-  }
 
-  getRiskClass(risk: string | null): string {
-    if (!risk) return '';
-    switch (risk) {
-      case 'low': return 'risk-low';
-      case 'medium': return 'risk-medium';
-      case 'high': return 'risk-high';
-      case 'critical': return 'risk-critical';
-      default: return '';
-    }
+    if (Number.isNaN(date.getTime())) return dateStr;
+
+    return date.toLocaleDateString('es-GT', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 
   protected readonly pageNumbers = computed(() => {

@@ -628,6 +628,52 @@ $border-light: #F3F4F6;
             }
           }
         }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+
+          label {
+            font-size: 12px;
+            font-weight: 600;
+            color: $text-muted;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: block;
+            margin-bottom: 0;
+          }
+        }
+
+        .form-control {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0.7rem 2rem 0.7rem 0.9rem;
+          background-color: #F8FAFC;
+          border: 1px solid $border-color;
+          border-radius: 6px;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 14px;
+          color: #334155;
+          cursor: pointer;
+          transition: border-color 0.2s, background-color 0.2s;
+
+          &:hover:not(:disabled) {
+            border-color: $brand-blue;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: $brand-blue;
+            background-color: #ffffff;
+          }
+
+          &:disabled {
+            background-color: $border-light;
+            color: $text-muted;
+            cursor: not-allowed;
+          }
+        }
       }
 
       &.modal-large {

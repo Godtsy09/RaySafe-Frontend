@@ -86,10 +86,6 @@
                         <h3 class="section-title">Información del Hecho</h3>
                         <div class="grid-3">
                             <div class="info-group">
-                                <span class="label">Nivel de Riesgo</span>
-                                <span class="badge" [class.risk-low]="report.nivel_riesgo === 'low'" [class.risk-medium]="report.nivel_riesgo === 'medium'" [class.risk-high]="report.nivel_riesgo === 'high'" [class.risk-critical]="report.nivel_riesgo === 'critical'">{{ report.nivel_riesgo ?? 'No especificado' }}</span>
-                            </div>
-                            <div class="info-group">
                                 <span class="label">Tipo de Abuso</span>
                                 <span class="value">{{ report.tipo_abuso }}</span>
                             </div>
@@ -117,10 +113,10 @@
                         <h3 class="section-title">Evidencia Adjunta</h3>
                         <details class="evidence-accordion margin-top">
                             <summary class="accordion-header">
-                                <span>📎 Ver Archivos de Evidencia ({{ report.evidencia?.length ?? 0 }} adjuntos)</span>
+                                <span>📎 Ver Archivos de Evidencia ({{ report.evidencia.length }} adjuntos)</span>
                             </summary>
                             <div class="accordion-content">
-                                @if (!report.evidencia?.length) {
+                                @if (!report.evidencia.length) {
                                     <div class="evidence-item">
                                         <span class="file-info">Sin evidencia adjunta</span>
                                     </div>
@@ -172,7 +168,7 @@
             </div>
             <div class="modal-footer-confirm">
                 <button class="btn-secondary" (click)="closeClaimModal()">Cancelar</button>
-                <button class="btn-primary" (click)="takeReport()" [disabled]="loading()">Tomar Denuncia</button>
+                <button class="btn-primary" (click)="takeReport()" [disabled]="taking()">Tomar Denuncia</button>
             </div>
         </div>
     </div>

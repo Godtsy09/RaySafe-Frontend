@@ -92,7 +92,7 @@
               </div>
               <div class="info-group">
                 <span class="label">Tipo de Abuso</span>
-                <span class="value">{{ report.abuseType?.name }} ({{ report.abuseType?.category === 'human' ? 'Humano' : 'Animal' }})</span>
+                <span class="value">{{ report.abuseType.name }} ({{ report.abuseType.category === 'human' ? 'Humano' : 'Animal' }})</span>
               </div>
               <div class="info-group">
                 <span class="label">Fecha de Ingreso</span>
@@ -102,7 +102,7 @@
 
             <div class="info-group margin-top">
               <span class="label">Ubicación y Dirección Específica</span>
-              <span class="value">{{ report.location?.city ?? '' }}{{ report.location?.city && report.location?.department ? ', ' : '' }}{{ report.location?.department ?? '' }}{{ report.specificAddress ? ' ・ ' + report.specificAddress : '' }}</span>
+              <span class="value">{{ formatLocation(report.location, report.specificAddress) }}</span>
             </div>
 
             <div class="info-group margin-top">
@@ -140,10 +140,10 @@
             <!-- Acordeón Desplegable para Evidencias -->
             <details class="evidence-accordion margin-top">
               <summary class="accordion-header">
-                <span>📎 Ver Archivos de Evidencia ({{ report.evidence?.length ?? 0 }} adjuntos)</span>
+                <span>📎 Ver Archivos de Evidencia ({{ report.evidence.length }} adjuntos)</span>
               </summary>
               <div class="accordion-content">
-                @if (!report.evidence?.length) {
+                @if (!report.evidence.length) {
                   <div class="evidence-item">
                     <span class="file-info">Sin evidencia adjunta</span>
                   </div>
@@ -183,7 +183,7 @@
 
             <!-- Feed de Notas Registradas (internal_notes) -->
             <div class="notes-feed">
-              @if (!report.notes?.length) {
+                @if (!report.notes.length) {
                 <div class="note-card">
                   <p class="note-body">Sin notas registradas</p>
                 </div>
@@ -203,7 +203,7 @@
             <!-- Historial de Transición de Estado -->
             <div class="status-history-compact margin-top">
               <span class="label">Historial de cambios de estado:</span>
-              @if (!report.statusHistory?.length) {
+                @if (!report.statusHistory.length) {
                 <p class="history-text">Sin cambios de estado registrados</p>
               } @else {
                 @for (history of report.statusHistory; track history.id) {
