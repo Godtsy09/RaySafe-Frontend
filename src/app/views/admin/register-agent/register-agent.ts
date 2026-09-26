@@ -1,4 +1,4 @@
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -23,10 +23,13 @@ export class RegisterAgent {
     role: 'agent',
   };
 
-  protected submitting = false;
-  protected error = '';
-  protected success = false;
-  protected successMessage = '';
+  // Signals y no propiedades planas: la app es zoneless, asi que un valor asignado
+  // dentro de un subscribe() no reprogramaria el change detection y el boton se
+  // quedaria en "Creando...".
+  protected readonly submitting = signal(false);
+  protected readonly error = signal('');
+  protected readonly success = signal(false);
+  protected readonly successMessage = signal('');
 
   private buildErrorMessage(err: unknown): string {
     const body = (err as { error?: { error?: string; details?: Record<string, string[] | string> } })?.error;
@@ -54,33 +57,35 @@ export class RegisterAgent {
   registrar(event: Event): void {
     event.preventDefault();
 
-    if (this.submitting) return;
+    if (this.submitting()) return;
 
-    this.error = '';
-    this.success = false;
-    this.successMessage = '';
+    this.error.set('');
+    this.success.set(false);
+    this.successMessage.set('');
 
     const name = this.formData.name.trim();
     const email = this.formData.email.trim();
     const password = this.formData.password;
 
     if (!name || !email || !password.trim()) {
-      this.error = 'Todos los campos son obligatorios';
+      this.error.set('Todos los campos son obligatorios');
       return;
     }
 
     if (password.length < 6) {
-      this.error = 'La contraseña debe tener al menos 6 caracteres';
+      this.error.set('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
-    this.submitting = true;
+    this.submitting.set(true);
 
     this.agentService.createAgent({ ...this.formData, name, email }).subscribe({
       next: (created) => {
-        this.submitting = false;
-        this.success = true;
-        this.successMessage = `${created.roleName === 'admin' ? 'Administrador' : 'Agente'} creado correctamente.`;
+        this.submitting.set(false);
+        this.success.set(true);
+        this.successMessage.set(
+          `${created.roleName === 'admin' ? 'Administrador' : 'Agente'} creado correctamente.`
+        );
         this.formData = { name: '', email: '', password: '', role: 'agent' };
 
         if (isPlatformBrowser(this.platformId)) {
@@ -90,8 +95,8 @@ export class RegisterAgent {
         }
       },
       error: (err) => {
-        this.submitting = false;
-        this.error = this.buildErrorMessage(err);
+        this.submitting.set(false);
+        this.error.set(this.buildErrorMessage(err));
       },
     });
   }

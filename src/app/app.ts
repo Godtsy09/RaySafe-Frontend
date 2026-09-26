@@ -1,7 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from './components/footer/footer';
-
 
 @Component({
   selector: 'app-root',
@@ -9,6 +8,4 @@ import { Footer } from './components/footer/footer';
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('raysafe');
-}
+export class App {}

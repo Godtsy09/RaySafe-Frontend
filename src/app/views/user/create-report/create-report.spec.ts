@@ -77,7 +77,6 @@ describe('CreateReport', () => {
     (component as never as { onDepartamentoChange: () => void }).onDepartamentoChange();
     (component as any).municipio = 'Mixco';
     (component as any).direccion = 'Zona 1, Calle 2';
-    (component as any).email = 'test@example.com';
     fixture.detectChanges();
   }
 
@@ -102,8 +101,8 @@ it('should not call the backend when required fields are missing', async () => {
 
     await enviar();
 
-    expect((component as any).errorDenuncia).toBe(true);
-    expect((component as any).mensajeError).toContain('Completa la categoría');
+    expect((component as any).errorDenuncia()).toBe(true);
+    expect((component as any).mensajeError()).toContain('Completa la categoría');
     expect(mockReportService.createReport).not.toHaveBeenCalled();
   });
 
@@ -117,7 +116,6 @@ it('should not call the backend when required fields are missing', async () => {
       description: 'Descripción de prueba',
       specific_address: 'Zona 1, Calle 2',
       location_id: 2,
-      notification_email: 'test@example.com',
     });
     expect(fixture.nativeElement.textContent).toContain('Denuncia realizada');
     expect(fixture.nativeElement.textContent).toContain('RS-2026-0123');
@@ -125,11 +123,23 @@ it('should not call the backend when required fields are missing', async () => {
     expect(fixture.nativeElement.textContent).toContain('Token de seguimiento');
   });
 
+  it('should leave the "Enviando" state and publish the result through signals', async () => {
+    llenarCampos();
+
+    await (component as any).enviarDenuncia(new Event('submit'));
+
+    // Sin un detectChanges manual: en zoneless la vista solo se actualiza si el estado
+    // que la activa es un signal. Si esto se rompe, el boton se queda en "Enviando…".
+    expect((component as any).enviando()).toBe(false);
+    expect((component as any).denunciaEnviada()).toBe(true);
+    expect((component as any).denunciaCreada()?.public_id).toBe('RS-2026-0123');
+  });
+
 it('should upload selected evidence with its description after creating the report', async () => {
     llenarCampos();
 
     const file = new File(['contenido'], 'prueba.txt', { type: 'text/plain' });
-    (component as any).archivos = [
+    (component as any).archivos.set([
       {
         nombre: 'prueba.txt',
         tamano: 9,
@@ -137,8 +147,9 @@ it('should upload selected evidence with its description after creating the repo
         file,
         estado: 'pendiente',
         descripcion: 'Boleta del veterinario',
+        preview: null,
       },
-    ];
+    ]);
     fixture.detectChanges();
 
     await enviar();
@@ -150,6 +161,7 @@ it('should upload selected evidence with its description after creating the repo
       file,
       'Boleta del veterinario'
     );
+    expect((component as any).archivos()[0].estado).toBe('exito');
     expect(fixture.nativeElement.textContent).toContain('Denuncia realizada');
   });
 
@@ -178,7 +190,7 @@ it('should upload selected evidence with its description after creating the repo
 
     expect(fixture.nativeElement.textContent).not.toContain('Denuncia realizada');
     expect((component as any).descripcion).toBe('');
-    expect((component as any).archivos.length).toBe(0);
+    expect((component as any).archivos().length).toBe(0);
 
     await enviar();
     expect(fixture.nativeElement.textContent).toContain('Error al enviar denuncia');

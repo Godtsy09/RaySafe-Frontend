@@ -70,22 +70,33 @@ export class CreateReport implements OnInit, OnDestroy {
   protected departamento = '';
   protected municipio = '';
   protected direccion = '';
-  protected email = '';
 
-  protected evidenciaAbierta = false;
-  protected archivos: ArchivoEvidencia[] = [];
-  protected arrastrando = false;
+  protected readonly evidenciaAbierta = signal(false);
+  protected readonly archivos = signal<ArchivoEvidencia[]>([]);
+  protected readonly arrastrando = signal(false);
   private dragContador = 0;
 
-  protected enviando = false;
-  protected denunciaEnviada = false;
-  protected errorDenuncia = false;
-  protected mensajeError = '';
+  protected readonly enviando = signal(false);
+  protected readonly denunciaEnviada = signal(false);
+  protected readonly errorDenuncia = signal(false);
+  protected readonly mensajeError = signal('');
 
-  protected denunciaCreada: CreatedReport | null = null;
-  protected archivosFallidos = 0;
-  protected campoCopiado: 'public_id' | 'token' | null = null;
+  protected readonly denunciaCreada = signal<CreatedReport | null>(null);
+  protected readonly archivosFallidos = signal(0);
+  protected readonly campoCopiado = signal<'public_id' | 'token' | null>(null);
   protected readonly archivoActual = signal(0);
+
+  /**
+   * Notifica a la vista de un cambio en un archivo ya existente. La app es zoneless,
+   * asi que mutar un objeto dentro del array no dispara change detection por si solo:
+   * se conserva la identidad del objeto (para no romper [(ngModel)] ni el foco) y se
+   * renueva la referencia del array, que si dispara el signal.
+   */
+  private refrescarArchivo(index: number, cambios: Partial<ArchivoEvidencia>): void {
+    this.archivos.update((lista) =>
+      lista.map((archivo, i) => (i === index ? Object.assign(archivo, cambios) : archivo))
+    );
+  }
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
@@ -138,11 +149,11 @@ export class CreateReport implements OnInit, OnDestroy {
   }
 
   abrirEvidencia(): void {
-    this.evidenciaAbierta = true;
+    this.evidenciaAbierta.set(true);
   }
 
   cerrarEvidencia(): void {
-    this.evidenciaAbierta = false;
+    this.evidenciaAbierta.set(false);
   }
 
   onArchivosSeleccionados(event: Event): void {
@@ -158,7 +169,7 @@ export class CreateReport implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
     this.dragContador++;
-    this.arrastrando = true;
+    this.arrastrando.set(true);
   }
 
   onDragLeave(event: DragEvent): void {
@@ -167,7 +178,7 @@ export class CreateReport implements OnInit, OnDestroy {
     this.dragContador--;
     if (this.dragContador <= 0) {
       this.dragContador = 0;
-      this.arrastrando = false;
+      this.arrastrando.set(false);
     }
   }
 
@@ -180,7 +191,7 @@ export class CreateReport implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
     this.dragContador = 0;
-    this.arrastrando = false;
+    this.arrastrando.set(false);
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
       this.agregarArchivos(Array.from(files));
@@ -188,17 +199,16 @@ export class CreateReport implements OnInit, OnDestroy {
   }
 
   private agregarArchivos(files: File[]): void {
-    for (const file of files) {
-      this.archivos.push({
-        nombre: file.name,
-        tamano: file.size,
-        tipo: file.type || 'archivo',
-        file,
-        estado: 'pendiente',
-        descripcion: '',
-        preview: this.crearPreview(file) ?? null,
-      });
-    }
+    const nuevos: ArchivoEvidencia[] = files.map((file) => ({
+      nombre: file.name,
+      tamano: file.size,
+      tipo: file.type || 'archivo',
+      file,
+      estado: 'pendiente',
+      descripcion: '',
+      preview: this.crearPreview(file) ?? null,
+    }));
+    this.archivos.update((lista) => [...lista, ...nuevos]);
   }
 
   private crearPreview(file: File): string | undefined {
@@ -220,7 +230,7 @@ export class CreateReport implements OnInit, OnDestroy {
   }
 
   private liberarPreviews(): void {
-    for (const archivo of this.archivos) {
+    for (const archivo of this.archivos()) {
       this.liberarPreview(archivo);
     }
   }
@@ -247,27 +257,28 @@ export class CreateReport implements OnInit, OnDestroy {
   }
 
   eliminarArchivo(index: number): void {
-    this.liberarPreview(this.archivos[index]);
-    this.archivos.splice(index, 1);
+    this.liberarPreview(this.archivos()[index]);
+    this.archivos.update((lista) => lista.filter((_, i) => i !== index));
   }
 
   async enviarDenuncia(event: Event): Promise<void> {
     event.preventDefault();
 
-    if (this.enviando) {
+    if (this.enviando()) {
       return;
     }
 
     if (!this.categoria || !this.tipoAbuso || !this.descripcion.trim()) {
-      this.errorDenuncia = true;
-      this.mensajeError =
-        'Completa la categoría, el tipo de abuso y la descripción para enviar la denuncia.';
+      this.errorDenuncia.set(true);
+      this.mensajeError.set(
+        'Completa la categoría, el tipo de abuso y la descripción para enviar la denuncia.'
+      );
       return;
     }
 
-    this.enviando = true;
-    this.errorDenuncia = false;
-    this.archivosFallidos = 0;
+    this.enviando.set(true);
+    this.errorDenuncia.set(false);
+    this.archivosFallidos.set(0);
 
     try {
       const creada = await lastValueFrom(
@@ -276,26 +287,25 @@ export class CreateReport implements OnInit, OnDestroy {
           description: this.descripcion.trim(),
           specific_address: this.direccion.trim() || undefined,
           location_id: this.locationId,
-          notification_email: this.email.trim() || undefined,
         })
       );
 
-      this.denunciaCreada = creada;
+      this.denunciaCreada.set(creada);
       await this.subirEvidencias(creada);
-      this.denunciaEnviada = true;
+      this.denunciaEnviada.set(true);
     } catch (error) {
-      this.errorDenuncia = true;
-      this.mensajeError = extraerMensajeError(error);
+      this.errorDenuncia.set(true);
+      this.mensajeError.set(extraerMensajeError(error));
     } finally {
-      this.enviando = false;
+      this.enviando.set(false);
     }
   }
 
   private async subirEvidencias(denuncia: CreatedReport): Promise<void> {
-    const total = this.archivos.length;
+    const total = this.archivos().length;
     for (let i = 0; i < total; i++) {
-      const archivo = this.archivos[i];
-      archivo.estado = 'subiendo';
+      const archivo = this.archivos()[i];
+      this.refrescarArchivo(i, { estado: 'subiendo' });
       this.archivoActual.set(i + 1);
       try {
         await lastValueFrom(
@@ -306,34 +316,34 @@ export class CreateReport implements OnInit, OnDestroy {
             archivo.descripcion.trim() || undefined
           )
         );
-        archivo.estado = 'exito';
+        this.refrescarArchivo(i, { estado: 'exito' });
       } catch {
-        archivo.estado = 'fallo';
-        this.archivosFallidos++;
+        this.refrescarArchivo(i, { estado: 'fallo' });
+        this.archivosFallidos.update((n) => n + 1);
       }
     }
     this.archivoActual.set(0);
   }
 
   async copiarCampo(campo: 'public_id' | 'token'): Promise<void> {
-    const valor = this.denunciaCreada?.[campo];
+    const valor = this.denunciaCreada()?.[campo];
     if (!valor) {
       return;
     }
     try {
       await navigator.clipboard.writeText(valor);
-      this.campoCopiado = campo;
+      this.campoCopiado.set(campo);
     } catch {
-      this.campoCopiado = null;
+      this.campoCopiado.set(null);
     }
   }
 
   cerrarError(): void {
-    this.errorDenuncia = false;
+    this.errorDenuncia.set(false);
   }
 
   cerrarDenunciaEnviada(): void {
-    this.denunciaEnviada = false;
+    this.denunciaEnviada.set(false);
     this.reiniciarFormulario();
   }
 
@@ -345,13 +355,12 @@ export class CreateReport implements OnInit, OnDestroy {
     this.departamento = '';
     this.municipio = '';
     this.direccion = '';
-    this.email = '';
     this.municipios.set([]);
-    this.archivos = [];
-    this.denunciaCreada = null;
-    this.archivosFallidos = 0;
+    this.archivos.set([]);
+    this.denunciaCreada.set(null);
+    this.archivosFallidos.set(0);
     this.archivoActual.set(0);
-    this.campoCopiado = null;
+    this.campoCopiado.set(null);
   }
 
   formatearTamano(bytes: number): string {

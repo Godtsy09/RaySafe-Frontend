@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { lastValueFrom } from 'rxjs';
 import { HeaderAgentComponent } from '../../../components/headers/header-agent/header-agent';
-import { AgentReportService, AssignedReportItem, AssignedResult, ReportDetail } from '../../../services/agent-report.service';
+import { AgentReportService, AssignedReportItem, ReportDetail } from '../../../services/agent-report.service';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -216,17 +216,6 @@ export class AssignedReports implements OnInit {
     if (s.includes('resuelt') || s.includes('cerrad')) return 'success';
     if (s.includes('desestim') || s.includes('rechaz')) return 'danger';
     return '';
-  }
-
-  getRiskClass(risk: string | null): string {
-    if (!risk) return '';
-    switch (risk) {
-      case 'low': return 'risk-low';
-      case 'medium': return 'risk-medium';
-      case 'high': return 'risk-high';
-      case 'critical': return 'risk-critical';
-      default: return '';
-    }
   }
 
   protected readonly pageNumbers = computed(() => {

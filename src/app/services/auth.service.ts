@@ -30,7 +30,6 @@ export class AuthService {
   private readonly tokenSignal = signal<string | null>(this.leerToken());
   private readonly userSignal = signal<PublicUser | null>(this.leerUsuario());
 
-  readonly token = this.tokenSignal.asReadonly();
   readonly user = this.userSignal.asReadonly();
   readonly rol = computed(() => this.userSignal()?.role ?? null);
   readonly estaAutenticado = computed(
@@ -46,7 +45,6 @@ export class AuthService {
       .join('');
   });
 
-  readonly institutionId = computed(() => this.userSignal()?.institutionId ?? 0);
   readonly institutionName = computed(() => this.userSignal()?.institutionName ?? '');
 
   login(email: string, password: string): Observable<LoginResult> {

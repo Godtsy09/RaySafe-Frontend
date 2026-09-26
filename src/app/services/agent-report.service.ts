@@ -169,10 +169,12 @@ export class AgentReportService {
   }
 
   addNote(id: number, content: string): Observable<CreateNoteResponse> {
-    return this.http.post<CreateNoteResponse>(`/api/agent/reports/${id}/notes`, { content });
+    const payload: CreateNotePayload = { content };
+    return this.http.post<CreateNoteResponse>(`/api/agent/reports/${id}/notes`, payload);
   }
 
   updateStatus(id: number, statusId: number, comment?: string): Observable<ReportDetail> {
-    return this.http.patch<ReportDetail>(`/api/agent/reports/${id}/status`, { status_id: statusId, comment });
+    const payload: UpdateStatusPayload = { status_id: statusId, comment };
+    return this.http.patch<ReportDetail>(`/api/agent/reports/${id}/status`, payload);
   }
 }

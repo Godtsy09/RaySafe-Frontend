@@ -21,7 +21,7 @@
         required
         [(ngModel)]="formData.name"
         name="name"
-        [disabled]="submitting"
+        [disabled]="submitting()"
         />
     </div>
 
@@ -34,7 +34,7 @@
         required
         [(ngModel)]="formData.email"
         name="email"
-        [disabled]="submitting"
+        [disabled]="submitting()"
         />
     </div>
 
@@ -47,27 +47,27 @@
         required
         [(ngModel)]="formData.password"
         name="password"
-        [disabled]="submitting"
+        [disabled]="submitting()"
         />
     </div>
 
     <div class="role-selector">
-        <input type="radio" id="role-agent" name="role" value="agent" [(ngModel)]="formData.role" [disabled]="submitting">
+        <input type="radio" id="role-agent" name="role" value="agent" [(ngModel)]="formData.role" [disabled]="submitting()">
         <label for="role-agent" class="role-btn">Agente</label>
-        <input type="radio" id="role-admin" name="role" value="admin" [(ngModel)]="formData.role" [disabled]="submitting">
+        <input type="radio" id="role-admin" name="role" value="admin" [(ngModel)]="formData.role" [disabled]="submitting()">
         <label for="role-admin" class="role-btn">Admin</label>
     </div>
 
-    @if (error) {
-      <div class="error-message">{{ error }}</div>
+    @if (error()) {
+      <div class="error-message">{{ error() }}</div>
     }
 
-    @if (success) {
-      <div class="success-message">{{ successMessage }} Redirigiendo...</div>
+    @if (success()) {
+      <div class="success-message">{{ successMessage() }} Redirigiendo...</div>
     }
 
-    <button type="submit" class="submit-btn" [disabled]="submitting">
-      {{ submitting ? 'Creando...' : 'Ingrese al sistema' }}
+    <button type="submit" class="submit-btn" [disabled]="submitting()">
+      {{ submitting() ? 'Creando...' : 'Ingrese al sistema' }}
     </button>
 
 </form>

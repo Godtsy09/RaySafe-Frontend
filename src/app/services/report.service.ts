@@ -22,7 +22,6 @@ export interface CreateReportPayload {
   description: string;
   specific_address?: string;
   location_id?: number;
-  notification_email?: string;
 }
 
 export interface CreatedReport {

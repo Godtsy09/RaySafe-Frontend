@@ -24,7 +24,6 @@ export class AgentList implements OnInit {
   protected readonly page = signal(1);
   protected readonly limit = 5;
   protected readonly totalPages = signal(0);
-  protected readonly totalItems = signal(0);
   protected readonly isModalOpen = signal(false);
   protected readonly saving = signal(false);
   protected readonly roleSelect = signal('2');
@@ -48,7 +47,6 @@ export class AgentList implements OnInit {
       next: (result: AgentListResult) => {
         this.agents.set(result.data);
         this.totalPages.set(result.totalPages);
-        this.totalItems.set(result.total);
         this.loading.set(false);
       },
       error: (err) => {

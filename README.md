@@ -1,84 +1,113 @@
-# Raysafe
+# Raysafe — Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
+Interfaz web de RaySafe: sistema de denuncia y seguimiento de casos de abuso (personas y animales) en Guatemala.
 
-> **Gestor de paquetes:** este proyecto usa **npm** (lo declara `packageManager` en `package.json`). No uses `pnpm dev` aquí — usa los scripts de `npm`.
+Angular 22 con **standalone components** y **signals**, con renderizado en servidor (SSR) y prerenderizado.
 
 ## Requisitos
 
-- Node.js 18+
-- npm 10+
-- El backend corriendo en `http://localhost:3000` (ver `raysafe-backend`)
+- Node.js `^22.22.3` \| `^24.15.0` \| `>=26.0.0` (requisito de Angular CLI 22)
+- npm 10 o superior (el proyecto declara `packageManager: npm@10.9.8`)
+- El backend corriendo en `http://localhost:3000` — ver [`../raysafe-backend`](../raysafe-backend)
 
-## Development server
-
-Con el backend levantado, inicia el frontend:
+## Puesta en marcha
 
 ```bash
-npm start        # equivale a ng serve
+npm install
+npm start
 ```
 
-> Usa `npm start` (CLI local del proyecto). No uses el `ng` global: puede diferir en versión y no aplicar el proxy correctamente.
+La app queda en `http://localhost:4200/`.
 
-Una vez corriendo, abre `http://localhost:4200/`. La aplicación recarga automáticamente al modificar archivos.
+> Usa los scripts de `npm` y el CLI local (`npm start`, no `ng` global): la versión global puede diferir y no aplicar el proxy correctamente.
 
-### Proxy al backend
+## Scripts
 
-El dev server redirige las peticiones `/api/*` al backend (`http://localhost:3000`) mediante `proxy.conf.json`, configurado en el target `serve` de `angular.json`. No hay problemas de CORS en desarrollo porque la petición sale del mismo origen (`localhost:4200`).
+| Comando | Qué hace |
+|---|---|
+| `npm start` | Servidor de desarrollo con recarga automática |
+| `npm run build` | Compila a `dist/raysafe/` |
+| `npm run watch` | Compila en modo desarrollo, viendo cambios |
+| `npm test` | Tests unitarios con Vitest |
+| `npm run serve:ssr:raysafe` | Sirve la build con el servidor SSR de Node |
 
-Para verificar que el proxy funciona (con el backend corriendo):
+## Cómo se conecta con el backend
+
+Todas las llamadas HTTP usan **rutas relativas** (`/api/...`); no hay ninguna URL absoluta en el código.
+
+En desarrollo, `proxy.conf.json` redirige `/api` y `/uploads` a `http://localhost:3000`, configurado en el target `serve` de `angular.json`. Por eso no hay problemas de CORS en local: la petición sale del mismo origen (`localhost:4200`).
+
+Para comprobar que el proxy responde:
 
 ```
 http://localhost:4200/api/stats/dashboard
 ```
 
-Debe devolver JSON (no HTML).
+Debe devolver JSON, no HTML.
 
-> 📖 ¿Quieres entender cómo funciona todo esto, capa por capa, y cómo llamar más
-> endpoints (incluidos los que requieren JWT)? Lee **[CONECTIVIDAD.md](./CONECTIVIDAD.md)**.
+> En producción (build con SSR) no hay proxy: el servidor Express generado sirve los archivos estáticos y el resto de rutas las resuelve el enrutador de Angular. Las llamadas a `/api` necesitan un servidor aparte o una regla de reescritura en el hosting.
 
-## Code scaffolding
+## Sesión y roles
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- `AuthService` (signals + `localStorage`) guarda el token JWT y los datos del usuario.
+- `authInterceptor` añade la cabecera `Authorization: Bearer` a cada petición y, ante un `401`, cierra sesión y redirige a `/login`.
+- `roleGuard` protege las rutas internas según el rol del usuario: `agente` o `admin`.
 
-```bash
-ng generate component component-name
+## Rutas de la aplicación
+
+| Ruta | Vista | Acceso |
+|---|---|---|
+| `/home` | Portada | Público |
+| `/login` | Iniciar sesión | Público |
+| `/create-report` | Formulario de denuncia | Público |
+| `/track-report` | Seguimiento de una denuncia | Público |
+| `/abuse-stats` | Estadísticas por departamento | Público |
+| `/help-resources` | Recursos de ayuda y guías | Público |
+| `/unassigned-reports` | Pool de denuncias sin asignar | `agente` |
+| `/assigned-reports` | Denuncias asignadas al agente | `agente` |
+| `/agent-list` | Gestión de agentes | `admin` |
+| `/register-agent` | Alta de agente | `admin` |
+| `/agent-logs` | Bitácora global de denuncias | `admin` |
+| `**` | Página 404 | Público |
+
+## Estructura
+
+```
+src/
+  main.ts                Bootstrap del navegador
+  main.server.ts         Bootstrap del servidor (SSR)
+  server.ts              Servidor Express que sirve la build con Angular
+  app/
+    app.ts               Componente raíz
+    app.config.ts        Providers: router, HTTP, interceptores
+    app.routes.ts        Tabla de rutas
+    app.routes.server.ts  Modo de renderizado por ruta
+    views/               Una carpeta por vista (componente + template + estilos)
+      user/              Portal ciudadano: home, create-report, track-report, abuse-stats, help-resources
+      agent/             Panel del agente: unassigned-reports, assigned-reports
+      admin/             Panel de administración: agent-list, register-agent, agent-logs
+      auth/              login
+      not-found/         404
+    components/          Cabeceras por rol y pie de página
+    services/            Una capa por módulo: llamadas HTTP con HttpClient
+    guards/              roleGuard
+    interceptors/        authInterceptor
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+Los servicios son el único lugar donde se escriben rutas de API. Los componentes no llaman a `HttpClient` directamente.
+
+## Tests
 
 ```bash
-ng generate --help
+npm test
 ```
 
-## Building
+Vitest vía `@angular/build`. Cubre los componentes y `AuthService`.
 
-To build the project run:
+> Los tests que necesitan backend usan `HttpTestingController` y verifican las peticiones esperadas; no requieren el servidor corriendo.
 
-```bash
-ng build
-```
+## Notas
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **El build requiere acceso a internet.** Varios archivos `.scss` importan Google Fonts con `@import url(...)`, y el plugin de inlining de fuentes los descarga durante la compilación. Sin conexión a `fonts.googleapis.com`, `npm run build` falla con un error de inlining. Esto no afecta a `npm start` ni a `npm test`.
+- No hay linter configurado, pero `.prettierrc` está presente; puedes aplicarlo con `npx prettier --write "src/**/*.{ts,html,scss}"`.
+- Para entender la conectividad con el backend capa por capa, ver [CONECTIVIDAD.md](./CONECTIVIDAD.md).

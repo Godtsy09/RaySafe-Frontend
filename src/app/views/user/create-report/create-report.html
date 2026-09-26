@@ -104,9 +104,9 @@
           <p class="dropzone-hint">JPG · PNG · MP4 · PDF</p>
         </button>
 
-        @if (archivos.length > 0) {
+        @if (archivos().length > 0) {
           <div class="archivos-lista">
-            @for (archivo of archivos; track $index) {
+            @for (archivo of archivos(); track $index) {
               <div class="archivo-item">
                 @if (archivo.preview) {
                   <div class="archivo-preview">
@@ -130,10 +130,10 @@
                     placeholder="Descripción de este archivo (opcional)"
                     [(ngModel)]="archivo.descripcion"
                     [ngModelOptions]="{ standalone: true }"
-                    [disabled]="enviando"
+                    [disabled]="enviando()"
                   />
                 </span>
-                @if (enviando) {
+                @if (enviando()) {
                   <span
                     class="archivo-estado"
                     [class.archivo-estado--exito]="archivo.estado === 'exito'"
@@ -147,7 +147,7 @@
                   class="archivo-eliminar"
                   aria-label="Quitar archivo"
                   (click)="eliminarArchivo($index)"
-                  [disabled]="enviando"
+                  [disabled]="enviando()"
                 >
                   ✕
                 </button>
@@ -157,23 +157,12 @@
         }
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Email (opcional — para recibir actualizaciones)</label>
-        <input
-          type="email"
-          class="form-control"
-          name="email"
-          [(ngModel)]="email"
-          placeholder="tucorreo@ejemplo.com"
-        />
-      </div>
-
       <div class="form-actions">
         <button type="button" class="btn btn-cancel" routerLink="/home">Cancelar</button>
-        <button type="submit" class="btn btn-submit" [disabled]="enviando">
-          @if (enviando) {
-            @if (archivos.length > 0) {
-              Subiendo evidencia {{ archivoActual() }} de {{ archivos.length }}…
+        <button type="submit" class="btn btn-submit" [disabled]="enviando()">
+          @if (enviando()) {
+            @if (archivos().length > 0) {
+              Subiendo evidencia {{ archivoActual() }} de {{ archivos().length }}…
             } @else {
               Enviando…
             }
@@ -187,7 +176,7 @@
   </section>
 </div>
 
-@if (evidenciaAbierta) {
+@if (evidenciaAbierta()) {
   <div class="modal-overlay" (click)="cerrarEvidencia()">
     <div class="modal-box" (click)="$event.stopPropagation()">
 
@@ -204,7 +193,7 @@
 
         <label
           class="dropzone dropzone--modal"
-          [class.dropzone--drag]="arrastrando"
+          [class.dropzone--drag]="arrastrando()"
           (dragenter)="onDragEnter($event)"
           (dragleave)="onDragLeave($event)"
           (dragover)="onDragOver($event)"
@@ -221,9 +210,9 @@
           />
         </label>
 
-        @if (archivos.length > 0) {
+        @if (archivos().length > 0) {
           <div class="archivos-lista modal-lista">
-            @for (archivo of archivos; track $index) {
+            @for (archivo of archivos(); track $index) {
               <div class="archivo-item">
                 @if (archivo.preview) {
                   <div class="archivo-preview">
@@ -268,7 +257,8 @@
   </div>
 }
 
-@if (denunciaEnviada && denunciaCreada) {
+@let creada = denunciaCreada();
+@if (denunciaEnviada() && creada) {
   <div class="modal-overlay" (click)="cerrarDenunciaEnviada()">
     <div class="modal-box modal-box--feedback" (click)="$event.stopPropagation()">
       <div class="feedback-icon feedback-icon--success" aria-hidden="true">✓</div>
@@ -280,24 +270,24 @@
       <div class="credenciales">
         <div class="credencial">
           <span class="credencial-label">ID Público</span>
-          <span class="credencial-valor">{{ denunciaCreada.public_id }}</span>
+          <span class="credencial-valor">{{ creada.public_id }}</span>
           <button
             type="button"
             class="btn-copiar"
             (click)="copiarCampo('public_id')"
           >
-            {{ campoCopiado === 'public_id' ? '✓ Copiado' : 'Copiar' }}
+            {{ campoCopiado() === 'public_id' ? '✓ Copiado' : 'Copiar' }}
           </button>
         </div>
         <div class="credencial">
           <span class="credencial-label">Token de seguimiento</span>
-          <span class="credencial-valor">{{ denunciaCreada.token }}</span>
+          <span class="credencial-valor">{{ creada.token }}</span>
           <button
             type="button"
             class="btn-copiar"
             (click)="copiarCampo('token')"
           >
-            {{ campoCopiado === 'token' ? '✓ Copiado' : 'Copiar' }}
+            {{ campoCopiado() === 'token' ? '✓ Copiado' : 'Copiar' }}
           </button>
         </div>
       </div>
@@ -306,12 +296,12 @@
         El token solo se muestra una vez. Lo necesitarás para consultar los detalles y adjuntar evidencia.
       </p>
 
-      @if (archivosFallidos > 0) {
+      @if (archivosFallidos() > 0) {
         <p class="modal-text feedback-text feedback-text--warn">
-          @if (archivosFallidos === archivos.length) {
-            No se pudieron subir los {{ archivosFallidos }} archivo(s). Puedes adjuntarlos luego consultando la denuncia con el token.
+          @if (archivosFallidos() === archivos().length) {
+            No se pudieron subir los {{ archivosFallidos() }} archivo(s). Puedes adjuntarlos luego consultando la denuncia con el token.
           } @else {
-            Se subieron algunos archivos, pero {{ archivosFallidos }} no se pudieron subir. Puedes adjuntarlos luego consultando la denuncia con el token.
+            Se subieron algunos archivos, pero {{ archivosFallidos() }} no se pudieron subir. Puedes adjuntarlos luego consultando la denuncia con el token.
           }
         </p>
       }
@@ -321,13 +311,13 @@
   </div>
 }
 
-@if (errorDenuncia) {
+@if (errorDenuncia()) {
   <div class="modal-overlay" (click)="cerrarError()">
     <div class="modal-box modal-box--feedback" (click)="$event.stopPropagation()">
       <div class="feedback-icon feedback-icon--error" aria-hidden="true">!</div>
       <h2 class="feedback-title">Error al enviar denuncia</h2>
       <p class="modal-text feedback-text">
-        {{ mensajeError }}
+        {{ mensajeError() }}
       </p>
       <button type="button" class="btn-confirm" (click)="cerrarError()">Entendido</button>
     </div>
