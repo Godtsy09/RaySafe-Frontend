@@ -7,6 +7,18 @@
     <h1 class="view-title">Mis denuncias</h1>
   </div>
 
+  <!-- Buscador -->
+  <div class="filter-card">
+    <input 
+      type="text" 
+      class="filter-input" 
+      placeholder="Buscar por ID, tipo, agente, ubicación..." 
+      [(ngModel)]="searchTerm"
+      [ngModelOptions]="{standalone: true}"
+      (ngModelChange)="onSearchChange($event)"
+    />
+  </div>
+
   <!-- Tabla Principal de la Vista (Sin columna de agente redundante) -->
   <div class="table-card">
     <div class="table-responsive">
@@ -92,7 +104,7 @@
               </div>
               <div class="info-group">
                 <span class="label">Tipo de Abuso</span>
-                <span class="value">{{ report.abuseType.name }} ({{ report.abuseType.category === 'human' ? 'Humano' : 'Animal' }})</span>
+                <span class="value">{{ report.abuseType?.name }} ({{ report.abuseType?.category === 'human' ? 'Humano' : 'Animal' }})</span>
               </div>
               <div class="info-group">
                 <span class="label">Fecha de Ingreso</span>
@@ -140,7 +152,7 @@
             <!-- Acordeón Desplegable para Evidencias -->
             <details class="evidence-accordion margin-top">
               <summary class="accordion-header">
-                <span>📎 Ver Archivos de Evidencia ({{ report.evidence.length }} adjuntos)</span>
+                <span>📎 Ver Archivos de Evidencia ({{ report.evidence.length ?? 0 }} adjuntos)</span>
               </summary>
               <div class="accordion-content">
                 @if (!report.evidence.length) {
@@ -183,7 +195,7 @@
 
             <!-- Feed de Notas Registradas (internal_notes) -->
             <div class="notes-feed">
-                @if (!report.notes.length) {
+              @if (!report.notes?.length) {
                 <div class="note-card">
                   <p class="note-body">Sin notas registradas</p>
                 </div>
@@ -203,7 +215,7 @@
             <!-- Historial de Transición de Estado -->
             <div class="status-history-compact margin-top">
               <span class="label">Historial de cambios de estado:</span>
-                @if (!report.statusHistory.length) {
+              @if (!report.statusHistory?.length) {
                 <p class="history-text">Sin cambios de estado registrados</p>
               } @else {
                 @for (history of report.statusHistory; track history.id) {
