@@ -158,10 +158,12 @@ export class AgentReportService {
   }
 
   // Assigned reports (mis reportes)
-  getMyReports(page: number, limit = 5): Observable<AssignedResult> {
-    return this.http.get<AssignedResult>('/api/agent/reports', {
-      params: new HttpParams().set('page', page).set('limit', limit),
-    });
+  getMyReports(page: number, limit = 5, search?: string): Observable<AssignedResult> {
+    let params = new HttpParams().set('page', page).set('limit', limit);
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<AssignedResult>('/api/agent/reports', { params });
   }
 
   getMyReportDetail(id: number): Observable<ReportDetail> {

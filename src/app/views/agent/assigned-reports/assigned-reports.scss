@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
 
+
 // Variables Institucionales RaySafe
 $brand-blue: #253754;
 $primary-btn: #CA9264;
@@ -651,6 +652,7 @@ $border-light: #F3F4F6;
         border-top: none;
         display: flex;
         justify-content: flex-end;
+        gap: 12px; /* Espacio entre los botones */
 
         .btn-secondary {
           background: transparent;
@@ -663,10 +665,28 @@ $border-light: #F3F4F6;
           font-weight: 500;
           color: #ffffff;
           transition: all 0.15s ease;
+          
 
           &:hover {
             background-color: rgba(255, 255, 255, 0.1);
             border-color: #ffffff;
+          }
+        }
+        .btn-primary {
+          background-color: #CA9264;
+          border: 1px solid rgba(255, 255, 255, 0.171);
+          padding: 8px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+          font-family: 'DM Sans', sans-serif;
+          font-size: 13px;
+          font-weight: 500;
+          color: #ffffff;
+          transition: all 0.15s ease;
+          
+
+          &:hover {
+            border-color: #ffffffec;
           }
         }
 }

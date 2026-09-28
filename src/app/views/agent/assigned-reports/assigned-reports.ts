@@ -27,6 +27,7 @@ export class AssignedReports implements OnInit {
   protected readonly isModalOpen = signal(false);
   protected readonly statusSelect = signal('');
   protected readonly newNoteContent = signal('');
+  protected readonly searchTerm = signal('');
   protected readonly availableStatuses = signal<{ id: number; name: string }[]>([]);
 
   ngOnInit(): void {
@@ -47,7 +48,7 @@ export class AssignedReports implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    this.reportService.getMyReports(this.page()).subscribe({
+    this.reportService.getMyReports(this.page(), 5, this.searchTerm()).subscribe({
       next: (result) => {
         this.reports.set(result.data);
         this.totalPages.set(result.totalPages);
@@ -64,6 +65,21 @@ export class AssignedReports implements OnInit {
     if (newPage < 1 || newPage > this.totalPages()) return;
     this.page.set(newPage);
     this.loadReports();
+  }
+
+  private searchTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  onSearchChange(term: string): void {
+    this.searchTerm.set(term);
+
+    if (this.searchTimeout) {
+      clearTimeout(this.searchTimeout);
+    }
+
+    this.searchTimeout = setTimeout(() => {
+      this.page.set(1);
+      this.loadReports();
+    }, 300);
   }
 
   openDetail(report: AssignedReportItem): void {
@@ -96,12 +112,13 @@ export class AssignedReports implements OnInit {
     const report = this.selectedReport();
     if (!report) return [];
 
-    const current = report.status.name.toLowerCase();
+    const normalize = (str: string) => str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const current = normalize(report.status.name);
     const all = this.availableStatuses();
 
     return all.filter(s => {
-      const target = s.name.toLowerCase();
-      if (target === report.status.name.toLowerCase()) return false;
+      const target = normalize(s.name);
+      if (target === normalize(report.status.name)) return false;
 
       // Estados finales sin salidas
       if (['resuelta', 'desestimada'].includes(current)) return false;
@@ -109,8 +126,8 @@ export class AssignedReports implements OnInit {
       // No volver atrás ni saltar a final
       const invalid: Record<string, string[]> = {
         'recibida': ['resuelta'],
-        'en revisión': ['recibida', 'resuelta'],
-        'en investigación': ['recibida', 'en revisión'],
+        'en revision': ['recibida', 'resuelta'],
+        'en investigacion': ['recibida', 'en revision'],
       };
 
       return !invalid[current]?.includes(target);
@@ -124,7 +141,9 @@ export class AssignedReports implements OnInit {
     this.loading.set(true);
     this.error.set(null);
 
-    const statusChanged = this.statusSelect() && Number(this.statusSelect()) !== report.status.id;
+    // Capturar valores UNA VEZ para evitar race condition
+    const selectedStatusId = this.statusSelect();
+    const statusChanged = selectedStatusId && Number(selectedStatusId) !== report.status.id;
     const hasNote = this.newNoteContent().trim().length > 0;
     const noteContent = this.newNoteContent().trim();
 
@@ -132,7 +151,7 @@ export class AssignedReports implements OnInit {
 
     if (statusChanged) {
       requests.push(
-        lastValueFrom(this.reportService.updateStatus(report.id, Number(this.statusSelect())))
+        lastValueFrom(this.reportService.updateStatus(report.id, Number(selectedStatusId)))
           .catch((err) => { throw { type: 'status', error: err }; })
       );
     }
@@ -201,7 +220,7 @@ export class AssignedReports implements OnInit {
   // interpolación encadenada que reemplazó, sin optional-chains redundantes.
   formatLocation(
     location: ReportDetail['location'],
-    specificAddress: string | null,
+    specificAddress: string | null | undefined,
   ): string {
     const city = location?.city ?? '';
     const department = location?.department ?? '';

@@ -4,7 +4,7 @@
   <!-- Encabezado con tipografía fina -->
   <div class="view-header">
     <div class="breadcrumbs">{{ auth.institutionName() }}</div>
-    <h1 class="view-title">Agentes en la institución</h1>
+    <h1 class="view-title">Personal en la institución</h1>
   </div>
 
   <!-- Card de la Tabla -->
@@ -109,8 +109,8 @@
           <div class="form-group">
             <label>Rol (role:)</label>
             <select [(ngModel)]="roleSelect" [ngModelOptions]="{standalone: true}">
-              <option value="1">1 - Administrador</option>
-              <option value="2">2 - Agente</option>
+              <option value="2"> Administrador</option>
+              <option value="1"> Agente</option>
             </select>
           </div>
 
