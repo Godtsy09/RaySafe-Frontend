@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Fraunces:ital,wght@1,500;1,600&display=swap');
+
+:host {
+  display: block;
+  width: 100%;
+  margin-top: auto; /* Empuja el footer automáticamente al fondo si la vista tiene poco contenido */
+}
+
+.footer {
+  background-color: #f8fafc;
+  color: #334155;
+  font-family: 'DM Sans', sans-serif;
+  border-top: 1px solid #e2e8f0;
+  padding: 24px 0 20px 0;
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* Alineación limpia entre las dos secciones superiores */
+ .footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 60px;
+    margin-bottom: 4px; /* Cambiado de 28px a 12px para acercar la línea */
+  }
+
+  .footer-brand {
+    max-width: 480px;
+
+    .brand {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 24px;
+      font-weight: 600;
+      color: #1e293b;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .brand-description {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+
+  .footer-column {
+    max-width: 320px;
+
+    .column-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #0f172a;
+      margin: 0 0 10px 0;
+    }
+
+    .info-text {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #64748b;
+      margin: 0;
+    }
+  }
+
+  .footer-divider {
+    border: 0;
+    border-top: 1px solid #e2e8f0;
+    margin: 0 0 20px 0;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .copyright {
+      font-size: 12.5px;
+      color: #94a3b8;
+      margin: 0;
+    }
+
+    .social-links {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .social-icon {
+        color: #64748b;
+        transition: color 0.2s ease, transform 0.2s ease;
+        display: flex;
+        align-items: center;
+
+        &:hover {
+          color: #1e293b;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+
+  /* Ajustes responsivos */
+  @media screen and (max-width: 680px) {
+    padding: 28px 0 16px 0;
+
+    .footer-container {
+      padding: 0 20px;
+    }
+
+    .footer-top {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .footer-bottom {
+      flex-direction: column-reverse;
+      gap: 14px;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=JetBrains+Mono:wght@200;400;500&display=swap');
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* 1. Regla base para .header (Agregada para escritorio) */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  padding: 0 40px;
+  background-color: #202e43;
+  color: #ffffff;
+  box-sizing: border-box;
+}
+
+/* 2. Marca / Logo (Consolidado sin duplicar) */
+.brand {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 27.5px;
+  font-weight: 500;
+  letter-spacing: -0.10px;
+  white-space: nowrap;
+  color: #ffffff;
+  text-decoration: none;
+  margin-left: 22px;
+  cursor: pointer; /* Muestra la manita al pasar el cursor */
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.85; /* Ligera opacidad visual al pasar el cursor */
+  }
+}
+
+/* 3. Menú de navegación */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 36px; /* Separa tanto los enlaces como el botón */
+  margin-left: auto;
+}
+
+/* Enlaces del menú */
+.nav-link {
+  font-family: 'DM Sans', sans-serif;
+  color: #f1f5f9;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 400;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+/* Botón "Agentes" */
+.btn-agentes {
+  font-family: 'DM Sans', sans-serif;
+  background-color: transparent;
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Responsivo para móviles */
+@media screen and (max-width: 600px) {
+  .header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 16px 20px;
+    gap: 16px;
+  }
+
+  .nav {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+    justify-content: space-between;
+    gap: 16px;
+  }
+}

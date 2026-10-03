@@ -1,0 +1,27 @@
+<header class="header">
+  <span class="brand">RaySafe</span>
+  
+  <div class="center">
+    <a routerLink="/assigned-reports" routerLinkActive="active" class="nav-link">Denuncias</a>
+    <button class="btn-sin-atender" type="button" routerLink="/unassigned-reports" routerLinkActive="active">Sin atender</button>
+  </div>
+
+  <div class="profile">
+    <span class="agent-name">{{ usuario()?.name ?? 'Agente' }} </span>
+    <div class="avatar-menu">
+      <button
+        class="avatar"
+        type="button"
+        (click)="toggleMenu()"
+        aria-haspopup="true"
+        [attr.aria-expanded]="menuAbierto"
+        aria-label="Menú de usuario"
+      >{{ iniciales() }}</button>
+      @if (menuAbierto) {
+        <div class="avatar-dropdown" role="menu">
+          <button class="avatar-dropdown-item" type="button" role="menuitem" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
+      }
+    </div>
+  </div>
+</header>

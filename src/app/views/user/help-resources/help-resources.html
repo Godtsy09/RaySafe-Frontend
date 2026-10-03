@@ -1,0 +1,118 @@
+<app-header-user></app-header-user>
+
+<div class="recursos-container">
+  <section class="recursos-content">
+    <span class="recursos-eyebrow">RECURSOS DE AYUDA</span>
+    <h1 class="recursos-title">Guías y materiales educativos</h1>
+    <p class="recursos-subtitle">
+      Descarga gratuita sin registro. Material validado por instituciones gubernamentales.
+    </p>
+
+    @if (cargando()) {
+      <div class="recursos-loader">
+        <span class="recursos-loader-spinner"></span>
+        <p class="recursos-loader-texto">Cargando recursos…</p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="recursos-error">
+        <p class="recursos-error-texto">
+          No se pudieron cargar los recursos. Inténtalo de nuevo.
+        </p>
+        <button type="button" class="recursos-error-boton" (click)="reintentar()">
+          Reintentar
+        </button>
+      </div>
+    }
+
+    @if (!cargando() && !error()) {
+
+      <div class="pdf-grid">
+        @for (pdf of pdfs(); track pdf.nombre) {
+          <article class="pdf-card">
+            <div class="pdf-card-top">
+              <div class="pdf-icon {{ pdf.claseIcono }}">PDF</div>
+              <span class="pdf-tag">{{ pdf.tag }}</span>
+            </div>
+            <h3 class="pdf-name">{{ pdf.nombre }}</h3>
+            <p class="pdf-description">{{ pdf.descripcion }}</p>
+            <div class="pdf-meta">
+              @if (pdf.url) {
+                <a [href]="pdf.url" class="pdf-download" target="_blank" rel="noopener">Descargar ↓</a>
+              } @else {
+                <span class="pdf-download pdf-download--disabled" aria-disabled="true">No disponible</span>
+              }
+            </div>
+          </article>
+        } @empty {
+          <p class="recursos-vacio">No hay guías disponibles por el momento.</p>
+        }
+      </div>
+
+      <h2 class="section-title">Líneas de emergencia</h2>
+
+      <div class="hotlines-grid">
+        @for (hotline of hotlines(); track hotline.nombre) {
+          <div class="hotline-card">
+            <span class="hotline-number">{{ hotline.numero || '—' }}</span>
+            <div class="hotline-info">
+              <span class="hotline-name">{{ hotline.nombre }}</span>
+              <span class="hotline-schedule">{{ hotline.horario }}</span>
+            </div>
+          </div>
+        } @empty {
+          <p class="recursos-vacio">No hay líneas de emergencia disponibles por el momento.</p>
+        }
+      </div>
+
+      <h2 class="section-title">Instituciones de apoyo</h2>
+
+      <div class="instituciones-grid">
+        @for (institucion of instituciones(); track institucion.nombre) {
+          <button type="button" class="institucion-card" (click)="abrirDetalle(institucion)">
+            <h3 class="institucion-name">{{ institucion.nombre }}</h3>
+            <p class="institucion-location">{{ institucion.ubicacion || 'Ubicación no disponible' }}</p>
+            <span class="institucion-ver">Ver detalle →</span>
+          </button>
+        } @empty {
+          <p class="recursos-vacio">No hay instituciones de apoyo disponibles por el momento.</p>
+        }
+      </div>
+
+    }
+  </section>
+</div>
+
+@if (institucionSeleccionada; as institucion) {
+  <div class="modal-overlay" (click)="cerrarModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+
+      <div class="modal-header">
+        <h2 class="modal-title">{{ institucion.nombre }}</h2>
+        <button type="button" class="modal-close" aria-label="Cerrar" (click)="cerrarModal()">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <span class="institucion-tag {{ institucion.claseTag }}">{{ institucion.tipo }}</span>
+
+        <dl class="detalle-lista">
+          <div class="detalle-item">
+            <dt>Dirección</dt>
+            <dd>{{ institucion.ubicacion || 'Ubicación no disponible' }}</dd>
+          </div>
+          <div class="detalle-item">
+            <dt>Teléfono</dt>
+            <dd>{{ institucion.telefono || 'No disponible' }}</dd>
+          </div>
+          <div class="detalle-item">
+            <dt>Horario</dt>
+            <dd>{{ institucion.horario }}</dd>
+          </div>
+        </dl>
+
+      </div>
+
+    </div>
+  </div>
+}

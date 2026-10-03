@@ -1,0 +1,175 @@
+<app-header-agent></app-header-agent>
+
+<section class="agent-unassigned-container">
+    <!-- Encabezado -->
+    <div class="view-header">
+        <div class="breadcrumbs">{{ auth.institutionName() }}</div>
+        <h1 class="view-title">Sin atender</h1>
+    </div>
+
+    <!-- Tabla Principal -->
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="logs-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tipo de abuso</th>
+                        <th>Ubicación</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th class="text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (loading()) {
+                        <tr>
+                            <td colspan="6" class="text-center">Cargando...</td>
+                        </tr>
+                    } @else if (reports().length === 0) {
+                        <tr>
+                            <td colspan="6" class="text-center">No hay denuncias sin atender</td>
+                        </tr>
+                    } @else {
+                        @for (report of reports(); track report.id) {
+                            <tr>
+                                <td class="log-id">{{ report.public_id }}</td>
+                                <td class="abuse-type">{{ report.abuse_type }}</td>
+                                <td class="log-location">{{ report.ubicacion ?? 'Sin ubicación' }}</td>
+                                <td><span class="status info">{{ report.estado }}</span></td>
+                                <td class="log-date">{{ formatDate(report.created_at) }}</td>
+                                <td class="text-right">
+                                    <div class="action-buttons">
+                                        <button class="btn-primary" (click)="openDetail(report)">Ver detalle</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="pagination">
+            <button class="btn-pagination" (click)="onPageChange(page() - 1)" [disabled]="page() === 1">← Previous</button>
+            <div class="page-numbers">
+                @for (p of pageNumbers(); track $index) {
+                    @if (p === '...') {
+                        <span class="dots">...</span>
+                    } @else {
+                        <span class="page" [class.active]="page() === p" (click)="onPageChange(p)">{{ p }}</span>
+                    }
+                }
+            </div>
+            <button class="btn-pagination" (click)="onPageChange(page() + 1)" [disabled]="page() === totalPages()">Next →</button>
+        </div>
+    </div>
+
+    <!-- Modal 1: Ver Detalles -->
+    <div class="modal-overlay" [class.active]="isDetailOpen()" (click)="closeDetailModal()">
+        <div class="modal-card modal-large" (click)="$event.stopPropagation()">
+            
+            <!-- Encabezado del Modal -->
+            <div class="modal-header">
+                <div class="header-title-group">
+                    <h2>Detalles de Denuncia Sin Asignar</h2>
+                    <span class="public-badge">{{ selectedReport()?.public_id }}</span>
+                </div>
+                <button class="btn-close" (click)="closeDetailModal()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                @if (selectedReport(); as report) {
+                    <!-- SECCIÓN 1: INFORMACIÓN DEL HECHO -->
+                    <div class="section-block">
+                        <h3 class="section-title">Información del Hecho</h3>
+                        <div class="grid-3">
+                            <div class="info-group">
+                                <span class="label">Tipo de Abuso</span>
+                                <span class="value">{{ report.tipo_abuso }}</span>
+                            </div>
+                            <div class="info-group">
+                                <span class="label">Fecha de Ingreso</span>
+                                <span class="value">{{ formatDate(report.fecha_creacion) }}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-group margin-top">
+                            <span class="label">Ubicación y Dirección Específica</span>
+                            <span class="value">{{ report.ubicacion ?? 'Sin ubicación' }}{{ report.direccion_especifica ? ' ・ ' + report.direccion_especifica : '' }}</span>
+                        </div>
+
+                        <div class="info-group margin-top">
+                            <span class="label">Relato de la Denuncia</span>
+                            <p class="description-box">{{ report.descripcion }}</p>
+                        </div>
+                    </div>
+
+                    <hr class="divider" />
+
+                    <!-- SECCIÓN 2: EVIDENCIA ADJUNTA -->
+                    <div class="section-block">
+                        <h3 class="section-title">Evidencia Adjunta</h3>
+                        <details class="evidence-accordion margin-top">
+                            <summary class="accordion-header">
+                                <span>📎 Ver Archivos de Evidencia ({{ report.evidencia.length }} adjuntos)</span>
+                            </summary>
+                            <div class="accordion-content">
+                                @if (!report.evidencia.length) {
+                                    <div class="evidence-item">
+                                        <span class="file-info">Sin evidencia adjunta</span>
+                                    </div>
+                                } @else {
+                                    @for (evidence of report.evidencia; track evidence.id) {
+                                        <div class="evidence-item">
+                                            <span class="file-icon">{{ evidence.fileType?.startsWith('image') ? '🖼️' : evidence.fileType?.startsWith('video') ? '🎬' : evidence.fileType?.startsWith('audio') ? '🎵' : '📄' }}</span>
+                                            <div class="file-info">
+                                                <span class="file-name">{{ evidence.fileUrl.split('/').pop() }}</span>
+                                                <span class="file-type">{{ evidence.fileType ?? 'Archivo' }}</span>
+                                            </div>
+                                            <a [href]="evidence.fileUrl" target="_blank" class="btn-link">Ver archivo</a>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </details>
+                    </div>
+                }
+            </div>
+
+            <div class="modal-footer-detail">
+                <button class="btn-secondary" (click)="closeDetailModal()">Cerrar</button>
+                <button class="btn-primary" (click)="confirmClaim()">Tomar Denuncia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Confirmación Tomar Denuncia -->
+    <div class="modal-overlay" [class.active]="isClaimOpen()" (click)="closeClaimModal()">
+        <div class="modal-card modal-small" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Asignar caso a mi cuenta</h2>
+                <button class="btn-close" (click)="closeClaimModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>¿Deseas asumir el seguimiento de la denuncia <strong>{{ selectedReport()?.public_id }}</strong>?</p>
+                <p class="text-subtle">El estado pasará a "En Investigación" y quedarás registrado como el agente responsable.</p>
+                
+                <div class="form-group margin-top">
+                    <label>Nivel de Riesgo *</label>
+                    <select [(ngModel)]="selectedRisk" class="form-control">
+                        <option value="low">Bajo</option>
+                        <option value="medium">Medio</option>
+                        <option value="high">Alto</option>
+                        <option value="critical">Crítico</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer-confirm">
+                <button class="btn-secondary" (click)="closeClaimModal()">Cancelar</button>
+                <button class="btn-primary" (click)="takeReport()" [disabled]="taking()">Tomar Denuncia</button>
+            </div>
+        </div>
+    </div>
+</section>

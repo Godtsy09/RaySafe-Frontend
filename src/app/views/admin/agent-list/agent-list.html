@@ -1,0 +1,133 @@
+<app-header-admin></app-header-admin>
+
+<section class="agents-container">
+  <!-- Encabezado con tipografía fina -->
+  <div class="view-header">
+    <div class="breadcrumbs">{{ auth.institutionName() }}</div>
+    <h1 class="view-title">Personal en la institución</h1>
+  </div>
+
+  <!-- Card de la Tabla -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="agents-table">
+        <thead>
+          <tr>
+            <th>Agente</th>
+            <th>ID</th>
+            <th>Casos</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading()) {
+            <tr>
+              <td colspan="5" class="text-center">Cargando...</td>
+            </tr>
+          } @else if (agents().length === 0) {
+            <tr>
+              <td colspan="5" class="text-center">No hay agentes registrados</td>
+            </tr>
+          } @else {
+            @for (agent of agents(); track agent.id) {
+              <tr>
+                <td>
+                  <div class="agent-info">
+                    <div class="avatar">{{ getAvatarInitials(agent.name) }}</div>
+                    <div class="details">
+                      <span class="name">{{ agent.name }}</span>
+                      <span class="email">{{ agent.email }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="agent-id">{{ getAgentDisplayId(agent) }}</td>
+                <td class="agent-id">{{ agent.assignedCases }}</td>
+                <td>
+                  <span class="status" [class.active]="agent.active" [class.inactive]="!agent.active">
+                    {{ agent.active ? 'activo' : 'inactivo' }}
+                  </span>
+                </td>
+                <td class="text-right">
+                  <button class="btn-info" (click)="openModal(agent)">Ver info</button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button class="btn-pagination" (click)="onPageChange(page() - 1)" [disabled]="page() === 1">← Previous</button>
+      <div class="page-numbers">
+        @for (p of pageNumbers(); track $index) {
+          @if (p === '...') {
+            <span class="dots">...</span>
+          } @else {
+            <span class="page" [class.active]="page() === p" (click)="onPageChange(p)">{{ p }}</span>
+          }
+        }
+      </div>
+      <button class="btn-pagination" (click)="onPageChange(page() + 1)" [disabled]="page() === totalPages()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Modal con desenfoque de fondo azul -->
+  <div class="modal-overlay" [class.active]="isModalOpen()" (click)="closeModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Detalles del Agente</h2>
+        <button class="btn-close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <form class="agent-form">
+          <div class="form-group">
+            <label>ID</label>
+            <input type="text" [value]="selectedAgent() ? getAgentPureId(selectedAgent()!) : ''" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" [value]="selectedAgent()?.name ?? ''" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Correo Electrónico</label>
+            <input type="email" [value]="selectedAgent()?.email ?? ''" readonly class="input-readonly" />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de Creación</label>
+            <input type="text" [value]="selectedAgent()?.createdAt ?? ''" readonly class="input-readonly" />
+          </div>
+
+          <hr class="divider" />
+
+          <div class="form-group">
+            <label>Rol (role:)</label>
+            <select [(ngModel)]="roleSelect" [ngModelOptions]="{standalone: true}">
+              <option value="2"> Administrador</option>
+              <option value="1"> Agente</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Estado</label>
+            <select [(ngModel)]="activeSelect" [ngModelOptions]="{standalone: true}">
+              <option value="true">Activo</option>
+              <option value="false">Inactivo</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" (click)="saveChanges()" [disabled]="saving()">{{ saving() ? 'Guardando...' : 'Guardar Cambios' }}</button>
+      </div>
+    </div>
+  </div>
+</section>

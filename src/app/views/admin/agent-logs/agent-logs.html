@@ -1,0 +1,227 @@
+<app-header-admin></app-header-admin>
+
+<section class="agent-logs-container">
+  <!-- Encabezado -->
+  <div class="view-header">
+    <div class="breadcrumbs">{{ auth.institutionName() }}</div>
+    <h1 class="view-title">Registros de denuncias</h1>
+  </div>
+
+  <!-- Buscador y Filtros -->
+  <div class="filter-card">
+    <input 
+      type="text" 
+      class="filter-input" 
+      placeholder="Filtrar por ID público, agente, tipo de abuso, ubicación..." 
+      [value]="searchTerm()"
+      (input)="onSearchChange($event.target.value)"
+    />
+  </div>
+
+  <!-- Tabla Principal -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="logs-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tipo de abuso</th>
+            <th>Agente</th>
+            <th>Fecha</th>
+            <th>Ubicacion</th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (loading()) {
+            <tr>
+              <td colspan="7" class="text-center">Cargando...</td>
+            </tr>
+          } @else if (reports().length === 0) {
+            <tr>
+              <td colspan="7" class="text-center">No hay registros</td>
+            </tr>
+          } @else {
+            @for (report of reports(); track report.id) {
+              <tr>
+                <td class="log-id">{{ report.publicId }}</td>
+                <td class="abuse-type">{{ report.abuseType }}</td>
+                <td class="agent-name">{{ report.agentName ?? 'Sin asignar' }}</td>
+                <td class="log-date">{{ formatDate(report.createdAt) }}</td>
+                <td class="log-location">{{ report.city ?? '' }}{{ report.city && report.department ? ', ' : '' }}{{ report.department ?? '' }}</td>
+                <td><span class="status" [class.warning]="getStatusClass(report.status) === 'warning'" [class.success]="getStatusClass(report.status) === 'success'" [class.danger]="getStatusClass(report.status) === 'danger'">{{ report.status }}</span></td>
+                <td class="text-right">
+                  <button class="btn-info" (click)="openModal(report)">Ver detalles</button>
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+      <button class="btn-pagination" (click)="onPageChange(page() - 1)" [disabled]="page() === 1">← Previous</button>
+      <div class="page-numbers">
+        @for (p of pageNumbers(); track $index) {
+          @if (p === '...') {
+            <span class="dots">...</span>
+          } @else {
+            <span class="page" [class.active]="page() === p" (click)="onPageChange(p)">{{ p }}</span>
+          }
+        }
+      </div>
+      <button class="btn-pagination" (click)="onPageChange(page() + 1)" [disabled]="page() === totalPages()">Next →</button>
+    </div>
+  </div>
+
+  <!-- Modal "Ver Detalles" (Solo Lectura) -->
+  <div class="modal-overlay" [class.active]="isModalOpen()" (click)="closeModal()">
+    <div class="modal-card modal-large" (click)="$event.stopPropagation()">
+      
+      <!-- Encabezado del Modal -->
+      <div class="modal-header">
+        <div class="header-title-group">
+          <h2>Expediente de Denuncia</h2>
+          <span class="public-badge">{{ selectedReport()?.publicId }}</span>
+        </div>
+        <button class="btn-close" (click)="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        
+        <!-- SECCIÓN 1: DATOS GENERALES DEL CASO -->
+        <div class="section-block">
+          <h3 class="section-title">Información del Hecho</h3>
+          
+          <div class="grid-3">
+            <div class="info-group">
+              <span class="label">Nivel de Riesgo</span>
+              <span class="badge" [class.risk-high]="selectedReport()?.riskLevel === 'critical'" [class.risk-medium]="selectedReport()?.riskLevel === 'medium'" [class.risk-low]="selectedReport()?.riskLevel === 'low'">{{ selectedReport()?.riskLevel ?? 'No especificado' }}</span>
+            </div>
+            <div class="info-group">
+              <span class="label">Tipo de Abuso</span>
+              <span class="value">{{ selectedReport()?.abuseType?.name }} ({{ selectedReport()?.abuseType?.category === 'human' ? 'Humano' : 'Animal' }})</span>
+            </div>
+            <div class="info-group">
+              <span class="label">Fecha de Ingreso</span>
+              <span class="value">{{ formatDateTime(selectedReport()?.createdAt ?? '') }}</span>
+            </div>
+          </div>
+
+          <div class="info-group margin-top">
+            <span class="label">Ubicación y Dirección Específica</span>
+            <span class="value">{{ selectedReport()?.location?.city ?? '' }}{{ selectedReport()?.location?.city && selectedReport()?.location?.department ? ', ' : '' }}{{ selectedReport()?.location?.department ?? '' }}{{ selectedReport()?.specificAddress ? ' ・ ' + selectedReport()?.specificAddress : '' }}</span>
+          </div>
+
+          <div class="info-group margin-top">
+            <span class="label">Relato de la Denuncia</span>
+            <p class="description-box">{{ selectedReport()?.description }}</p>
+          </div>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- SECCIÓN 2: AGENTE Y EVIDENCIAS -->
+        <div class="section-block">
+          <h3 class="section-title">Asignación y Evidencia</h3>
+          
+          <div class="agent-card">
+            <div class="agent-avatar">{{ getAvatarInitials(selectedReport()?.agent?.name ?? '') }}</div>
+            <div class="agent-details">
+              <span class="agent-title">Agente a cargo:</span>
+              <span class="agent-name">{{ selectedReport()?.agent?.name ?? 'Sin asignar' }}</span>
+              <span class="agent-email">
+                {{ selectedReport()?.agent?.email ?? '' }}
+                @if (selectedReport()?.agent) {
+                  <span class="badge-status-{{ selectedReport()!.agent!.active ? 'active' : 'inactive' }}">{{ selectedReport()!.agent!.active ? 'Activo' : 'Inactivo' }}</span>
+                }
+              </span>
+            </div>
+            
+            <div class="info-group">
+              <span class="label">Estado del Caso</span>
+              <span class="status" [class.warning]="getStatusClass(selectedReport()?.status?.name ?? '') === 'warning'" [class.success]="getStatusClass(selectedReport()?.status?.name ?? '') === 'success'" [class.danger]="getStatusClass(selectedReport()?.status?.name ?? '') === 'danger'">{{ selectedReport()?.status?.name }}</span>
+            </div>
+          </div>
+
+          <!-- Acordeón Desplegable para Evidencias -->
+          <details class="evidence-accordion margin-top">
+            <summary class="accordion-header">
+              <span>📎 Ver Archivos de Evidencia ({{ selectedReport()?.evidence?.length ?? 0 }} adjuntos)</span>
+            </summary>
+            <div class="accordion-content">
+              @if (selectedReport()?.evidence?.length === 0) {
+                <div class="evidence-item">
+                  <span class="file-info">Sin evidencia adjunta</span>
+                </div>
+              } @else {
+                @for (evidence of selectedReport()?.evidence ?? []; track evidence.id) {
+                  <div class="evidence-item">
+                    <span class="file-icon">{{ getFileIcon(evidence.fileType) }}</span>
+                    <div class="file-info">
+                      <span class="file-name">{{ getFileName(evidence.fileUrl) }}</span>
+                      <span class="file-type">{{ evidence.fileType ?? 'Archivo' }}</span>
+                    </div>
+                    <a [href]="evidence.fileUrl" target="_blank" class="btn-link">Ver archivo</a>
+                  </div>
+                }
+              }
+            </div>
+          </details>
+        </div>
+
+        <hr class="divider" />
+
+        <!-- SECCIÓN 3: BITÁCORA Y NOTAS DEL AGENTE -->
+        <div class="section-block">
+          <h3 class="section-title">Bitácora de Avances y Notas de Investigación</h3>
+          <span class="label" style="margin-bottom: 12px; display: block;">Notas realizadas por el agente:</span>
+
+          <!-- Feed de Notas Registradas -->
+          <div class="notes-feed">
+            @if (selectedReport()?.notes?.length === 0) {
+              <div class="note-card">
+                <p class="note-body">Sin notas registradas</p>
+              </div>
+            } @else {
+              @for (note of selectedReport()?.notes ?? []; track note.id) {
+                <div class="note-card">
+                  <div class="note-header">
+                    <span class="author">{{ note.agentName }}</span>
+                    <span class="date">{{ formatDateTime(note.createdAt) }}</span>
+                  </div>
+                  <p class="note-body">{{ note.content }}</p>
+                </div>
+              }
+            }
+          </div>
+
+          <!-- Historial de Transición de Estado -->
+          <div class="status-history-compact margin-top">
+            <span class="label">Historial de cambios de estado:</span>
+            @if (selectedReport()?.statusHistory?.length === 0) {
+              <p class="history-text">Sin cambios de estado registrados</p>
+            } @else {
+              @for (history of selectedReport()?.statusHistory ?? []; track history.id) {
+                <p class="history-text">
+                  Pasó a <span class="status" [class.warning]="getStatusClass(history.newStatusName) === 'warning'" [class.success]="getStatusClass(history.newStatusName) === 'success'" [class.danger]="getStatusClass(history.newStatusName) === 'danger'">{{ history.newStatusName }}</span> por <strong>{{ history.agentName ?? 'Sistema' }}</strong> el {{ formatDateTime(history.date) }}{{ history.comment ? ': ' + history.comment : '' }}.
+                </p>
+              }
+            }
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Pie del Modal -->
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Cerrar Expediente</button>
+      </div>
+
+    </div>
+  </div>
+</section>
